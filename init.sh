@@ -34,3 +34,8 @@ echo "Setting up .tmux.conf and .tmux.local.conf"
 [ -e $dir/local/"$hostname".tmux.conf ] || touch $dir/local/"$hostname".tmux.conf
 ln -s $dir/local/"$hostname".tmux.conf .tmux.local.conf
 ln -s $dir/tmux.conf .tmux.conf
+
+echo "Initializing Vundle"
+cd $dir
+git submodule update --init --recursive
+vim +PluginInstall +qall
