@@ -28,7 +28,7 @@ echo "Setting up .vimrc and .vimrc.local.vim"
 [ -e $dir/local/"$hostname".vim ] || touch $dir/local/"$hostname".vim
 ln -s $dir/local/"$hostname".vim .vimrc.local.vim
 ln -s $dir/vimrc ~/.vimrc
-[ "$dir" != "$HOME/.vim" ] && ln $dir .vim
+[ "$dir" != "$HOME/.vim" ] && ln -s $dir .vim
 
 echo "Setting up .tmux.conf and .tmux.local.conf"
 [ -e $dir/local/"$hostname".tmux.conf ] || touch $dir/local/"$hostname".tmux.conf
