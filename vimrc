@@ -49,7 +49,7 @@ call vundle#begin()
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+Plugin 'vundle/Vundle.vim'
 
 Plugin 'ntpeters/vim-better-whitespace' "Show trailing whitespace {{{
 "}}}
