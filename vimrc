@@ -37,6 +37,11 @@
 "
 " }}}
 
+let g:vimrc_autoinit = 0
+if index(['1', 'yes', 'on', 'true', 'y', 't', 'enable'], tolower($VIM_AUTOINIT)) >= 0
+  let g:vimrc_autoinit = 1
+endif
+
 set nocompatible " be iMproved, required
 
 "============================= VUNDLE CONFIG ============================= {{{
@@ -137,7 +142,7 @@ if has('cscope')
   Plugin 'erig0/cscope_dynamic' "{{{
   let g:cscopedb_big_file = "cscope.out"
   let g:cscopedb_small_file = "cache_cscope.out"
-  let g:cscopedb_auto_init = 0
+  let g:cscopedb_auto_init = g:vimrc_autoinit
   let g:cscopedb_auto_files = 1
   function s:autodir_cscope()
     let orig_cwd = getcwd()
@@ -189,7 +194,7 @@ Plugin 'junkblocker/patchreview-vim' "{{{ Open up patches or git diffs in separa
 "}}}
 
 Plugin 'sudobash1/vprojman.vim' " Settings for a project {{{
-let g:vprojman_autoinit = 0
+let g:vprojman_autoinit = g:vimrc_autoinit
 let g:vprojman_signature = "-sbr-"
 let g:vprojman_copen_pos = "botright"
 
