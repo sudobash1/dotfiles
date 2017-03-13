@@ -7,7 +7,10 @@
 " to test if something is "set" in vimscript use the ampersand & prefix
 " to use a regsiter in vimscript use the at @ prefix
 " use <c-u> <c-d> and scroll option for fast navigation
+"
 " use <c-T> to navigate back from <c-]>
+"  Or use <c-W> ] to open in new split
+"  Or use <c-W> } to open in the preview window (use :pc to close)
 "
 " use <c-G> to print full pathname of file (relative to cwd)
 "
@@ -437,13 +440,15 @@ if has('cscope')
 "  "}}}
 
   " s:cscopecmd {{{
-  func s:cscopecmd(cmd, word, word2)
+  func s:cscopecmd(cmd, ...)
 
-    if a:word != ""
-      let word = a:word
-    else
-      let word = a:word2
-    endif
+    let word = ""
+
+    for word in a:000
+      if word != ""
+        break
+      endif
+    endfor
 
     if word == ""
       let error = "ERROR: You must have the cursor on a word"
@@ -452,6 +457,10 @@ if has('cscope')
       endif
       echom error
       return
+    endif
+
+    if word == "."
+      let word = s:curtag()
     endif
 
     "Determine if this command will use the quickfix list
@@ -481,7 +490,7 @@ if has('cscope')
     endif
 
     if len(getqflist()) < 2
-      cexpr []
+      "cexpr []
     elseif use_quickfix
       let tagbar_open = bufwinnr('__Tagbar__') != -1
       if tagbar_open
@@ -517,9 +526,13 @@ if has('cscope')
   endfunc
   " }}}
 
+  func s:curtag()
+    return substitute(tagbar#currenttag('%s',''),"()","","")
+  endfunc
+
   command -nargs=? CustCMDcs call <SID>cscopecmd("s", "<args>", expand("<cword>"))
   command -nargs=? CustCMDcg call <SID>cscopecmd("g", "<args>", expand("<cword>"))
-  command CustCMDcd call <SID>cscopecmd("d", "", substitute(tagbar#currenttag('%s',''),"()","",""))
+  command CustCMDcd call <SID>cscopecmd("d", s:curtag())
   command -nargs=? CustCMDcc call <SID>cscopecmd("c", "<args>", expand("<cword>"))
   command -nargs=? CustCMDcf call <SID>cscopeGotoIncludeFile("<args>")
   command -nargs=? CustCMDci call <SID>cscopecmd("i", "<args>", fnamemodify(expand('%'), ':t'))
