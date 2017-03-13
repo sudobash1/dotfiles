@@ -137,7 +137,7 @@ if has('cscope')
   Plugin 'erig0/cscope_dynamic' "{{{
   let g:cscopedb_big_file = "cscope.out"
   let g:cscopedb_small_file = "cache_cscope.out"
-  let g:cscopedb_auto_init = 1
+  let g:cscopedb_auto_init = 0
   let g:cscopedb_auto_files = 1
   function s:autodir_cscope()
     let orig_cwd = getcwd()
@@ -149,7 +149,13 @@ if has('cscope')
     endwhile
     execute "cd " . orig_cwd
   endfunc
-  call s:autodir_cscope()
+  if g:cscopedb_auto_init
+    call s:autodir_cscope()
+  endif
+  func InitCScope()
+    call s:autodir_cscope()
+    execute "normal \<Plug>CscopeDBInit"
+  endfunc
   "}}}
 endif
 
@@ -183,6 +189,7 @@ Plugin 'junkblocker/patchreview-vim' "{{{ Open up patches or git diffs in separa
 "}}}
 
 Plugin 'sudobash1/vprojman.vim' " Settings for a project {{{
+let g:vprojman_autoinit = 0
 let g:vprojman_signature = "-sbr-"
 let g:vprojman_copen_pos = "botright"
 
