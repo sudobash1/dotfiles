@@ -66,8 +66,7 @@ Plugin 'Superbil/llvm.vim' "Syntax highlighting for llvm IR {{{
 "}}}
 
 Plugin 'kien/ctrlp.vim' " Fuzzy file finder {{{
-let g:ctrlp_map = ''
-nnoremap <F1> :CtrlP .<CR>
+let g:ctrlp_map = '<F1>'
 let g:ctrlp_by_filename = 1
 "}}}
 
