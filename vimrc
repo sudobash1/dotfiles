@@ -650,52 +650,52 @@ autocmd Filetype c set errorformat^=%-Gavrdude%.%#
 
 " SML {{{
 " no autowrap XXX Why can't I put the t and c on one line?
-autocmd Filetype sml setlocal formatoptions-=t
-autocmd Filetype sml setlocal formatoptions-=c
-autocmd filetype sml setlocal shiftwidth=2
-autocmd filetype sml setlocal softtabstop=2
+autocmd FileType sml setlocal formatoptions-=t
+autocmd FileType sml setlocal formatoptions-=c
+autocmd FileType sml setlocal shiftwidth=2
+autocmd FileType sml setlocal softtabstop=2
 " }}}
 
 " Text {{{
-autocmd filetype text setlocal linebreak
-autocmd filetype text setlocal cc=0
-autocmd filetype text setlocal nonu
-autocmd filetype text setlocal spell
-autocmd filetype help setlocal nospell
+autocmd FileType text setlocal linebreak
+autocmd FileType text setlocal cc=0
+autocmd FileType text setlocal nonu
+autocmd FileType text setlocal spell
+autocmd FileType help setlocal nospell
 autocmd FileType text setlocal textwidth=0
-autocmd filetype text setlocal tabstop=4
-autocmd filetype text setlocal noexpandtab
-autocmd filetype text noremap <buffer> <up> gk
-autocmd filetype text noremap <buffer> k gk
-autocmd filetype text noremap <buffer> <down> gj
-autocmd filetype text noremap <buffer> j gj
-autocmd filetype text noremap <buffer> ^ g^
-autocmd filetype text noremap <buffer> $ g$
-autocmd filetype text nnoremap <buffer> I g^i
-autocmd filetype text nnoremap <buffer> A g$a
+autocmd FileType text setlocal tabstop=4
+autocmd FileType text setlocal noexpandtab
+autocmd FileType text noremap <buffer> <up> gk
+autocmd FileType text noremap <buffer> k gk
+autocmd FileType text noremap <buffer> <down> gj
+autocmd FileType text noremap <buffer> j gj
+autocmd FileType text noremap <buffer> ^ g^
+autocmd FileType text noremap <buffer> $ g$
+autocmd FileType text nnoremap <buffer> I g^i
+autocmd FileType text nnoremap <buffer> A g$a
 " }}}
 
 " Assembly {{{
 
 "disable tab completion for asm files
-silent autocmd filetype asm let b:SuperTabDisabled = 1
+silent autocmd FileType asm let b:SuperTabDisabled = 1
 
-autocmd filetype asm setlocal tabstop=8
-autocmd filetype asm setlocal shiftwidth=8
-autocmd filetype asm setlocal softtabstop=8
-autocmd filetype asm setlocal noexpandtab
+autocmd FileType asm setlocal tabstop=8
+autocmd FileType asm setlocal shiftwidth=8
+autocmd FileType asm setlocal softtabstop=8
+autocmd FileType asm setlocal noexpandtab
 " }}}
 
 " Special Indentation Rules {{{
 
-autocmd filetype html setlocal shiftwidth=2
-autocmd filetype php setlocal shiftwidth=2
-autocmd filetype css setlocal shiftwidth=2
-autocmd filetype vim setlocal shiftwidth=2
-autocmd filetype sh setlocal shiftwidth=2
+autocmd FileType html setlocal shiftwidth=2
+autocmd FileType php setlocal shiftwidth=2
+autocmd FileType css setlocal shiftwidth=2
+autocmd FileType vim setlocal shiftwidth=2
+autocmd FileType sh setlocal shiftwidth=2
 
-autocmd filetype make setlocal tabstop=8
-autocmd filetype make setlocal noexpandtab
+autocmd FileType make setlocal tabstop=8
+autocmd FileType make setlocal noexpandtab
 
 set softtabstop=-1 " use shiftwidth
 
