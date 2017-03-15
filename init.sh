@@ -27,7 +27,7 @@ fi
 echo "Setting up .vimrc and .vimrc.local.vim"
 [ -e $dir/local/"$hostname".vim ] || touch $dir/local/"$hostname".vim
 ln -s $dir/local/"$hostname".vim .vimrc.local.vim
-ln -s $dir/vimrc ~/.vimrc
+ln -s $dir/vimrc $HOME/.vimrc
 [ "$dir" != "$HOME/.vim" ] && ln -s $dir .vim
 
 echo "Setting up .tmux.conf and .tmux.local.conf"
@@ -35,7 +35,11 @@ echo "Setting up .tmux.conf and .tmux.local.conf"
 ln -s $dir/local/"$hostname".tmux.conf .tmux.local.conf
 ln -s $dir/tmux.conf .tmux.conf
 
-echo "Initializing Vundle"
-cd $dir
-git submodule update --init --recursive
-vim +PluginInstall +qall
+if [[ -e $dir/bundle/Vundle.vim/.git ]]; then
+  echo "Skipping Vundle initialization"
+else
+  echo "Initializing Vundle"
+  cd $dir
+  git submodule update --init --recursive
+  vim +PluginInstall +qall
+fi
