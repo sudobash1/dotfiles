@@ -67,8 +67,24 @@ Plugin 'Superbil/llvm.vim' "Syntax highlighting for llvm IR {{{
 
 Plugin 'kien/ctrlp.vim' " Fuzzy file finder {{{
 let g:ctrlp_map = '<F1>'
+let g:ctrlp_cmd = 'call VIMRC_do_ctrlp()'
 let g:ctrlp_by_filename = 1
-"}}}
+let g:ctrlp_match_window = 'results:100'
+
+" Find files in all directories that are not hidden or of forbidden extention types
+function VIMRC_do_ctrlp()
+  if v:count == 2
+    CtrlPBuffer
+  else
+    let g:ctrlp_user_command = "find %s -type f -not -path '*/\.*/*'"
+    for l:ignore in split(&wildignore, '\s*,\s*')
+      let g:ctrlp_user_command .= " -not -path '" . l:ignore . "'"
+    endfor
+    CtrlP .
+  endif
+endfunc
+
+" }}}
 
 Plugin 'ervandew/supertab' " Tab completion anywhere {{{
 "let g:SuperTabDefaultCompletionType = "context" " Detect if in a pathname, etc...
@@ -359,7 +375,7 @@ set tags=./tags;~
 
 "Allow O key to work almost instantly while still allowing the arrow keys to
 "work
-set ttimeoutlen=250
+set ttimeoutlen=50
 
 "Allow conceal mode
 set conceallevel=2
