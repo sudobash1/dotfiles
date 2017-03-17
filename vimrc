@@ -62,9 +62,6 @@ Plugin 'vundle/Vundle.vim'
 Plugin 'ntpeters/vim-better-whitespace' "Show trailing whitespace {{{
 "}}}
 
-Plugin 'Superbil/llvm.vim' "Syntax highlighting for llvm IR {{{
-"}}}
-
 Plugin 'kien/ctrlp.vim' " Fuzzy file finder {{{
 let g:ctrlp_map = '<F1>'
 let g:ctrlp_cmd = 'call VIMRC_do_ctrlp()'
