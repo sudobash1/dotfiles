@@ -75,6 +75,8 @@ let g:ctrlp_match_window = 'results:100'
 function VIMRC_do_ctrlp()
   if v:count == 2
     CtrlPBuffer
+  elseif v:count == 3
+    CtrlPTag
   else
     let g:ctrlp_user_command = "find %s -type f -not -path '*/\.*/*'"
     for l:ignore in split(&wildignore, '\s*,\s*')
