@@ -59,6 +59,9 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'vundle/Vundle.vim'
 
+Plugin 'tpope/vim-fugitive.git' " Intigrate vim with git {{{
+"}}}
+
 Plugin 'ntpeters/vim-better-whitespace' "Show trailing whitespace {{{
 "}}}
 
