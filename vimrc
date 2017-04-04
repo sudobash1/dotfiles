@@ -776,7 +776,7 @@ nnoremap <leader>l :call MakeLine('')<left><left>
 
 " }}}
 
-"============================== STATUSLINE ============================= {{{
+"============================== STATUS/TAB LINE ============================= {{{
 set statusline=%t\     "tail of the filename
 
 "set statusline+=[%{strlen(&fenc)?&fenc:'none'}, "file encoding
@@ -798,7 +798,7 @@ set statusline+=%c,     "cursor column
 set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
 
-function! Cscope_dynamic_update_hook(updating)
+function! g:Cscope_dynamic_update_hook(updating)
   if a:updating
     let g:statusline_cscope_update_status = "  (Updating cscope...)"
   else
@@ -806,6 +806,32 @@ function! Cscope_dynamic_update_hook(updating)
   endif
   execute "redrawstatus!"
 endfunction
+
+"from https://github.com/mkitt/tabline.vim/blob/master/plugin/tabline.vim
+function! VIMRC_Tabline()
+  let s = ''
+  for i in range(tabpagenr('$'))
+    let tab = i + 1
+    let winnr = tabpagewinnr(tab)
+    let buflist = tabpagebuflist(tab)
+    let bufnr = buflist[winnr - 1]
+    let bufname = bufname(bufnr)
+    let bufmodified = getbufvar(bufnr, "&mod")
+
+    let s .= '%' . tab . 'T'
+    let s .= (tab == tabpagenr() ? '%#TabLineSel#' : '%#TabLine#')
+    let s .= ' ' . tab .':'
+    let s .= (bufname != '' ? '['. fnamemodify(bufname, ':t') . '] ' : '[No Name] ')
+
+    if bufmodified
+      let s .= '[+] '
+    endif
+  endfor
+
+  let s .= '%#TabLineFill#'
+  return s
+endfunction
+set tabline=%!VIMRC_Tabline()
 
 " }}}
 
