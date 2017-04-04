@@ -704,6 +704,11 @@ autocmd FileType asm setlocal softtabstop=8
 autocmd FileType asm setlocal noexpandtab
 " }}}
 
+" Vim {{{
+autocmd FileType vim nnoremap <buffer> K :execute "help " . expand('<cword>')<CR>
+autocmd FileType vim vnoremap <buffer> K "ty:help <C-R>t<CR>
+" }}}
+
 " Special Indentation Rules {{{
 
 autocmd FileType html setlocal shiftwidth=2
@@ -772,6 +777,11 @@ nnoremap <leader>l :call MakeLine('')<left><left>
 "endfunction
 "
 "nnoremap z= :call <SID>SpellCorrect()<CR>
+" }}}
+
+" Generate gdb break for current line {{{
+autocmd Filetype c nnoremap <buffer> <leader>b :echo "break " . expand('%:p') . ":" . line('.')<CR>
+autocmd Filetype c++ nnoremap <buffer> <leader>b :echo "break " . expand('%:p') . ":" . line('.')<CR>
 " }}}
 
 " }}}
