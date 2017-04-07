@@ -225,7 +225,7 @@ nnoremap <F12> :call vprojman#make(g:run_target)<CR>
 command CustCMDpatch call vprojman#patch()
 "}}}
 
-Plugin 'sudobash1/vimwits.vim' " Settings for a project {{{
+Plugin 'sudobash1/vimwits' " Settings for a project {{{
 let g:vimwits_enable = g:vimrc_autoinit
 "}}}
 
