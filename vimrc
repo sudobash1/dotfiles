@@ -1,4 +1,3 @@
-
 "General Notes About Vim: {{{
 "
 "to convert the current char to ascii use ga
@@ -43,6 +42,7 @@
 let g:vimrc_autoinit = 0
 if index(['1', 'yes', 'on', 'true', 'y', 't', 'enable'], tolower($VIM_AUTOINIT)) >= 0
   let g:vimrc_autoinit = 1
+  autocmd Filetype vim,make,sh let b:vimwits_valid_hi_groups = ["", "Identifier"]
 endif
 
 set nocompatible " be iMproved, required
@@ -223,6 +223,10 @@ nnoremap <F9>  :call vprojman#make()<CR>
 nnoremap <F12> :call vprojman#make(g:run_target)<CR>
 
 command CustCMDpatch call vprojman#patch()
+"}}}
+
+Plugin 'sudobash1/vimwits.vim' " Settings for a project {{{
+let g:vimwits_enable = g:vimrc_autoinit
 "}}}
 
 
@@ -782,73 +786,6 @@ nnoremap <leader>l :call MakeLine('')<left><left>
 " Generate gdb break for current line {{{
 autocmd Filetype c nnoremap <buffer> <leader>b :echo "break " . expand('%:p') . ":" . line('.')<CR>
 autocmd Filetype c++ nnoremap <buffer> <leader>b :echo "break " . expand('%:p') . ":" . line('.')<CR>
-" }}}
-
-"" TODO
-""
-"" Bind to enter window (tab?)
-"" Clear on leave window (tab?)
-"" Filetype config
-"" disable flag (buffer/window/tab/global specific?)
-"" toggle command?
-""
-"" Highlight current word {{{
-"function! s:matchWord()
-"  let l:cword = escape(expand('<cword>'), '/\')
-"  if l:cword == ""
-"    if exists("w:matchWord_match")
-"      call matchdelete(w:matchWord_match)
-"      unlet w:matchWord_match
-"      unlet w:matchWord_oldMatchWord
-"    endif
-"    return
-"  endif
-"
-"  let l:syn = synIDattr(synIDtrans(synID(line("."),col("."),1)),"name")
-"  " TODO do we care about trans=0 for synID:
-"  " let trans = synIDattr(synID(line("."),col("."),0),"name")
-"  " TODO do we care about non translated syntax
-"  " let hi = synIDattr(synID(line("."),col("."),1),"name")
-"
-"  if g:MatchWord_validHiGroups != [] && index(g:MatchWord_validHiGroups, l:syn) == -1
-"    " We are filtering valid higlight groups and the cursor isn't in the
-"    " correct one
-"    if exists("w:matchWord_match")
-"      call matchdelete(w:matchWord_match)
-"      unlet w:matchWord_match
-"      unlet w:matchWord_oldMatchWord
-"    endif
-"    return
-"  endif
-"
-"  if exists("w:matchWord_oldMatchWord") && w:matchWord_oldMatchWord == l:cword
-"    " Already matching this word. Don't bother searching again.
-"    return
-"  endif
-"
-"  if exists("w:matchWord_match")
-"    call matchdelete(w:matchWord_match)
-"    unlet w:matchWord_match
-"    unlet w:matchWord_oldMatchWord
-"  endif
-"
-"  let w:matchWord_oldMatchWord = l:cword
-"
-"  let l:topline = line("w0") - 1
-"  let l:botline = line("w$") + 1
-"  let l:match_re = '\V\%>' . l:topline . 'l\%<' . l:botline . 'l\<' . l:cword . '\>'
-"
-"  echo "re"
-"
-"  let w:matchWord_match = matchadd("MatchWord", l:match_re)
-"
-"endfunction
-
-"highlight! MatchWord term=underline cterm=underline gui=underline
-"let g:MatchWord_validHiGroups = ['']
-
-"autocmd CursorMoved,CursorMovedI,VimResized,BufEnter * :call s:matchWord()
-
 " }}}
 
 " }}}
