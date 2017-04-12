@@ -42,7 +42,6 @@
 let g:vimrc_autoinit = 0
 if index(['1', 'yes', 'on', 'true', 'y', 't', 'enable'], tolower($VIM_AUTOINIT)) >= 0
   let g:vimrc_autoinit = 1
-  autocmd Filetype vim,make,sh let b:vimwits_valid_hi_groups = ["", "Identifier"]
 endif
 
 set nocompatible " be iMproved, required
@@ -227,6 +226,7 @@ command CustCMDpatch call vprojman#patch()
 
 Plugin 'sudobash1/vimwits' " Settings for a project {{{
 let g:vimwits_enable = g:vimrc_autoinit
+autocmd Filetype vim,make,sh let b:vimwits_valid_hi_groups = ["", "Identifier"]
 "}}}
 
 Plugin 'simeji/winresizer' " Resize window mode {{{
