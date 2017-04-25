@@ -91,8 +91,7 @@ esac
 # }}}
 
 # Execute the local bashrc (if exists)
-[[ -f $DOTFILES_REPO/local/${HOSTNAME}.bash ]] && \
-  source $DOTFILES_REPO/local/${HOSTNAME}.bash
+[[ -f $HOME/.bashrc.local.bash ]] && source $HOME/.bashrc.local.bash
 
 unset USE_COLOR
 
