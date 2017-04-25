@@ -22,6 +22,10 @@ hi Comment    ctermfg=darkblue   cterm=bold
 "hi Number     ctermfg=brown   cterm=bold
 "hi ColorColumn ctermfg=green
 
+hi DiffAdd ctermbg=9
+hi DiffText ctermbg=1
+hi DiffChange ctermbg=13
+
 let colors_name = "custom"
 
 " vim: sw=2
