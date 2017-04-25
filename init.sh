@@ -10,7 +10,7 @@ hostname=`uname -n`
 echo "Using $hostname as hostname"
 
 error=
-for file in .tmux.conf .tmux.local.conf .vimrc .vimrc.local.vim; do
+for file in .tmux.conf .tmux.local.conf .vimrc .vimrc.local.vim .bashrc; do
   [ -h $file ] && rm $file
   if [ -e $file ]; then
     echo "$HOME/$file already exists and is not a link"
@@ -34,6 +34,9 @@ echo "Setting up .tmux.conf and .tmux.local.conf"
 [ -e $dir/local/"$hostname".tmux.conf ] || touch $dir/local/"$hostname".tmux.conf
 ln -s $dir/local/"$hostname".tmux.conf .tmux.local.conf
 ln -s $dir/tmux.conf .tmux.conf
+
+echo "Setting up .bashrc"
+ln -s $dir/bashrc .bashrc
 
 if [[ -e $dir/vim/bundle/Vundle.vim/.git ]]; then
   echo "Skipping Vundle initialization"
