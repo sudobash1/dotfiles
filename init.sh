@@ -18,24 +18,24 @@ for file in .tmux.conf .tmux.local.conf .vimrc .vimrc.local.vim; do
   fi
 done
 [ -h .vim ] && rm .vim
-if [ -e .vim ] && [ "$dir" != "$HOME/.vim" ] ; then
-  echo "$HOME/.vim already exists and is not this repo or a link"
+if [ -e .vim ] ; then
+  echo "$HOME/.vim already exists and is not a link"
   error=1
 fi
 [ "$error" ] && exit 1
 
-echo "Setting up .vimrc and .vimrc.local.vim"
+echo "Setting up .vim, .vimrc and .vimrc.local.vim"
 [ -e $dir/local/"$hostname".vim ] || touch $dir/local/"$hostname".vim
+ln -s $dir/vim .vim
 ln -s $dir/local/"$hostname".vim .vimrc.local.vim
 ln -s $dir/vimrc $HOME/.vimrc
-[ "$dir" != "$HOME/.vim" ] && ln -s $dir .vim
 
 echo "Setting up .tmux.conf and .tmux.local.conf"
 [ -e $dir/local/"$hostname".tmux.conf ] || touch $dir/local/"$hostname".tmux.conf
 ln -s $dir/local/"$hostname".tmux.conf .tmux.local.conf
 ln -s $dir/tmux.conf .tmux.conf
 
-if [[ -e $dir/bundle/Vundle.vim/.git ]]; then
+if [[ -e $dir/vim/bundle/Vundle.vim/.git ]]; then
   echo "Skipping Vundle initialization"
 else
   echo "Initializing Vundle"
