@@ -588,6 +588,8 @@ nnoremap <space> za
 "Doublepress the leader to get a prompt to do one of my custom commands
 nnoremap <leader><leader> :CustCMD
 
+nnoremap <leader>h :echo printf("0x%x", expand('<cword>'))<CR>
+
 "Move current/selected lines up/down
 "nnoremap <C-Up> "zddkk$p
 "nnoremap <C-Down> "zdd$p
@@ -789,8 +791,16 @@ nnoremap <leader>l :call MakeLine('')<left><left>
 " }}}
 
 " Generate gdb break for current line {{{
-autocmd Filetype c nnoremap <buffer> <leader>b :echo "break " . expand('%:p') . ":" . line('.')<CR>
-autocmd Filetype c++ nnoremap <buffer> <leader>b :echo "break " . expand('%:p') . ":" . line('.')<CR>
+function GenerateBreakpoint()
+  " TODO: what about paths with spaces?
+  let l:cmd = "break " . expand('%:p') . ":" . line('.')
+  let l:buf = shellescape(l:cmd)
+  exec 'silent ! [ "$TMUX" ] && tmux set-buffer ' . l:buf
+  redraw!
+  echo l:cmd
+endfunction
+autocmd Filetype c nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
+autocmd Filetype c++ nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
 " }}}
 
 " }}}
