@@ -39,9 +39,11 @@
 "
 " }}}
 
-let g:vimrc_autoinit = 0
+let g:vimrc_autoinit = 1
 if index(['1', 'yes', 'on', 'true', 'y', 't', 'enable'], tolower($VIM_AUTOINIT)) >= 0
   let g:vimrc_autoinit = 1
+elseif index(['0', 'no', 'off', 'false', 'n', 'f', 'disable'], tolower($VIM_AUTOINIT)) >= 0
+  let g:vimrc_autoinit = 0
 endif
 
 set nocompatible " be iMproved, required
