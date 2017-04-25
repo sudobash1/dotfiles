@@ -40,7 +40,6 @@ function get_local_file() {
 
 # VIM
 echo "Setting up .vim, .vimrc and .vimrc.local.vim"
-[ -e $dir/local/"$hostname".vim ] || touch $dir/local/"$hostname".vim
 ln -s $dir/vim .vim
 echo "using $(get_local_file vim) as local vim config"
 ln -s $(get_local_file vim) .vimrc.local.vim
@@ -49,7 +48,6 @@ echo
 
 # TMUX
 echo "Setting up .tmux.conf and .tmux.local.conf"
-[ -e $dir/local/"$hostname".tmux.conf ] || touch $dir/local/"$hostname".tmux.conf
 echo "using $(get_local_file tmux.conf) as local tmux config"
 ln -s $(get_local_file tmux.conf) .tmux.local.conf
 ln -s $dir/tmux.conf .tmux.conf
