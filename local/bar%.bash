@@ -8,5 +8,6 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
 
+export HOME=/lustre/home/srobinson
 
 source $DOTFILES_REPO/local/xstg.bash
