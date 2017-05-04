@@ -55,11 +55,15 @@ source ~/.dotfiles/bash/bash_completion_tmux.sh
 
 # }}}
 
-# ------------------- Aliases ------------------- {{{
+# ------------------- Aliases & Functions ------------------- {{{
 
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
+
+function mantag() {
+  man -P "less -p \"^ +$2\"" $1
+}
 
 [ -x /usr/bin/dircolors ] && eval "$(dircolors -b)" && alias ls='ls --color=auto'
 
