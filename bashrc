@@ -36,7 +36,7 @@ HISTFILESIZE=2000
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
+export LESS="${LESS}SFR"
 # }}}
 
 # ------------------- Bash Completions ------------------- {{{
@@ -60,6 +60,9 @@ source ~/.dotfiles/bash/bash_completion_tmux.sh
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
+
+alias csv=$'column -t -s\',\''
+alias tsv=$'column -t -s\'\t\''
 
 function mantag() {
   man -P "less -p \"^ +$2\"" $1
