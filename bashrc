@@ -68,6 +68,62 @@ function mantag() {
   man -P "less -p \"^ +$2\"" $1
 }
 
+if [[ ${BASH_VERSINFO[0]} > 4 || (${BASH_VERSINFO[0]} == 4 && ${BASH_VERSINFO[1]} > 0) ]]; then
+
+function __bashrc__tablesort() { #{{{
+  if [[ ! $__BASHRC__TABLESORT_FN || ! $__BASHRC__TABLESORT_SEP ]]; then
+    echo "Do not call __bashrc__tablesort directly!"
+    return 1
+  fi
+  if [[ $# != 1 && $# != 2 ]]; then
+    echo "Usage: $__BASHRC__TABLESORT_FN column_name/num [file]"
+    echo
+    echo "if file is unspecified or -, the stdin is used"
+    return 1
+  fi
+  if [[ $# == 2 && $2 != "-" ]]; then
+    if [[ ! -r $2 ]]; then
+      echo "Unable to read file $2"
+      return
+    fi
+    exec {FD}<$2
+  else
+    exec {FD}<&0
+  fi
+
+  IFS="" read header <&$FD
+  col=""
+  if [[ $1 =~ ^[0-9]+$ ]]; then
+    col=$1
+  elif [[ $header == *"$__BASHRC__TABLESORT_SEP$1$__BASHRC__TABLESORT_SEP"* || \
+          $header == "$1$__BASHRC__TABLESORT_SEP"* || \
+          $header == *"$__BASHRC__TABLESORT_SEP$1" || \
+          $header == "$1" \
+       ]]; then
+    col=$(printf -- "$header" | awk -F "$__BASHRC__TABLESORT_SEP" $"{for (i=1; i<=NF; i++) {if (\$i == \"$1\") print i}}")
+  fi
+
+  if [[ ! $col =~ ^[0-9]+$ ]]; then
+    echo "Unknown header '$1'"
+    exec {FD}<&-
+    return 1
+  fi
+
+  printf -- "$header\n"
+  sort -t "$__BASHRC__TABLESORT_SEP" -k $col -n <&$FD
+  exec {FD}<&-
+} #}}}
+
+alias csvsort=$'__BASHRC__TABLESORT_SEP=\',\' __BASHRC__TABLESORT_FN=\'csvsort\' __bashrc__tablesort'
+alias tsvsort=$'__BASHRC__TABLESORT_SEP=\'\t\' __BASHRC__TABLESORT_FN=\'tsvsort\' __bashrc__tablesort'
+
+else
+
+alias csvsort=$'echo "csvsort is not supported for bash < 4.1"#'
+alias csvsort=$'echo "tsvsort is not supported for bash < 4.1"#'
+
+fi
+
 [ -x /usr/bin/dircolors ] && eval "$(dircolors -b)" && alias ls='ls --color=auto'
 
 # }}}
