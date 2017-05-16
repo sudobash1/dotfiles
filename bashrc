@@ -36,7 +36,7 @@ HISTFILESIZE=2000
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-export LESS="${LESS}SFR"
+export LESS="${LESS}SFRX"
 # }}}
 
 # ------------------- Bash Completions ------------------- {{{
@@ -100,7 +100,7 @@ function __bashrc__tablesort() { #{{{
           $header == *"$__BASHRC__TABLESORT_SEP$1" || \
           $header == "$1" \
        ]]; then
-    col=$(printf -- "$header" | awk -F "$__BASHRC__TABLESORT_SEP" $"{for (i=1; i<=NF; i++) {if (\$i == \"$1\") print i}}")
+    col=$(printf -- "$header" | awk -F "$__BASHRC__TABLESORT_SEP" $"{for (i=1; i<=NF; i++) {if (\$i == \"$1\") {print i; exit} }}")
   fi
 
   if [[ ! $col =~ ^[0-9]+$ ]]; then
