@@ -51,7 +51,7 @@ if ! shopt -oq posix; then
 fi
 
 # My completions
-source ~/.dotfiles/bash/bash_completion_tmux.sh
+source $DOTFILES_REPO/bash/bash_completion_tmux.sh
 
 # }}}
 
@@ -151,11 +151,11 @@ xterm*|rxvt*)
     ;;
 esac
 
+unset USE_COLOR
+
 # }}}
 
 # Execute the local bashrc (if exists)
 [[ -f $HOME/.bashrc.local.bash ]] && source $HOME/.bashrc.local.bash
-
-unset USE_COLOR
 
 # vim: fdm=marker foldlevel=0
