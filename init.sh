@@ -11,7 +11,7 @@ echo "Using $hostname as hostname"
 echo
 
 error=
-for file in .tmux.conf .tmux.local.conf .vimrc .vimrc.local.vim .bashrc; do
+for file in .tmux.conf .tmux.local.conf .vimrc .vimrc.local.vim .bashrc .bashrc.local.bash; do
   [ -h $file ] && rm $file
   if [ -e $file ]; then
     echo "$HOME/$file already exists and is not a link"
