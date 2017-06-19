@@ -18,6 +18,8 @@ export VISUAL=/usr/bin/vim
 set -o vi
 # Recheck the window size after every command
 shopt -s checkwinsize
+# Append (don't overwrite) history
+shopt -s histappend
 
 export LC_COLLATE="C"
 
