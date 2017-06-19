@@ -9,14 +9,25 @@ function __repo_base() {
 }
 
 alias goto_bar_repo='cd ~/${HOSTNAME}_repos'
-export PATH="\
+
+if [[ $HOSTNAME == bar36 ]]; then
+  export PATH="\
+$HOME/repos/tg/tg/install/bin:\
+$HOME/bin:\
+$PATH:\
+/usr/mpi/gcc/openmpi-1.10.3a1/bin:\
+$HOME/.local/opt/compilers_and_libraries_2017.0.098/linux/mpi/intel64/bin:\
+$HOME/.local/opt/compilers_and_libraries_2017.0.098/linux/bin/intel64"
+  export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.local/opt/compilers_and_libraries_2017.0.098/linux/mpi/intel64/lib:$HOME/.local/opt/lib/intel64_lin"
+else
+  export PATH="\
 $HOME/repos/tg/tg/install/bin:\
 $HOME/bin:/home/srobinson/build/tau-2.26.1/x86_64/bin:\
 /opt/intel/tools-2017/bin:\
 /opt/intel/tools-2017/compilers_and_libraries_2017.0.098/linux/mpi/intel64/bin:\
 $PATH"
-
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/intel/tools-2017/lib/intel64_lin"
+  export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/intel/tools-2017/lib/intel64_lin"
+fi
 
 alias clustermyps=$'for i in {1..32} 36;do echo -en "bar$i\t";ssh bar$i -qt \'ps ux|awk "END{print NR-5}"\';done'
 alias clusterwho=$'for i in {1..32} 36;do echo -en "\nbar$i\t";ssh bar$i -qt \'ps -Gxstack -ouser|awk -vORS=, \'\\\'\'/^[^U]/{users[$1]}END{for(x in users)print x}\'\\\';done;echo'
@@ -41,6 +52,6 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
 
-export HOME=/lustre/home/srobinson
+[[ $HOSTNAME != bar36 ]] && export HOME=/lustre/home/srobinson
 
 source $DOTFILES_REPO/local/xstg.bash
