@@ -33,14 +33,34 @@ function config_gen() {
   eval "$(__repo_base)/ocr/ocr/install/share/ocr/scripts/Configs/config-generator.py $extra_args $@"
 }
 
+alias config_gen_x86=$'config_gen --output install/x86/generated.cfg --target x86'
+alias config_gen_x86_mpi=$'config_gen --output install/x86-mpi/generated.cfg --target mpi'
+
 alias config_gen_phi=$'config_gen --output install/x86-phi/generated.cfg --target x86'
 alias config_gen_phi_mpi=$'config_gen --output install/x86-phi-mpi/generated.cfg --target mpi'
+
+alias analyzeProfile=$'$(__repo_base)/ocr/ocr/scripts/Profiler/analyzeProfile.py'
+alias summaryProfile=$"analyzeProfile -t'*' -s | sed -n -e '/TOTAL/,\$p' | sed -e 's/^[/\\]/ /'"
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
 
-export HOME=/lustre/home/srobinson
-
 source $DOTFILES_REPO/local/xstg.bash
+
+# cd variables
+shopt -s cdable_vars
+
+export repos="$HOME/${HOSTNAME}_repos"
+export hpcg="$HOME/${HOSTNAME}_repos/apps/apps/hpcg/refactored/ocr/intel-Eager"
+export comd="$HOME/${HOSTNAME}_repos/apps/apps/CoMD/refactored/ocr/intel-chandra-tiled"
+export rsbench="$HOME/${HOSTNAME}_repos/apps/apps/RSBench/refactored/ocr/intel-sharedDB"
+
+alias goto_bar_repo='cd $repos'
+
+
+# auto source the apps_env.bash
+if [[ -e "$repos/apps/apps/apps_env.bash" ]]; then
+  source "$repos/apps/apps/apps_env.bash" > /dev/null
+fi
