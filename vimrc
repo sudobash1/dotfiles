@@ -58,7 +58,7 @@ call vundle#begin()
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-Plugin 'vundle/Vundle.vim'
+Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'tpope/vim-fugitive.git' " Intigrate vim with git {{{
 "}}}
@@ -431,7 +431,7 @@ endif
 "indenting defaults
 set shiftwidth=4
 set softtabstop=4
-set tabstop=4
+"set tabstop=4
 set expandtab
 set autoindent
 set smartindent
