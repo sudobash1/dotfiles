@@ -60,6 +60,16 @@ echo "using $(get_local_file bash) as local bash config"
 ln -s $(get_local_file bash) .bashrc.local.bash
 echo
 
+# GIT
+if [ -e .gitconfig ]; then
+  echo "$HOME/.gitconfig already exists."
+  echo "Skipping git configuration"
+else
+  echo "Calling git_init.sh"
+  $dir/git_init.sh
+fi
+echo
+
 if [[ -e $dir/vim/bundle/Vundle.vim/.git ]]; then
   echo "Skipping Vundle initialization"
 else
