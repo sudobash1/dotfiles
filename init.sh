@@ -64,6 +64,7 @@ if [[ -e $dir/vim/bundle/Vundle.vim/.git ]]; then
   echo "Skipping Vundle initialization"
 else
   echo "Initializing Vundle"
+  mkdir -p $dir/vim/bundle
   cd $dir/vim/bundle
   git clone https://github.com/VundleVim/Vundle.vim.git
   vim +PluginInstall +qall
