@@ -20,6 +20,8 @@ set -o vi
 shopt -s checkwinsize
 # Append (don't overwrite) history
 shopt -s histappend
+# Allow ** globs
+shopt -s globstar
 
 export LC_COLLATE="C"
 
