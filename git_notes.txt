@@ -1,0 +1,3 @@
+To push a repo without checking it out, the explicit form is:
+
+git push some_repo local_branch:refs/heads/new_branch
