@@ -60,18 +60,6 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
 
-# cd variables
-shopt -s cdable_vars
-
-export repos="$HOME/${HOSTNAME}_repos"
-export hpcg="$HOME/${HOSTNAME}_repos/apps/apps/hpcg/refactored/ocr/intel-Eager"
-export comd="$HOME/${HOSTNAME}_repos/apps/apps/CoMD/refactored/ocr/intel-chandra-tiled"
-export rsbench="$HOME/${HOSTNAME}_repos/apps/apps/RSBench/refactored/ocr/intel-sharedDB"
-
 alias goto_bar_repo='cd $repos'
 
-
-# auto source the apps_env.bash
-if [[ -e "$repos/apps/apps/apps_env.bash" ]]; then
-  source "$repos/apps/apps/apps_env.bash" > /dev/null
-fi
+source $DOTFILES_REPO/local/xstg.bash
