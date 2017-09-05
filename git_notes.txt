@@ -1,3 +1,6 @@
 To push a repo without checking it out, the explicit form is:
 
 git push some_repo local_branch:refs/heads/new_branch
+
+
+You can put per repository ignore patterns in .git/info/exclude in each repository.
