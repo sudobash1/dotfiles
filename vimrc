@@ -214,18 +214,6 @@ Plugin 'junkblocker/patchreview-vim' "{{{ Open up patches or git diffs in separa
 "See :h patchreview for details
 "}}}
 
-Plugin 'sudobash1/vprojman.vim' " Settings for a project {{{
-let g:vprojman_autoinit = g:vimrc_autoinit
-let g:vprojman_signature = "-sbr-"
-let g:vprojman_copen_pos = "botright"
-
-let g:run_target = "run"
-nnoremap <F9>  :call vprojman#make()<CR>
-nnoremap <F12> :call vprojman#make(g:run_target)<CR>
-
-command CustCMDpatch call vprojman#patch()
-"}}}
-
 Plugin 'sudobash1/vimwits' " Settings for a project {{{
 let g:vimwits_enable = g:vimrc_autoinit
 autocmd Filetype vim,make,sh let b:vimwits_valid_hi_groups = ["", "Identifier"]
@@ -246,6 +234,17 @@ let g:winresizer_horiz_resize = 1
 "let g:acp_enableAtStartup = 0 "DISABLE
 ""}}}
 
+"Plugin 'sudobash1/vprojman.vim' " Settings for a project {{{
+"let g:vprojman_autoinit = 0
+"let g:vprojman_signature = "-sbr-"
+"let g:vprojman_copen_pos = "botright"
+"
+"let g:run_target = "run"
+"nnoremap <F9>  :call vprojman#make()<CR>
+"nnoremap <F12> :call vprojman#make(g:run_target)<CR>
+"
+"command CustCMDpatch call vprojman#patch()
+""}}}
 
 "Plugin 'SirVer/ultisnips' "{{{
 "Plugin 'honza/vim-snippets' " This repo has a lot of default snippets
@@ -642,7 +641,7 @@ set cinoptions+=g0 "disable for access modifiers
 
 "The directory the MAKEFILE is in.
 let g:make_dir = "."
-let g:make_opts = "run"
+let g:make_opts = ""
 
 
 " commit messages {{{
@@ -650,10 +649,7 @@ autocmd Filetype svn,*commit* setlocal spell
 " }}}
 
 " Java {{{
-autocmd Filetype java set errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
-"autocmd Filetype java nnoremap <F9> :wa<CR>:execute "make -C ".g:make_dir<CR><CR>:botright copen<CR>:wincmd p<CR>
-"autocmd Filetype java nnoremap <F12> :wa<CR>:execute "make -C ".g:make_dir." ".g:make_opts<CR><CR>
-
+"autocmd Filetype java set errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
 "autocmd Filetype java inoremap {<CR> {<CR>}<C-O>O
 "autocmd Filetype java inoremap {{ <CR>{<CR>}<C-O>O
 "autocmd Filetype java inoremap { {}<Left>
@@ -663,20 +659,16 @@ autocmd Filetype java set errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
 " }}}
 
 " C++ {{{
-autocmd Filetype cpp set errorformat=%f:%l:%c:%m,%f:kk%l:\ %m,In\ file\ included\ from\ %f:%l:,\^I\^Ifrom\ %f:%l%m,\"%f\"\\\,\ line\ %l.%c:%m\,\ %f:%l:%m,%f:%l:%c:%m
-autocmd Filetype cpp set errorformat^=%-GIn\ file\ included\ %.%# 
-autocmd Filetype cpp set errorformat^=%-Gavrdude%.%#
-"autocmd Filetype cpp nnoremap <F9>  :wa<CR>:execute "make -C ".g:make_dir<CR><CR>:botright copen<CR>:wincmd p<CR>
-"autocmd Filetype cpp nnoremap <F12> :wa<CR>:execute "make -C ".g:make_dir." ".g:make_opts<CR><CR><CR>
+"autocmd Filetype cpp set errorformat=%f:%l:%c:%m,%f:kk%l:\ %m,In\ file\ included\ from\ %f:%l:,\^I\^Ifrom\ %f:%l%m,\"%f\"\\\,\ line\ %l.%c:%m\,\ %f:%l:%m,%f:%l:%c:%m
+"autocmd Filetype cpp set errorformat^=%-GIn\ file\ included\ %.%# 
+"autocmd Filetype cpp set errorformat^=%-Gavrdude%.%#
 autocmd Filetype cpp set foldmethod=syntax
 " }}}
 
 " C {{{
-autocmd Filetype c set errorformat=%f:%l:%c:%m,%f:kk%l:\ %m,In\ file\ included\ from\ %f:%l:,\^I\^Ifrom\ %f:%l%m,\"%f\"\\\,\ line\ %l.%c:%m\,\ %f:%l:%m,%f:%l:%c:%m
-autocmd Filetype c set errorformat^=%-GIn\ file\ included\ %.%# 
-autocmd Filetype c set errorformat^=%-Gavrdude%.%#
-"autocmd Filetype c nnoremap <F9>  :wa<CR>:execute "make -C ".g:make_dir<CR><CR>:botright copen<CR>:wincmd p<CR>
-"autocmd Filetype c nnoremap <F12> :wa<CR>:execute "make -C ".g:make_dir." ".g:make_opts<CR><CR><CR>
+"autocmd Filetype c set errorformat=%f:%l:%c:%m,%f:kk%l:\ %m,In\ file\ included\ from\ %f:%l:,\^I\^Ifrom\ %f:%l%m,\"%f\"\\\,\ line\ %l.%c:%m\,\ %f:%l:%m,%f:%l:%c:%m
+"autocmd Filetype c set errorformat^=%-GIn\ file\ included\ %.%# 
+"autocmd Filetype c set errorformat^=%-Gavrdude%.%#
 " }}}
 
 " SML {{{
@@ -736,6 +728,8 @@ autocmd FileType make setlocal noexpandtab
 set softtabstop=-1 " use shiftwidth
 
 " }}}
+
+autocmd Filetype java,asm,c,cpp,make nnoremap <F9> :wa<CR>:execute "make -C ".g:make_dir." ".g:make_opts<CR><CR>:botright copen<CR>:wincmd p<CR><CR>
 
 " }}}
 
