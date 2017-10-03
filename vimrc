@@ -729,7 +729,9 @@ set softtabstop=-1 " use shiftwidth
 
 " }}}
 
-autocmd Filetype java,asm,c,cpp,make nnoremap <F9> :wa<CR>:execute "make -C ".g:make_dir." ".g:make_opts<CR><CR>:botright copen<CR>:wincmd p<CR><CR>
+autocmd Filetype java,asm,c,cpp,make nnoremap <F9> :wa<CR>:execute "make -C ".g:make_dir." ".g:make_opts<CR><CR>:botright copen<CR>
+" Add :wincmd p<CR><CR> to the end of the previous mapping to disable jumping
+" to the quickfix window
 
 " }}}
 
