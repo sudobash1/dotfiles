@@ -27,6 +27,8 @@
 "
 " :verbose set option? will tell you where option was last set
 "
+" In : command mode, <Ctrl-R><Ctrl-W> will insert the current word
+"
 " "= will prompt you for an expression (1+1 or system('ls') etc...) and will
 " allow you to <p>ut the result
 " \= will allow you to use the result of a vim command as the replacement text
@@ -160,24 +162,26 @@ autocmd FileType html,css,php,xml EmmetInstall
 "}}}
 
 if has('cscope')
-  Plugin 'erig0/cscope_dynamic' "{{{
+  Plugin 'sudobash1/cscope_dynamic' "{{{
   let g:cscopedb_big_file = "cscope.out"
   let g:cscopedb_small_file = "cache_cscope.out"
   let g:cscopedb_auto_init = g:vimrc_autoinit
   let g:cscopedb_auto_files = 1
+
   function s:autodir_cscope()
-    let orig_cwd = getcwd()
-    while getcwd() != expand("~") && getcwd() != "/"
-      if filereadable("cscope.out")
-        return
+    let l:dir = getcwd()
+    while l:dir != expand("~") && getcwd() != "/"
+      if filereadable(expand(l:dir . "/" . g:cscopedb_big_file))
+        let g:cscopedb_dir = l:dir
       endif
-      cd ..
+      let l:dir = simplify(expand(l:dir . "/.."))
     endwhile
-    execute "cd " . orig_cwd
   endfunc
+
   if g:cscopedb_auto_init
     call s:autodir_cscope()
   endif
+
   func InitCScope()
     call s:autodir_cscope()
     execute "normal \<Plug>CscopeDBInit"
@@ -446,7 +450,7 @@ set splitright
 "============================= CSCOPE CONFIG ============================= {{{
 if has('cscope')
   set cscopetag cscopeverbose
-  "set cscoperelative
+  set cscoperelative
   set cscopequickfix=s-,c-,d-,i-,t-,e-
 
 "  "csope db autoconnect NON_DYNAMIC {{{
