@@ -30,10 +30,10 @@ export LC_COLLATE="C"
 
 # ------------------- History ------------------- {{{
 
-HISTCONTROL=ignoredup # Don't put duplicate lines in the history
+export HISTCONTROL=ignoredup # Don't put duplicate lines in the history
 shopt -s histappend # Append instead of overwriting the history file
-HISTSIZE=1000
-HISTFILESIZE=2000
+export HISTSIZE=1000
+export HISTFILESIZE=2000
 
 # }}}
 
