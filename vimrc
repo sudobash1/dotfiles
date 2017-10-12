@@ -458,6 +458,33 @@ set splitright
 
 " }}}
 
+
+"============================= GREP CONFIG ============================= {{{
+
+if executable('ag')
+  " Use ag if we have it
+  set grepprg=ag\ --nogroup\ --nocolor
+else
+  set grepprg=grep\ -n\ -r
+endif
+
+func s:ag(search_a, search_b)
+  if a:search_a != ""
+    let search=a:search_a
+  else
+    let search=a:search_b
+  endif
+  if search == ""
+      echom "ERROR: You must have the cursor on a word or provide an argument"
+      return
+  endif
+  execute "silent! grep!" search
+  cwindow
+  redraw!
+endfunc
+
+command -nargs=? -complete=file CustCMDag call <SID>ag("<args>", expand("<cword>"))
+
 "============================= CSCOPE CONFIG ============================= {{{
 if has('cscope')
   set cscopetag cscopeverbose
