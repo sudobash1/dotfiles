@@ -23,6 +23,9 @@ shopt -s histappend
 # Allow ** globs
 shopt -s globstar
 
+# Do not let Ctrl-S send XOFF
+stty -ixon
+
 export LC_COLLATE="C"
 
 # ------------------- History ------------------- {{{
