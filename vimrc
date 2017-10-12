@@ -896,7 +896,7 @@ set statusline+=%c,     "cursor column
 set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
 
-function! g:Cscope_dynamic_update_hook(updating)
+function! Cscope_dynamic_update_hook(updating)
   if a:updating
     let g:statusline_cscope_update_status = "  (Updating cscope...)"
   else
