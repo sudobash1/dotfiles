@@ -657,11 +657,6 @@ set cinoptions+=(4m1 "This makes only one indentation happen after (
 
 set cinoptions+=g0 "disable for access modifiers
 
-"The directory the MAKEFILE is in.
-let g:make_dir = "."
-let g:make_opts = ""
-
-
 " commit messages {{{
 autocmd Filetype svn,*commit* setlocal spell
 " }}}
@@ -747,9 +742,7 @@ set softtabstop=-1 " use shiftwidth
 
 " }}}
 
-autocmd Filetype java,asm,c,cpp,make nnoremap <F9> :wa<CR>:execute "make -C ".g:make_dir." ".g:make_opts<CR><CR>:botright copen<CR>
-" Add :wincmd p<CR><CR> to the end of the previous mapping to disable jumping
-" to the quickfix window
+autocmd Filetype java,asm,c,cpp,make nnoremap <F9> :wa<CR>:call Make()<CR>
 
 " }}}
 
@@ -818,6 +811,66 @@ endfunction
 autocmd Filetype c nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
 autocmd Filetype c++ nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
 " }}}
+
+"The directory the MAKEFILE is in.
+let g:make_dir = "."
+let g:make_file = "Makefile"
+let g:make_opts = ""
+let g:make_pos = "botright"
+let g:make_autojump = 0
+let g:make_autofocus = 1
+
+function Make(...)
+    let dir = get(a:000, 0, g:make_dir)
+    let file = get(a:000, 1, g:make_file)
+    let ops = get(a:000, 2, g:make_opts)
+    let cmd = g:make_autojump ? "make" : "make!"
+
+    " Use execute normal so that we can append a <CR> so that we don't get
+    " the "Press Enter" prompt
+    execute "normal! :".cmd." -C ".dir." -f ".file." ".g:make_opts."\r"
+
+    execute g:make_pos . " copen"
+    if ! g:make_autofocus
+      wincmd p
+    endif
+endfunction
+
+function MakeSetup()
+  try
+
+    call inputsave()
+    let wildmode = &wildmode
+    let &wildmode = "list:longest"
+
+    redraw
+    let g:make_dir = input("g:make_dir = ", g:make_dir, "dir")
+
+    try
+      " Get into the make_dir to be able to file name complete the makefile
+      let orig_dir = getcwd()
+      silent! cd -
+      let old_dir = getcwd()
+      silent! execute "cd!" g:make_dir
+
+      redraw
+      let g:make_file = input("g:make_file = ", g:make_file, "file")
+    finally
+      " Get back into the other dir
+      silent! execute "cd " old_dir
+      silent! execute "cd!" orig_dir
+    endtry
+
+    for var in ["opts", "pos", "autojump", "autofocus"]
+      redraw
+      execute "let g:make_".var." = input('g:make_".var." = ','".g:{"make_".var}."')"
+    endfor
+
+  finally
+    call inputrestore()
+    let &wildmode = wildmode
+  endtry
+endfunction
 
 " }}}
 
