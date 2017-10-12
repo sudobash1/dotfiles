@@ -231,6 +231,15 @@ let g:winresizer_vert_resize = 1
 let g:winresizer_horiz_resize = 1
 "}}}
 
+Plugin 'yssl/QFEnter'  " Open quickfix entry in prev window (and more) {{{
+" Be like CtrP
+let g:qfenter_keymap = {}
+let g:qfenter_keymap.open = ['<CR>', '<2-LeftMouse>']
+let g:qfenter_keymap.vopen = ['<C-v>']
+let g:qfenter_keymap.hopen = ['<C-CR>', '<C-s>', '<C-x>']
+let g:qfenter_keymap.topen = ['<C-t>']
+"}}}
+
 "Unused: {{{
 
 "Plugin 'dirkwallenstein/vim-autocomplpop' " automatically open popup window {{{
