@@ -70,7 +70,7 @@ Plugin 'tpope/vim-fugitive.git' " Intigrate vim with git {{{
 Plugin 'ntpeters/vim-better-whitespace' "Show trailing whitespace {{{
 "}}}
 
-Plugin 'kien/ctrlp.vim' " Fuzzy file finder {{{
+Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file finder {{{
 let g:ctrlp_map = '<F1>'
 let g:ctrlp_cmd = 'call VIMRC_do_ctrlp()'
 let g:ctrlp_by_filename = 1
