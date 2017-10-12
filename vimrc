@@ -104,11 +104,6 @@ autocmd CompleteDone * pclose
 
 " }}}
 
-Plugin 'scrooloose/nerdtree' " Browse files from vim {{{
-nnoremap <silent> <F3> :NERDTreeToggle<CR>
-let g:NERDTreeDirArrows = 0 "Turn off NERDTree arrows and use ~ and + instead
-" }}}
-
 Plugin 'milkypostman/vim-togglelist' " Toggle Location list and Quickfix list {{{
 let g:toggle_list_no_mappings = 1 "Define mapping(s) myself
 "let g:toggle_list_copen_command = "copen 30"
@@ -241,6 +236,11 @@ let g:qfenter_keymap.topen = ['<C-t>']
 "}}}
 
 "Unused: {{{
+
+"Plugin 'scrooloose/nerdtree' " Browse files from vim {{{
+"nnoremap <silent> <F3> :NERDTreeToggle<CR>
+"let g:NERDTreeDirArrows = 0 "Turn off NERDTree arrows and use ~ and + instead
+"" }}}
 
 "Plugin 'dirkwallenstein/vim-autocomplpop' " automatically open popup window {{{
 "Plugin 'eparreno/vim-l9' "Required by autocomplpop
