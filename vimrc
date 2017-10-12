@@ -226,7 +226,7 @@ let g:winresizer_vert_resize = 1
 let g:winresizer_horiz_resize = 1
 "}}}
 
-Plugin 'yssl/QFEnter'  " Open quickfix entry in prev window (and more) {{{
+Plugin 'yssl/QFEnter'  " Open quickfix entry in previous window (and more) {{{
 " Be like CtrP
 let g:qfenter_keymap = {}
 let g:qfenter_keymap.open = ['<CR>', '<2-LeftMouse>']
@@ -458,12 +458,12 @@ set splitright
 
 " }}}
 
-
 "============================= GREP CONFIG ============================= {{{
 
 if executable('ag')
   " Use ag if we have it
-  set grepprg=ag\ --nogroup\ --nocolor
+  set grepprg=ag\ --nogroup\ --nocolor\ --vimgrep
+  set grepformat^=%f:%l:%c:%m   " file:line:column:message
 else
   set grepprg=grep\ -n\ -r
 endif
@@ -479,11 +479,11 @@ func s:ag(search_a, search_b)
       return
   endif
   execute "silent! grep!" search
-  cwindow
+  botright cwindow
   redraw!
 endfunc
 
-command -nargs=? -complete=file CustCMDag call <SID>ag("<args>", expand("<cword>"))
+command -nargs=* -complete=file CustCMDag call <SID>ag("<args>", expand("<cword>"))
 
 " }}}
 
