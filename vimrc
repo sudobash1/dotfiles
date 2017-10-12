@@ -485,6 +485,8 @@ endfunc
 
 command -nargs=? -complete=file CustCMDag call <SID>ag("<args>", expand("<cword>"))
 
+" }}}
+
 "============================= CSCOPE CONFIG ============================= {{{
 if has('cscope')
   set cscopetag cscopeverbose
