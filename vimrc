@@ -35,9 +35,11 @@
 " in a substitute command (eg  :%s/\d\+/\=printf("0x%04x", submatch(0)) )
 "
 " <c-r><register> will paste the register in insert mode or command mode
-" (this is usefull for s/<c-r>//to replace/ because <c-r>/ will show the last
+" (this is useful for s/<c-r>//to replace/ because <c-r>/ will show the last
 "  searched string)
 "  Use " for the unnamed register
+"
+"  To "dereference" a string into a var, do {"foobar"} or g:{"foobar"}
 "
 " }}}
 
