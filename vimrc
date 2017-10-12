@@ -595,6 +595,9 @@ cnoreabbrev  w!! w !sudo tee % >/dev/null
 
 "============================= KEY MAPPINGS ============================= {{{
 
+" I never use ex mode
+nnoremap Q <Nop>
+
 "Press space to toggle current fold
 nnoremap <space> za
 
