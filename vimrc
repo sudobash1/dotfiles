@@ -167,7 +167,7 @@ if has('cscope')
 
   function s:autodir_cscope()
     let l:dir = getcwd()
-    while l:dir != expand("~") && getcwd() != "/"
+    while l:dir != expand("~") && l:dir != "/"
       if filereadable(expand(l:dir . "/" . g:cscopedb_big_file))
         let g:cscopedb_dir = l:dir
       endif
