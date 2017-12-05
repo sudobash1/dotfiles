@@ -21,11 +21,15 @@ function set_repos() {
   export fsim="$tg/fsim"
 
   export PATH=$(echo $PATH | awk -v RS=: -v ORS=: '/tg\/tg\/install\/bin\/?$/{next} {print}' | tr -d "\n" | sed "s%:*$%:$tg/install/bin%")
+  export PATH=$(echo $PATH | awk -v RS=: -v ORS=: '/apps\/apps\/libs\/install\/x86-host\/bin\/?$/{next} {print}' | tr -d "\n" | sed "s%:*$%:$apps/libs/install/x86-host/bin%")
 
-  # auto source the apps_env.bash
-  if [[ -e "$apps/apps_env.bash" ]]; then
-    source "$apps/apps_env.bash" > /dev/null
-  fi
+  export APPS_ROOT="$apps"
+  export TG_INSTALL="$tg/install"
+
+#  # auto source the apps_env.bash
+#  if [[ -e "$apps/apps_env.bash" ]]; then
+#    source "$apps/apps_env.bash" > /dev/null
+#  fi
 }
 set_repos ${repos-"$HOME/repos/intel"}
 
