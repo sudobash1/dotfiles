@@ -259,6 +259,25 @@ let g:qfenter_keymap.topen = ['<C-t>']
 Plugin 'davidhalter/jedi-vim' " Context completion for Python {{{
 "let g:jedi#popup_select_first = 0
 "let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
+
+" s:jedigoto {{{
+func s:jedigoto()
+  echo
+  redir => l:goto_output
+  silent call jedi#goto_assignments()
+  redir END
+  if l:goto_output != ""
+    try
+      tag expand("<cword>")
+    catch /E257/
+      echohl WarningMsg
+      echo "Tag not found"
+      echohl None
+    endtry
+  endif
+endfunc
+" }}}
+autocmd FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
 " }}}
 
 "Unused: {{{
