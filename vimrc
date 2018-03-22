@@ -627,11 +627,13 @@ endif
 " }}}
 
 "================================ COMMANDS ================================ {{{
-cnoreabbrev wd w<BAR>bd
+cnoreabbrev wd w<BAR>bn<BAR>bd #
 
 "Save with root permissions
 "cnoremap w!! w !sudo tee % >/dev/null
 cnoreabbrev  w!! w !sudo tee % >/dev/null
+
+command BD bp<BAR>bd #
 
 " }}}
 
