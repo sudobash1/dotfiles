@@ -94,13 +94,21 @@ endfunc
 " }}}
 
 Plugin 'ervandew/supertab' " Tab completion anywhere {{{
-"let g:SuperTabDefaultCompletionType = "context" " Detect if in a pathname, etc...
-let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
+let g:SuperTabDefaultCompletionType = "context" " Detect if in a pathname, etc...
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>" " If above detect fails fallback to cxcp
+"let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 "let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
 
 let g:SuperTabClosePreviewOnPopupClose = 1
 "Should be the same as
 autocmd CompleteDone * pclose
+
+" Jedi vim should be allowed to autocomplete in cases like "from os import "
+autocmd FileType python let b:SuperTabNoCompleteAfter = ['^']
+" Allow Jedi vim to take precidence
+"autocmd FileType python let b:SuperTabDefaultCompletionType = "<C-X><C-O>"
+" Allow Jedi vim to be the fallback if context fails
+autocmd FileType python call SuperTabSetDefaultCompletionType("<C-X><C-O>")
 
 " }}}
 
@@ -248,6 +256,11 @@ let g:qfenter_keymap.hopen = ['<C-CR>', '<C-s>', '<C-x>']
 let g:qfenter_keymap.topen = ['<C-t>']
 "}}}
 
+Plugin 'davidhalter/jedi-vim' " Context completion for Python {{{
+"let g:jedi#popup_select_first = 0
+"let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
+" }}}
+
 "Unused: {{{
 
 "Plugin 'scrooloose/nerdtree' " Browse files from vim {{{
@@ -331,10 +344,6 @@ let g:qfenter_keymap.topen = ['<C-t>']
 
 "Plugin 'ntpeters/vim-better-whitespace' "Highlight trailing whitespace {{{
 "}}}
-
-"Plugin 'davidhalter/jedi-vim' " Context completion for Python {{{
-"let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
-" }}}
 
 "Plugin 'scrooloose/syntastic' " Syntax checking for vim {{{
 "let g:syntastic_error_symbol = 'E>'
