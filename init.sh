@@ -12,6 +12,7 @@ echo
 cd "$HOME"
 
 files=(
+.profile
 .tmux.conf .tmux.local.conf
 .vim .vimrc .vimrc.local.vim
 .bashrc .bashrc.local.bash
@@ -64,7 +65,8 @@ ln -s "$dir/tmux.conf" .tmux.conf
 echo
 
 # BASH
-echo "Setting up .bashrc and .bashrc.local.bash"
+echo "Setting up .profile .bashrc and .bashrc.local.bash"
+ln -s "$dir/profile" .profile
 ln -s "$dir/bashrc" .bashrc
 echo "using $(get_local_file bash) as local bash config"
 ln -s "$(get_local_file bash)" .bashrc.local.bash
