@@ -11,7 +11,13 @@ echo
 
 cd "$HOME"
 
-files=(.tmux.conf .tmux.local.conf .vim .vimrc .vimrc.local.vim .bashrc .bashrc.local.bash .ctags)
+files=(
+.tmux.conf .tmux.local.conf
+.vim .vimrc .vimrc.local.vim
+.bashrc .bashrc.local.bash
+.Xresources .Xresources.d
+.ctags
+)
 
 error=
 for file in "${files[@]}"; do
@@ -62,6 +68,12 @@ echo "Setting up .bashrc and .bashrc.local.bash"
 ln -s "$dir/bashrc" .bashrc
 echo "using $(get_local_file bash) as local bash config"
 ln -s "$(get_local_file bash)" .bashrc.local.bash
+echo
+
+# Xresources
+echo "Setting up .Xresources and .Xresources.d"
+ln -s "$dir/Xresources" .Xresources
+ln -s "$dir/Xresources.d" .Xresources.d
 echo
 
 # CTAGS
