@@ -41,6 +41,11 @@
 "
 "  To "dereference" a string into a var, do {"foobar"} or g:{"foobar"}
 "
+"  NEOVIM
+"
+"  if python doesn't work, you must pip2 install --user neovim
+"  https://github.com/zchee/deoplete-jedi/wiki/Setting-up-Python-for-Neovim
+"
 " }}}
 
 let g:vimrc_autoinit = 1
@@ -56,8 +61,13 @@ set nocompatible " be iMproved, required
 filetype off "required for now to use vundle
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+if has('nvim')
+  set rtp+=~/.vim/neovim_bundle/Vundle.vim
+  call vundle#begin('~/.vim/neovim_bundle')
+else
+  set rtp+=~/.vim/bundle/Vundle.vim
+  call vundle#begin('~/.vim/bundle')
+endif
 "alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
@@ -94,8 +104,9 @@ endfunc
 " }}}
 
 Plugin 'ervandew/supertab' " Tab completion anywhere {{{
-let g:SuperTabDefaultCompletionType = "context" " Detect if in a pathname, etc...
-let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>" " If above detect fails fallback to cxcp
+let g:SuperTabDefaultCompletionType = "<c-x><c-p>" " Detect if in a pathname, etc...
+"let g:SuperTabDefaultCompletionType = "context" " Detect if in a pathname, etc...
+"let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>" " If above detect fails fallback to cxcp
 "let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 "let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
 
@@ -104,11 +115,9 @@ let g:SuperTabClosePreviewOnPopupClose = 1
 autocmd CompleteDone * pclose
 
 " Jedi vim should be allowed to autocomplete in cases like "from os import "
-autocmd FileType python let b:SuperTabNoCompleteAfter = ['^']
-" Allow Jedi vim to take precidence
-"autocmd FileType python let b:SuperTabDefaultCompletionType = "<C-X><C-O>"
-" Allow Jedi vim to be the fallback if context fails
-autocmd FileType python call SuperTabSetDefaultCompletionType("<C-X><C-O>")
+"autocmd FileType python let b:SuperTabNoCompleteAfter = ['^']
+" Allow Jedi vim / clang_complete to take precidence
+"autocmd FileType python,c++ call SuperTabSetDefaultCompletionType("<C-X><C-O>")
 
 " }}}
 
@@ -165,34 +174,6 @@ let g:user_emmet_settings = { 'html' : { 'quote_char' : "'" } }
 let g:user_emmet_install_global = 0
 autocmd FileType html,css,php,xml EmmetInstall
 "}}}
-
-if has('cscope')
-  Plugin 'sudobash1/cscope_dynamic' "{{{
-  let g:cscopedb_big_file = "cscope.out"
-  let g:cscopedb_small_file = "cache_cscope.out"
-  let g:cscopedb_auto_init = g:vimrc_autoinit
-  let g:cscopedb_auto_files = 1
-
-  function s:autodir_cscope()
-    let l:dir = getcwd()
-    while l:dir != expand("~") && l:dir != "/"
-      if filereadable(expand(l:dir . "/" . g:cscopedb_big_file))
-        let g:cscopedb_dir = l:dir
-      endif
-      let l:dir = simplify(expand(l:dir . "/.."))
-    endwhile
-  endfunc
-
-  if g:cscopedb_auto_init
-    call s:autodir_cscope()
-  endif
-
-  func InitCScope()
-    call s:autodir_cscope()
-    execute "normal \<Plug>CscopeDBInit"
-  endfunc
-  "}}}
-endif
 
 Plugin 'mrtazz/DoxygenToolkit.vim' "{{{
 let g:DoxygenToolkit_authorName="Stephen Robinson"
@@ -256,31 +237,101 @@ let g:qfenter_keymap.hopen = ['<C-CR>', '<C-s>', '<C-x>']
 let g:qfenter_keymap.topen = ['<C-t>']
 "}}}
 
-Plugin 'davidhalter/jedi-vim' " Context completion for Python {{{
-"let g:jedi#popup_select_first = 0
-"let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
+if has('nvim')
 
-" s:jedigoto {{{
-func s:jedigoto()
-  echo
-  redir => l:goto_output
-  silent call jedi#goto_assignments()
-  redir END
-  if l:goto_output != ""
-    try
-      tag expand("<cword>")
-    catch /E257/
-      echohl WarningMsg
-      echo "Tag not found"
-      echohl None
-    endtry
+Plugin 'Shougo/deoplete.nvim' " Dark powered completion {{{
+let g:deoplete#enable_at_startup = g:vimrc_autoinit
+"}}}
+
+"Plugin 'zchee/deoplete-clang' " Dark powered clang completion {{{
+"g:deoplete#sources#clang#libclang_path
+"g:deoplete#sources#clang#clang_header
+"}}}
+
+Plugin 'Rip-Rip/clang_complete' " C style langages completion {{{
+let g:clang_snippets = 0
+let g:clang_complete_auto = 0
+"let g:clang_snippets_engine = 'clang_complete'
+
+"autocmd Filetype c,cpp autocmd InsertLeave * call g:ClangUpdateQuickFix()
+"autocmd Filetype c,cpp autocmd BufWrite * call g:ClangUpdateQuickFix()
+
+let g:clang_user_options='|| exit 0'
+
+let g:clang_close_preview = 1
+let g:clang_complete_macros = 1
+let g:clang_complete_patterns = 1
+
+"" I don't want these mappings!
+"let g:clang_jumpto_declaration_key = '<C-A-S-F12>'
+"let g:clang_jumpto_back_key = '<C-A-S-F12>'
+"" Disable all clang_complete keybindings
+"let g:clang_make_default_keymappings = 0
+"}}}
+
+else " !nvim
+
+if has('cscope')
+  Plugin 'sudobash1/cscope_dynamic' "{{{
+  let g:cscopedb_big_file = "cscope.out"
+  let g:cscopedb_small_file = "cache_cscope.out"
+  let g:cscopedb_auto_init = g:vimrc_autoinit
+  let g:cscopedb_auto_files = 1
+
+  function s:autodir_cscope()
+    let l:dir = getcwd()
+    while l:dir != expand("~") && l:dir != "/"
+      if filereadable(expand(l:dir . "/" . g:cscopedb_big_file))
+        let g:cscopedb_dir = l:dir
+      endif
+      let l:dir = simplify(expand(l:dir . "/.."))
+    endwhile
+  endfunc
+
+  if g:cscopedb_auto_init
+    call s:autodir_cscope()
   endif
-endfunc
-" }}}
-autocmd FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
-" }}}
+
+  func InitCScope()
+    call s:autodir_cscope()
+    execute "normal \<Plug>CscopeDBInit"
+  endfunc
+  "}}}
+endif
+
+endif
 
 "Unused: {{{
+
+"Plugin 'davidhalter/jedi-vim' " Context completion for Python {{{
+""let g:jedi#popup_select_first = 0
+""let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
+"
+"" s:jedigoto {{{
+"func s:jedigoto()
+"  echo
+"  redir => l:goto_output
+"  silent call jedi#goto_assignments()
+"  redir END
+"  if l:goto_output =~ "jedi-vim" " Matches jedi-vim errors
+"    echo "output '".l:goto_output."'"
+"    try
+"      exe "tag " . expand("<cword>")
+"    catch /E257/
+"      echohl WarningMsg
+"      echo "Tag not found"
+"      echohl None
+"    endtry
+"  endif
+"endfunc
+"" }}}
+"autocmd FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
+"" }}}
+
+"Plugin 'w0rp/ale' " Async Lint Engine {{{
+" Linters:
+" pip install --user prospector
+"}}}
 
 "Plugin 'scrooloose/nerdtree' " Browse files from vim {{{
 "nnoremap <silent> <F3> :NERDTreeToggle<CR>
@@ -338,30 +389,7 @@ autocmd FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<C
 "Plugin 'Valloric/YouCompleteMe' " Code completion for vim {{{
 "}}}
 
-"Plugin 'Rip-Rip/clang_complete' " C style langages completion {{{
-"let g:clang_snippets = 1
-"let g:clang_snippets_engine = 'clang_complete'
-"
-"autocmd Filetype cpp autocmd InsertLeave * call g:ClangUpdateQuickFix()
-"autocmd Filetype cpp autocmd BufWrite * call g:ClangUpdateQuickFix()
-"autocmd Filetype c autocmd InsertLeave * call g:ClangUpdateQuickFix()
-"autocmd Filetype c autocmd BufWrite * call g:ClangUpdateQuickFix()
-"
-"let g:clang_user_options='|| exit 0'
-"
-"let g:clang_close_preview = 1
-"let g:clang_complete_macros = 1
-"let g:clang_complete_patterns = 1
-"
-" "I don't want these mappings!
-"let g:clang_jumpto_declaration_key = '<C-A-S-F12>'
-"let g:clang_jumpto_back_key = '<C-A-S-F12>'
-""}}}
-
 "Plugin 'ap/vim-css-color' "Highlight color codes with what they are {{{
-"}}}
-
-"Plugin 'ntpeters/vim-better-whitespace' "Highlight trailing whitespace {{{
 "}}}
 
 "Plugin 'scrooloose/syntastic' " Syntax checking for vim {{{
@@ -477,7 +505,8 @@ syn on "turn on syntax highlighting
 if !has("gui_running")
   set t_Co=8
   if has ('nvim')
-    autocmd VimEnter * colorscheme custom
+    "autocmd VimEnter * colorscheme neovim_custom
+    colorscheme neovim_custom
   else
     colorscheme custom
   endif
@@ -1067,6 +1096,11 @@ set tabline=%!VIMRC_Tabline()
 command -nargs=? Tabname if "<args>" != "" | let t:tab_name="<args>" | else | unlet t:tab_name | endif | redraw!
 
 " }}}
+
+"============================== NEOVIM ============================= {{{
+if has('nvim')
+  tnoremap <Esc> <C-\><C-n>
+endif " }}}
 
 if filereadable(expand("~") . "/.vimrc.local.vim")
   source ~/.vimrc.local.vim

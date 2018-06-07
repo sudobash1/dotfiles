@@ -14,7 +14,7 @@ cd "$HOME"
 files=(
 .profile
 .tmux.conf .tmux.local.conf
-.vim .vimrc .vimrc.local.vim
+.vim .vimrc .vimrc.local.vim .config/nvim/init.vim
 .bashrc .bashrc.local.bash
 .Xresources .Xresources.d
 .ctags
@@ -50,11 +50,13 @@ function get_local_file() {
 }
 
 # VIM
-echo "Setting up .vim, .vimrc and .vimrc.local.vim"
+echo "Setting up .vim, .vimrc, .vimrc.local.vim, and .config/nvim/init.vim"
 ln -s "$dir/vim" .vim
 echo "using $(get_local_file vim) as local vim config"
 ln -s "$(get_local_file vim)" .vimrc.local.vim
 ln -s "$dir/vimrc" .vimrc
+mkdir -p .config/nvim/
+ln -s "$dir/neovim_init.vim" .config/nvim/init.vim
 echo
 
 # TMUX
@@ -101,4 +103,14 @@ else
   cd "$dir/vim/bundle"
   git clone https://github.com/VundleVim/Vundle.vim.git
   vim +PluginInstall +qall
+fi
+
+if ! command -v nvim || [[ -e "$dir/vim/neovim_bundle/Vundle.vim/.git" ]]; then
+  echo "Skipping Neovim Vundle initialization"
+else
+  echo "Initializing Neovim Vundle"
+  mkdir -p "$dir/vim/neovim_bundle"
+  cd "$dir/vim/neovim_bundle"
+  git clone https://github.com/VundleVim/Vundle.vim.git
+  nvim +PluginInstall +qall
 fi
