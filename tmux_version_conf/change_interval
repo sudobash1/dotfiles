@@ -1,0 +1,6 @@
+#Stop tmux from freezing when too much is being printed at once
+#source: https://stelfox.net/blog/2014/03/preventing-tmux-lockups/
+setw -g c0-change-interval 50
+setw -g c0-change-trigger  75
+
+# vim:ft=tmux
