@@ -159,7 +159,7 @@ Plugin 'derekwyatt/vim-fswitch' " Toggle between header and source files {{{
 "}}}
 
 Plugin 'mattn/emmet-vim' " html editing tools {{{
-let g:user_emmet_leader_key='<C-y>'
+let g:user_emmet_leader_key='<C-e>'
 let g:user_emmet_settings = { 'html' : { 'quote_char' : "'" } }
 
 let g:user_emmet_install_global = 0
