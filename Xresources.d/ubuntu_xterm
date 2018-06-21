@@ -24,7 +24,8 @@ XTerm*color7      : #d3d7cf
 XTerm*color15     : #eeeeec
 
 XTerm*foreground  : #eeeeec
-XTerm*background  : #300a24
+!XTerm*background  : #300a24
+XTerm*background  : #000000
 XTerm*cursorColor : #fefefe
 
 ! vim:ft=xdefaults
