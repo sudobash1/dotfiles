@@ -14,9 +14,8 @@ exec 1>>"${tmux_socket_path}_version_source_log"
 exec 2>>"${tmux_socket_path}_version_source_log"
 
 tmux_pid=$(echo $TMUX | sed 's%.*/%%; s/[^,]*,//; s/,.*//')
-tmux_cmd=$(ps -o comm= -p $tmux_pid | awk '{print $1}')
-tmux_ver=$("$tmux_cmd" -V | awk '{print $2}')
-tmux_socket_cmd="'$tmux_cmd' -S '$tmux_socket_path'"
+tmux_ver=$(/proc/$tmux_pid/exe -V | awk '{print $2}')
+tmux_socket_cmd="/proc/$tmux_pid/exe -S '$tmux_socket_path'"
 conf_dir="$DOTFILES_REPO/tmux_version_conf"
 
 echo "Setting up for tmux v$tmux_ver"
@@ -33,10 +32,10 @@ done | awk -F "_v" '
   END {
     for(f in vers) {
       if(vers[f]) {
-        print "'"$tmux_socket_cmd"' source '"$conf_dir/"'" f "_v" vers[f];
+        print "sourcing '"$conf_dir/"'" f "_v" vers[f];
         system("'"$tmux_socket_cmd"' source '"$conf_dir/"'" f "_v" vers[f]);
       } else {
-        print "'"$tmux_socket_cmd"' source '"$conf_dir/"'" f;
+        print "sourcing '"$conf_dir/"'" f;
         system("'"$tmux_socket_cmd"' source '"$conf_dir/"'" f);
     }
   }
