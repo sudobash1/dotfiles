@@ -893,7 +893,7 @@ function GenerateBreakpoint()
   echo l:cmd
 endfunction
 autocmd Filetype c nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
-autocmd Filetype c++ nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
+autocmd Filetype cpp nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
 " }}}
 
 "The directory the MAKEFILE is in.
