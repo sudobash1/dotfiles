@@ -166,6 +166,9 @@ let g:user_emmet_install_global = 0
 autocmd FileType html,css,php,xml EmmetInstall
 "}}}
 
+Plugin 'kergoth/vim-bitbake' " Bitbake syntax and file support for vim {{{
+"}}}
+
 if has('cscope')
   Plugin 'sudobash1/cscope_dynamic' "{{{
   let g:cscopedb_big_file = "cscope.out"
