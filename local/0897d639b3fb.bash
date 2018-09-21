@@ -13,6 +13,8 @@ alias linuxline="addr2line -e '$vmlinux'"
 function deploy() {
   scp "$deploy/uImage-rzn1-snarc.bin" traveler:~/tftp/uImage-initramfs-rzn1.bin
   scp "$deploy/uImage-rzn1d400-snarc-bestla.dtb" traveler:~/tftp/uImage-snarc.dtb
+  echo "enter traveler sudo password when prompted"
+  ssh traveler -t 'sudo cp ~/tftp/* /var/lib/tftpboot'
 }
 
 function poky_init() {
