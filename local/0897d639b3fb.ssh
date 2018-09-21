@@ -1,0 +1,11 @@
+HOST deathstar
+	User stephen.robinson
+
+HOST git.eqware.net
+	User git
+	IdentityFile /home/ngbcpm/.ssh/gemini/id_rsa
+	IdentitiesOnly yes
+
+HOST traveler
+    User eqware
+    ProxyCommand ssh -W %h:%p eqware@monolith
