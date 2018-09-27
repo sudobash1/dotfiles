@@ -17,7 +17,7 @@ export EDITOR=/usr/bin/vim
 export VISUAL=/usr/bin/vim
 
 # Use vi keybindings
-set -o vi
+#set -o vi
 # Recheck the window size after every command
 shopt -s checkwinsize
 # Append (don't overwrite) history
