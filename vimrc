@@ -455,7 +455,13 @@ set concealcursor=inv
 set nu
 set laststatus=2 "Always show status bar
 set encoding=utf-8 "Use utf-8 encoding
-set wildchar=<Tab> wildmenu wildmode=full "Tab completion for commands
+set wildchar=<Tab> wildmenu "Tab completion for commands
+" Custom tab completion
+" 1st tab: longest match
+" 2nd tab: provide list of options
+" 3rd tab: cycle though options
+set wildmode=longest,list,full
+
 set nohlsearch "Do not highlight while seaching
 set incsearch "search as soon as characters are entered after /
 "set colorcolumn=80 "display soft margin bar.
