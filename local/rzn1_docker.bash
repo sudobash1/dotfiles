@@ -15,7 +15,23 @@ function deploy() {
   scp "$deploy/uImage-initramfs-rzn1-snarc.bin" traveler:~/tftp/uImage-initramfs-rzn1.bin
   scp "$deploy/uImage-rzn1d400-snarc-bestla.dtb" traveler:~/tftp/uImage-snarc.dtb
   echo "enter traveler sudo password when prompted"
-  ssh traveler -t 'sudo cp ~/tftp/* /var/lib/tftpboot'
+  if [[ $1 ]]; then
+    echo "$2" | ssh traveler "cat > ~/tftp/notes.txt"
+    ssh traveler -t \
+      "sudo mkdir -p /var/lib/tftpboot/sbr/$1/ && " \
+      "sudo mv ~/tftp/* /var/lib/tftpboot/sbr/$1/"
+  else
+    ssh traveler -t "sudo cp ~/tftp/* /var/lib/tftpboot"
+  fi
+}
+
+function traveler_load() {
+  if [[ ! $1 ]]; then
+    echo "Argument required"
+    return 1
+  fi
+  echo "enter traveler sudo password when prompted"
+  ssh traveler -t "sudo cp /var/lib/tftpboot/sbr/$1/* /var/lib/tftpboot"
 }
 
 function poky_init() {
