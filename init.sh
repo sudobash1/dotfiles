@@ -12,10 +12,11 @@ echo
 cd "$HOME"
 
 files=(
-.profile
+.profile .shrc .shrc.local.sh
 .tmux.conf .tmux.local.conf
 .vim .vimrc .vimrc.local.vim
 .bashrc .bashrc.local.bash
+.zshrc .zshrc.local.zsh
 .Xresources .Xresources.d
 .ctags
 .ssh/config
@@ -65,12 +66,26 @@ ln -s "$(get_local_file tmux.conf)" .tmux.local.conf
 ln -s "$dir/tmux.conf" .tmux.conf
 echo
 
-# BASH
-echo "Setting up .profile .bashrc and .bashrc.local.bash"
+# *SH
+echo "Setting up .profile and .shrc"
 ln -s "$dir/profile" .profile
+ln -s "$dir/shrc" .shrc
+echo "using $(get_local_file sh) as local sh config"
+ln -s "$(get_local_file sh)" .shrc.local.sh
+echo
+
+# BASH
+echo "Setting up .bashrc and .bashrc.local.bash"
 ln -s "$dir/bashrc" .bashrc
 echo "using $(get_local_file bash) as local bash config"
 ln -s "$(get_local_file bash)" .bashrc.local.bash
+echo
+
+# ZSH
+echo "Setting up .zshrc and .zshrc.local.zsh"
+ln -s "$dir/zshrc" .zshrc
+echo "using $(get_local_file zsh) as local zsh config"
+ln -s "$(get_local_file zsh)" .zshrc.local.zsh
 echo
 
 # Xresources
@@ -107,4 +122,16 @@ else
   cd "$dir/vim/bundle"
   git clone https://github.com/VundleVim/Vundle.vim.git
   vim +PluginInstall +qall
+fi
+echo
+
+if [[ -d "$dir/oh-my-zsh" ]]; then
+  echo "Skipping oh-my-zsh initialization"
+else
+  (
+  # Prevent the cloned repository from having insecure permissions.
+  umask g-w,o-w
+
+  git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git "$dir/oh-my-zsh"
+  )
 fi

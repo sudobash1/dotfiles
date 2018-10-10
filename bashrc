@@ -5,8 +5,7 @@
 # If not running interactively, don't do anything
 [[ $- == *i* ]] || return
 
-# Get the dotfiles repo directory
-export DOTFILES_REPO=$(dirname $(find ~/.bashrc -prune -printf "%l\n"))
+source ~/.shrc
 
 # ------------------- Basic settings ------------------- {{{
 
@@ -25,11 +24,6 @@ shopt -s histappend
 # Allow ** globs
 shopt -s globstar
 
-# Do not let Ctrl-S send XOFF
-stty -ixon
-
-export LC_COLLATE="C"
-
 # ------------------- History ------------------- {{{
 
 export HISTCONTROL=ignoredup # Don't put duplicate lines in the history
@@ -39,13 +33,6 @@ export HISTFILESIZE=2000
 
 # }}}
 
-# }}}
-
-# ------------------- less ------------------- {{{
-
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-export LESS="${LESS}SFRX"
 # }}}
 
 # ------------------- Bash Completions ------------------- {{{
@@ -65,17 +52,6 @@ source $DOTFILES_REPO/bash/bash_completion_tmux.sh
 # }}}
 
 # ------------------- Aliases & Functions ------------------- {{{
-
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-
-alias csv=$'column -t -s\',\''
-alias tsv=$'column -t -s\'\t\''
-
-function mantag() {
-  man -P "less -p \"^ +$2\"" $1
-}
 
 if [[ ${BASH_VERSINFO[0]} > 4 || (${BASH_VERSINFO[0]} == 4 && ${BASH_VERSINFO[1]} > 0) ]]; then
 
@@ -133,6 +109,7 @@ alias csvsort=$'echo "tsvsort is not supported for bash < 4.1"#'
 
 fi
 
+# TODO: should the below line go in shrc?
 [ -x /usr/bin/dircolors ] && eval "$(dircolors -b)" && alias ls='ls --color=auto'
 
 # }}}
