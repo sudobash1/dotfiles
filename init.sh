@@ -19,7 +19,6 @@ files=(
 .zshrc .zshrc.local.zsh
 .Xresources .Xresources.d
 .ctags
-.ssh/config
 )
 
 error=
@@ -97,11 +96,6 @@ echo
 # CTAGS
 echo "Setting up .ctags"
 ln -s "$dir/ctags" .ctags
-echo
-
-# SSH
-echo "Setting up .ssh/config"
-ln -s "$(get_local_file ssh)" .ssh/config
 echo
 
 # GIT
