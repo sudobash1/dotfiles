@@ -115,6 +115,9 @@ bindkey '^[[Z' reverse-menu-complete
 bindkey "${terminfo[khome]}" beginning-of-line
 bindkey "${terminfo[kend]}" end-of-line
 
+# Make Ctrl-R behave like bash
+bindkey '^R' history-incremental-search-backward
+
 # }}}
 
 
