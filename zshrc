@@ -75,6 +75,7 @@ ZSH_CUSTOM=$DOTFILES_REPO/zsh
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  vi-mode
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -105,9 +106,6 @@ setopt nosharehistory
 # }}}
 
 # ------------------- Key Binding ------------------- {{{
-
-# Use vi keybindings
-bindkey -v
 
 # Shift-tab to go back in completion
 bindkey '^[[Z' reverse-menu-complete
