@@ -94,7 +94,8 @@ setopt interactivecomments
 
 HISTFILE=~/.zhistory
 HISTSIZE=SAVEHIST=10000
-setopt sharehistory
+setopt nosharehistory
+#setopt sharehistory
 
 # Add timestamp information to history
 #setopt extendedhistory
