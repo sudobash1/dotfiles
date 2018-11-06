@@ -904,12 +904,12 @@ let g:make_autofocus = 1
 function Make(...)
     let dir = get(a:000, 0, g:make_dir)
     let file = get(a:000, 1, g:make_file)
-    let ops = get(a:000, 2, g:make_opts)
+    let opts = get(a:000, 2, g:make_opts)
     let cmd = g:make_autojump ? "make" : "make!"
 
     " Use execute normal so that we can append a <CR> so that we don't get
     " the "Press Enter" prompt
-    execute "normal! :".cmd." -C ".dir." -f ".file." ".g:make_opts."\r"
+    execute "normal! :".cmd." -C ".dir." -f ".file." ".opts."\r"
 
     execute g:make_pos . " copen"
     if ! g:make_autofocus
