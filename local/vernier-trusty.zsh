@@ -5,14 +5,22 @@ function resource() {
     source ~/.zshrc.local.zsh
 }
 
+function __get_lq_addr() {
+    echo ${LQ2_ADDR-10.0.0.75}
+}
+
 function deploy() {
     local usage="Usage: ${0:t} path/to/file.ipk [host]"
     if [[ -z $1 ]]; then
         echo $usage
         return
     fi
+    if [[ ! -e $1 ]]; then
+        echo "$1 doesn't exist"
+        return
+    fi
     local ipk=${1:t}
-    local host=${2-lq2}
+    local host=${2-$(__get_lq_addr)}
     scp "$1" root@$host:/tmp
     ssh root@$host "ipkg install '/tmp/$ipk' --force-downgrade; rm '/tmp/$ipk'"
 }
@@ -31,7 +39,7 @@ function deploy_lqa() {
 }
 
 function restart_x11() {
-    local host=${1-lq2}
+    local host=${1-$(__get_lq_addr)}
     ssh root@$host "cd /etc/init.d && ./xserver-nodm restart; sleep 2 ./xserver-nodm start; sleep 3"
 }
 
@@ -42,7 +50,7 @@ function gdb_run() {
         return
     fi
     local cmd=$1
-    local host="10.0.0.75"
+    local host=$(__get_lq_addr)
     local port="1234"
     shift 1
     if [[ $1 =~ "^[^-].+$" ]]; then
@@ -94,7 +102,7 @@ function gdb_attach() {
         echo "       ${0:t} <exec_name> [host[:port]]"
         return
     fi
-    local host="10.0.0.75"
+    local host=$(__get_lq_addr)
     local port="1234"
     if [[ -n $2 ]]; then
         if [[ $2 =~ ":[0-9]+$" ]]; then
@@ -131,14 +139,24 @@ function deploy_bin() {
         echo "Usage: ${0:t} <exe_path> [host]" 
         return 1
     fi
-    scp $1 root@${2-lq2}:/usr/bin
+    host="${2-$(__get_lq_addr)}"
+    scp $1 root@$host:/tmp
+    ssh root@$host "chmod 755 /tmp/${1:t} && mv /tmp/${1:t} /usr/bin"
 }
 function deploy_home() {
     if [[ -z $1 ]]; then
         echo "Usage: ${0:t} <exe_path> [host]" 
         return 1
     fi
-    scp $1 root@${2-lq2}:/home/root
+    scp $1 root@${2-$(__get_lq_addr)}:/home/root
 }
-alias deploy_ngi_bin='scp ~/poky/build/tmp/work/cortexa8-vfp-neon-poky-linux-gnueabi/ngi-app/2.8.4+gitAUTOINC+1fb5b5797e-r*/git/src/.libs/ngi root@10.0.0.75:/tmp && ssh lq2 "mv /tmp/ngi /usr/bin; pkill ngi"'
-alias deploy_sonify='scp ~/poky/build/tmp/work/cortexa8-vfp-neon-poky-linux-gnueabi/sonify/0.0.1+git*/git/src/sonify root@10.0.0.75:/tmp && ssh lq2 "chmod 755 /tmp/sonify; mv /tmp/sonify /usr/bin; pkill sonify; sonify >/tmp/sonify.log 2>&1 &"'
+
+function deploy_ngi_bin() {
+    scp $builds/ngi-app/2.8.4+gitAUTOINC+1fb5b5797e-r*/git/src/.libs/ngi root@$(__get_lq_addr):/tmp && \
+    ssh $(__get_lq_addr) "mv /tmp/ngi /usr/bin; pkill ngi"
+}
+
+function deploy_sonify() {
+    scp $builds/sonify/0.0.1+git*/git/src/sonify root@$(__get_lq_addr):/tmp && \
+    ssh root@$(__get_lq_addr) "chmod 755 /tmp/sonify; mv /tmp/sonify /usr/bin; pkill sonify; sonify >/tmp/sonify.log 2>&1 &"
+}
