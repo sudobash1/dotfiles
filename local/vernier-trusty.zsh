@@ -10,33 +10,39 @@ function __get_lq_addr() {
 }
 
 function deploy() {
-    local usage="Usage: ${0:t} path/to/file.ipk [host] -- [opkg-arg [opkg-arg [...]]]"
-    if [[ -z $1 ]]; then
+    local usage="Usage: ${0:t} path/to/file.ipk [file2.ipk ... fileN.ipk] [host] -- [opkg-arg [opkg-arg [...]]]"
+    if [[ -z $1 || ${1:e} != "ipk" ]]; then
         echo $usage
-        return
+        return 1
     fi
-    if [[ ! -e $1 ]]; then
-        echo "$1 doesn't exist"
-        return
-    fi
-    local fullpath=$1
-    local ipk=${fullpath:t}
+    local -a ipk_paths
+    while [[ ${1:e} == "ipk" ]]; do
+        if [[ ! -e $1 ]]; then
+            echo "$1 doesn't exist"
+            return 1
+        fi
+        ipk_paths+=$1
+        shift 1
+    done
     local host=$(__get_lq_addr)
-    shift 1
     if [[ $1 == "--" ]]; then
         shift 1
     elif [[ -n $1 ]]; then
         host=$1
         shift 1
-        if [[ $1 != "--" ]]; then
-            echo $usage
-            return
-        else
+        if [[ $1 == "--" ]]; then
             shift 1
+        elif [[ -n "$1" ]]; then
+            echo "Unexpected argument: $1"
+            echo $usage
+            return 1
         fi
     fi
-    scp "$fullpath" root@$host:/tmp
-    ssh -t root@$host "ipkg install '/tmp/$ipk' --force-downgrade ${@}; rm '/tmp/$ipk'"
+    for fullpath in $ipk_paths; do
+        local ipk=${fullpath:t}
+        scp "$fullpath" root@$host:/tmp
+        ssh -t root@$host "ipkg install '/tmp/$ipk' --force-downgrade ${@}; rm '/tmp/$ipk'"
+    done
 }
 
 function deploy_lqa() {
@@ -210,7 +216,8 @@ done"
 
 function deploy_bin() {
     if [[ -z $1 ]]; then
-        echo "Usage: ${0:t} <exe_path> [host]" 
+        echo "Usage: ${0:t} <exe_path> [host] [dest-dir]"
+        echo "dest-dir defaults to /usr/bin"
         return 1
     fi
     if [[ ! -e $1 ]]; then
@@ -218,8 +225,9 @@ function deploy_bin() {
         return 1
     fi
     host="${2-$(__get_lq_addr)}"
+    dest_dir="${3-/usr/bin}"
     scp $1 root@$host:/tmp
-    ssh root@$host "chmod 755 /tmp/${1:t} && mv /tmp/${1:t} /usr/bin"
+    ssh root@$host "chmod 755 /tmp/${1:t} && mkdir -p $dest_dir && mv /tmp/${1:t} $dest_dir"
 }
 function deploy_home() {
     if [[ -z $1 ]]; then
@@ -290,7 +298,8 @@ function setup_build_env() {
 function deploy_ngi_bin() {
     echo "deploying to $(__get_lq_addr)"
     scp -C $builds/ngi-app/2.8.4+gitAUTOINC+1fb5b5797e-r*/git/src/.libs/ngi root@$(__get_lq_addr):/tmp && \
-    ssh root@$(__get_lq_addr) "mv /tmp/ngi /usr/bin; pkill ngi"
+    scp -C $builds/ngi-app/2.8.4+gitAUTOINC+1fb5b5797e-r*/git/src/pages/.libs/liblqpages.so.0.0.0 root@$(__get_lq_addr):/tmp && \
+    ssh root@$(__get_lq_addr) "mv /tmp/ngi /usr/bin; mv /tmp/liblqpages.so.0.0.0 /usr/lib; pkill ngi"
 }
 
 function deploy_sonify() {
@@ -299,10 +308,10 @@ function deploy_sonify() {
 #             $builds/sonify/0.1.0+git*/git/src/sonify_settings /usr/bin 755 \
 #             $builds/sonify/0.1.0+git*/git/po/es.gmo /usr/share/locale/es/LC_MESSAGES/sonify.mo "" \
 #             $builds/sonify/0.1.0+git*/git/src/.libs/libsonify.so.0.0.0 /usr/lib 755 \
-    scp $builds/sonify/0.1.0+git*/git/src/sonify root@$(__get_lq_addr):/tmp && \
-    scp $builds/sonify/0.1.0+git*/git/src/sonify_settings root@$(__get_lq_addr):/tmp && \
-    scp $builds/sonify/0.1.0+git*/git/po/es.gmo root@$(__get_lq_addr):/tmp/es.gmo && \
-    scp $builds/sonify/0.1.0+git*/git/src/.libs/libsonify.so.0.0.0 root@$(__get_lq_addr):/tmp && \
+    scp $builds/sonify/0.1.0+gitAUTOINC+*/git/src/sonify root@$(__get_lq_addr):/tmp && \
+    scp $builds/sonify/0.1.0+gitAUTOINC+*/git/src/sonify_settings root@$(__get_lq_addr):/tmp && \
+    scp $builds/sonify/0.1.0+gitAUTOINC+*/git/po/es.gmo root@$(__get_lq_addr):/tmp/es.gmo && \
+    scp $builds/sonify/0.1.0+gitAUTOINC+*/git/src/.libs/libsonify.so.0.0.0 root@$(__get_lq_addr):/tmp && \
     ssh root@$(__get_lq_addr) "
         mv /tmp/es.gmo /usr/share/locale/es/LC_MESSAGES/sonify.mo;
         chmod 755 /tmp/sonify_settings;
@@ -314,5 +323,29 @@ function deploy_sonify() {
         ln -s /usr/lib/libsonify.so.0.0.0 /usr/lib/libsonify.so.0 2>/dev/null
         ln -s /usr/lib/libsonify.so.0.0.0 /usr/lib/libsonify.so 2>/dev/null
         pkill sonify
-        DISPLAY=:0 sonify 1>/dev/console 2>&1 &"
+        DISPLAY=:0 sonify 1>/dev/console 2>&1 &" && \
+    cp $builds/sonify/0.1.0+gitAUTOINC+*/git/src/libsonify.h $sysroot/usr/include
+}
+
+function deploy_krill() {
+    scp $builds/krill/2.0.1+gitAUTOINC+*/git/src/krill-server root@$(__get_lq_addr):/tmp && \
+    ssh root@$(__get_lq_addr) "
+        /etc/apm/scripts.d/krill suspend
+        cp /tmp/krill-server /usr/bin
+        /etc/apm/scripts.d/krill resume
+    "
+}
+
+function write_patch() {
+    if [[ -z $1 ]]; then
+        usage "${0} path/to/file.patch"
+        return 1;
+    fi
+    if [[ ! -e "$1" || ! -h "${1}~" ]]; then
+        echo "$1 and ${1}~ must exist!"
+        echo "(${1}~ must be a symlink)"
+        return 1;
+    fi
+    mv "$1" $(readlink -f "${1}~")
+    mv "${1}~" "$1"
 }
