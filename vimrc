@@ -283,6 +283,9 @@ endfunc
 autocmd FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
 " }}}
 
+Plugin 'ekalinin/Dockerfile.vim' "Show trailing whitespace {{{
+"}}}
+
 "Unused: {{{
 
 "Plugin 'scrooloose/nerdtree' " Browse files from vim {{{
