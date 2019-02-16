@@ -119,8 +119,9 @@ bindkey '^R' history-incremental-search-backward
 
 # }}}
 
-
 # Execute the local zshrc (if exists)
 [[ -f $HOME/.zshrc.local.zsh ]] && source $HOME/.zshrc.local.zsh
+
+alias resource="source ~/.zshrc"
 
 # vim: fdm=marker foldlevel=0
