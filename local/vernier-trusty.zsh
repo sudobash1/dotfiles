@@ -229,6 +229,16 @@ function deploy_bin() {
     scp $1 root@$host:/tmp
     ssh root@$host "chmod 755 /tmp/${1:t} && mkdir -p $dest_dir && mv /tmp/${1:t} $dest_dir"
 }
+
+function deploy_lib() {
+    if [[ -z $1 ]]; then
+        echo "Usage: ${0:t} <lib_path> [host] [dest-dir]"
+        echo "dest-dir defaults to /usr/lib"
+        return 1
+    fi
+    deploy_bin "$1" "${2-$(__get_lq_addr)}" "${3-/usr/lib}"
+}
+
 function deploy_home() {
     if [[ -z $1 ]]; then
         echo "Usage: ${0:t} <exe_path> [host]"
@@ -299,7 +309,15 @@ function deploy_ngi_bin() {
     echo "deploying to $(__get_lq_addr)"
     scp -C $builds/ngi-app/2.8.4+gitAUTOINC+1fb5b5797e-r*/git/src/.libs/ngi root@$(__get_lq_addr):/tmp && \
     scp -C $builds/ngi-app/2.8.4+gitAUTOINC+1fb5b5797e-r*/git/src/pages/.libs/liblqpages.so.0.0.0 root@$(__get_lq_addr):/tmp && \
-    ssh root@$(__get_lq_addr) "mv /tmp/ngi /usr/bin; mv /tmp/liblqpages.so.0.0.0 /usr/lib; pkill ngi"
+    scp -C $builds/ngi-app/2.8.4+gitAUTOINC+1fb5b5797e-r*/git/src/graph/.libs/libngigraphview.so.0.0.0 root@$(__get_lq_addr):/tmp && \
+    ssh root@$(__get_lq_addr) "mv /tmp/ngi /usr/bin; mv /tmp/liblqpages.so.0.0.0 /tmp/libngigraphview.so.0.0.0 /usr/lib; pkill ngi"
+}
+
+function deploy_periodic_table() {
+    echo "deploying to $(__get_lq_addr)"
+    scp -C $builds/periodic-table/2.8.2+gitAUTOINC+543dd6c588-r20/git/src/.libs/periodic_table root@$(__get_lq_addr):/tmp && \
+    scp -C $builds/periodic-table/2.8.2+gitAUTOINC+543dd6c588-r20/git/src/.libs/libperiodic.so.0.0.0 root@$(__get_lq_addr):/tmp && \
+    ssh root@$(__get_lq_addr) "mv /tmp/periodic_table /usr/bin; mv /tmp/libperiodic.so.0.0.0 /usr/lib; pkill periodic_table"
 }
 
 function deploy_sonify() {
@@ -338,7 +356,7 @@ function deploy_krill() {
 
 function write_patch() {
     if [[ -z $1 ]]; then
-        usage "${0} path/to/file.patch"
+        echo "${0} path/to/file.patch"
         return 1;
     fi
     if [[ ! -e "$1" || ! -h "${1}~" ]]; then
@@ -348,4 +366,34 @@ function write_patch() {
     fi
     mv "$1" $(readlink -f "${1}~")
     mv "${1}~" "$1"
+}
+
+function theme() {
+    if [[ $1 == '-h' || $# > 1 ]]; then
+        echo "Usage ${0} [toggle|refresh]"
+        echo "Toggles or refreshes theme"
+        echo "default: refresh"
+        return 0
+    fi
+    if [[ $# == 0 ]]; then
+        "${0}" refresh
+        return
+    fi
+    toggle_cmd="DISPLAY=:0 vernier-light-power-capplet --krill-toggle-high-contrast"
+    case $1 in
+        toggle)
+            ssh $(__get_lq_addr) "$toggle_cmd"
+            ;;
+        refresh)
+            ssh $(__get_lq_addr) "$toggle_cmd; sleep 2; $toggle_cmd"
+            ;;
+        *)
+            "${0}" -h
+            return 1
+            ;;
+    esac
+}
+
+function deploy_theme() {
+    scp $builds/matchbox-vernier/0.1-r0/usr/share/themes/vernier/gtk-2.0/vstrc_{common,colors_hi_contrast,colors_lq_original} root@$(__get_lq_addr):/usr/share/themes/vernier/gtk-2.0/
 }
