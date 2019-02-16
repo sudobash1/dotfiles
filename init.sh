@@ -1,12 +1,17 @@
 #!/bin/bash
 
-dir=`pwd`
+# set dir to the location of this script
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1; pwd)"
 
-mkdir local 2>/dev/null
+mkdir -p "$dir/local"
 
-hostname=${DOTFILE_HOSTNAME-`uname -n`}
+# Get hostname
+hostname=${DOTFILE_HOSTNAME-$([[ -e .hostname ]] && cat .hostname || uname -n)}
+echo
 echo "Using $hostname as hostname"
-echo "To override, rerun setting \$DOTFILE_HOSTNAME"
+read -p "Hit [enter] to accept or type other hostname > " new_hostname
+[[ $new_hostname ]] && hostname="$new_hostname"
+echo $hostname > .hostname
 echo
 
 cd "$HOME"
@@ -108,6 +113,7 @@ else
 fi
 echo
 
+# VUNDLE
 if [[ -e "$dir/vim/bundle/Vundle.vim/.git" ]]; then
   echo "Skipping Vundle initialization"
 else
@@ -119,6 +125,7 @@ else
 fi
 echo
 
+# OH-MY-ZSH
 if [[ -d "$dir/oh-my-zsh" ]]; then
   echo "Skipping oh-my-zsh initialization"
 else
