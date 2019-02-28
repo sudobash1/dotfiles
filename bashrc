@@ -47,7 +47,7 @@ if ! shopt -oq posix; then
 fi
 
 # My completions
-source $DOTFILES_REPO/bash/bash_completion_tmux.sh
+source $DOTFILES_REPO/scripts/bash/bash_completion_tmux.sh
 
 # }}}
 
