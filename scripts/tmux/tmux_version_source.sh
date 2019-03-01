@@ -13,10 +13,10 @@ rm -f "${tmux_socket_path}_version_source_log"
 exec 1>>"${tmux_socket_path}_version_source_log"
 exec 2>>"${tmux_socket_path}_version_source_log"
 
-tmux_pid=$(echo $TMUX | sed 's%.*/%%; s/[^,]*,//; s/,.*//')
-tmux_ver=$(/proc/$tmux_pid/exe -V | awk '{print $2}')
+tmux_pid=$(echo $TMUX | cut -d, -f2)
+tmux_ver=$(/proc/$tmux_pid/exe -V | cut -d' ' -f2)
 tmux_socket_cmd="/proc/$tmux_pid/exe -S '$tmux_socket_path'"
-conf_dir="$DOTFILES_REPO/tmux_version_conf"
+conf_dir="$DOTFILES_REPO/scripts/tmux/tmux_version_conf"
 
 echo "Setting up for tmux v$tmux_ver"
 
