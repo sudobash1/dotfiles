@@ -1,0 +1,4 @@
+# These settings are usable until v2.2
+set -g utf8 on
+set -g mouse-utf8 on
+set-window-option -g utf8 on
