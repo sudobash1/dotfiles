@@ -3,12 +3,25 @@
 set-option -g pane-border-status off
 set-option -g pane-border-format " { #P#{?#T,: ,}#T#{?pane_synchronized, [SYNC],}#{?pane_dead, [DEAD],} } "
 
+# When set, show the pane title in the lower right
+run-shell -b 'tmux set -g status-right "##{?##T,##[fg=yellow][##T],}  $(tmux show-options -gv status-right)"'
+
+bind x confirm-before -p "kill pane #P #{?#T,(#T),}? (y/n)" kill-pane
+bind < command-prompt -p "rename pane" -I "#T" "select-pane -T '%%'"
+
+set -g @sbr_use_pbs 1
+
+bind Space if-shell -F '#{@sbr_use_pbs}' \
+    'set -w @sbr_use_pbs 0; set pane-border-status off' \
+    'set -w @sbr_use_pbs 1; set-hook -R after-resize-pane'
+
 # Auto hide pane-border-status line when only one pane is displayed (see tmux/tmux#566)
-set-hook -g 'session-created'    "select-pane -T ''"
-set-hook -g 'after-new-window'   "select-pane -T ''"
-set-hook -g 'after-split-window' "select-pane -T '' ; run-shell -b "'"'"tmux set pane-border-status $( [ \#{window_panes} -gt 1 ] && [ \#{window_zoomed_flag} -eq 0 ] && echo bottom || echo off )"'"'
-set-hook -g 'after-kill-pane'    "run-shell -b "'"'"tmux set pane-border-status $( [ \#{window_panes} -gt 1 ] && [ \#{window_zoomed_flag} -eq 0 ] && echo bottom || echo off )"'"' 
-set-hook -g 'pane-exited'        "run-shell -b "'"'"tmux set pane-border-status $( [ \#{window_panes} -gt 1 ] && [ \#{window_zoomed_flag} -eq 0 ] && echo bottom || echo off )"'"'
-set-hook -g 'after-resize-pane'  "run-shell -b "'"'"tmux set pane-border-status $( [ \#{window_panes} -gt 1 ] && [ \#{window_zoomed_flag} -eq 0 ] && echo bottom || echo off )"'"' # For Zoom
+set-hook -g 'session-created'     "select-pane -T ''"
+set-hook -g 'after-new-window'    "select-pane -T ''"
+set-hook -g 'after-split-window'  "select-pane -T '' ; if-shell -F '\#{@sbr_use_pbs}' 'set pane-border-status bottom'"
+#set-hook -g 'after-kill-pane'     "if-shell -F '#{&&:#{@sbr_use_pbs},#{!=:#{window_panes},1}}' '' 'set pane-border-status off'"
+set-hook -g 'pane-exited'         "if-shell -F '#{&&:#{@sbr_use_pbs},#{!=:#{window_panes},1}}' '' 'set pane-border-status off'"
+set-hook -g 'after-resize-pane'   "if-shell -F '#{&&:#{@sbr_use_pbs},#{&&:#{!=:#{window_panes},1},#{?#{window_zoomed_flag},,1}}}' 'set pane-border-status bottom' 'set pane-border-status off'"
+set-hook -g 'after-select-window' "set-hook -R after-resize-pane"
 
 # vim: ft=tmux
