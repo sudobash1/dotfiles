@@ -78,36 +78,26 @@ function deploy_ipk() {
 function deploy_itb() {
     usage="Usage: ${0:t} [-r] [-cr] [path/to/file.itb] [-H host] [-h|--help]
 
-    -r         rebuild
-    -cr        clean and rebuild
-    -H         specify destination host
-    -h|--help  show this help"
+-r         rebuild
+-cr        clean and rebuild
+-H         specify destination host
+-h|--help  show this help
+"
+
+    gen_env # Make sure env is up to date
 
     local itb="$builds/nant-g8-image/1.0-r1/rootfs/boot/sama5d2_xplained.itb"
     local host=$(__get_target_addr)
-
+    local clean=false
+    local rebuild=false
     while [[ $# != 0 ]]; do
         case $1 in
             -cr)
-                (
-                shift $# # must get rid of all arguments before source oe-init-build-env
-                cd ~/poky
-                source ./oe-init-build-env
-                bitbake -c clean -f linux-at91 && \
-                    bitbake linux-at91 || \
-                    { echo "Build failed!"; return 1; }
-                ) || return 1;
+                clean=true
+                rebuild=true
                 ;;
             -r)
-                (
-                shift $# # must get rid of all arguments before source oe-init-build-env
-                cd ~/poky
-                source ./oe-init-build-env
-                bitbake -c compile -f linux-at91 && \
-                    bitbake linux-at91 && \
-                    bitbake -c do_rootfs nant-g8-image || \
-                    { echo "Build failed!"; return 1; }
-                ) || return 1
+                rebuild=true
                 ;;
             *.itb)
                 itb="$1"
@@ -129,23 +119,38 @@ function deploy_itb() {
         esac
         shift
     done
+
+    $rebuild && { (
+        shift $# # must get rid of all arguments before source oe-init-build-env
+        cd ~/poky
+        source ./oe-init-build-env
+        clean && bitbake -c clean -f linux-at91
+        exec bitbake linux-at91
+    ) || { echo "Build failed!"; return 1; } }
+
+    ssh root@$host true || { echo "Cannot reach host '$host'"; return; }
+
     [[ -e $itb ]] || { echo "File '$itb' doesn't exist"; return 1; }
     scp $itb root@$host:/boot
 }
 
 function deploy_rootfs() {
-    usage="Usage: ${0:t} [-n] -H [host] [-h|--help]
+    usage="Usage: ${0:t} [-r] -H [host] [-h|--help]
 
--n         disable rebuild
+-r         rebuild
 -H         specify destination host
--h|--help  show this help"
-    local host=${1-$(__get_target_addr)}
-    local rebuild=true
+-h|--help  show this help
+"
+
+    gen_env # Make sure env is up to date
+
+    local host=$(__get_target_addr)
+    local rebuild=false
 
     while [[ $# != 0 ]]; do
         case $1 in
-            -n)
-                rebuild=false
+            -r)
+                rebuild=true
                 ;;
             -H)
                 shift;
@@ -165,13 +170,13 @@ function deploy_rootfs() {
         shift
     done
     ssh root@$host true || { echo "Cannot reach host '$host'"; return; }
-    gen_env # Make sure env is up to date
-    $rebuild && (
-        shift $#
+
+    $rebuild && { (
+        shift $# # must get rid of all arguments before source oe-init-build-env
         cd ~/poky
         source ./oe-init-build-env
         exec bitbake nant-g8-image
-    ) || return 1
+    )  || { echo "Build failed"; return 1; } }
 
     local archive=$(ls -t $images/nant-g8-image-$(__get_machine)-*.rootfs.tar.gz | head -n1)
     [[ $archive ]] || { echo "Cannot find archive!"; return 1; }
@@ -189,8 +194,8 @@ function deploy_rootfs() {
         tar xf ~/'$archive' --warning=no-timestamp && \
         echo 'Removing ${archive}' && \
         rm -f ~/'$archive' && \
-        echo 'Rebooting' && \
-        reboot
+        echo 'Shutting down' && \
+        shutdown -h now
     "
 }
 
