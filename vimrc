@@ -813,6 +813,10 @@ autocmd FileType vim nnoremap <buffer> K :execute "help " . expand('<cword>')<CR
 autocmd FileType vim vnoremap <buffer> K "ty:help <C-R>t<CR>
 " }}}
 
+" Vim {{{
+autocmd FileType tmux nnoremap <F9> :wa<bar>:!tmux source ~/.tmux.conf<CR>
+" }}}
+
 " Special Indentation Rules {{{
 
 autocmd FileType html setlocal shiftwidth=2
