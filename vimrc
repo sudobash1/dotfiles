@@ -428,6 +428,8 @@ if &term =~ '^screen'
     set ttymouse=xterm2
 endif
 
+autocmd BufEnter * syntax sync fromstart
+
 "}}}
 
 "============================= GENERAL CONFIG ============================= {{{
