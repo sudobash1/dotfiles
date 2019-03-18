@@ -12,7 +12,7 @@ function gen_env() {
   export ipk="$build/tmp/deploy/ipk/$machine"
   export builds="$build/tmp/work/${machine}-poky-linux-gnueabi"
   export buildsc="$build/tmp/work/cortexa5hf-neon-poky-linux-gnueabi"
-  export linux="$builds/linux-at91/$(ls -t $builds/linux-at91/ | head -n1)/git"
+  export linux="$builds/linux-at91/$(ls -t $builds/linux-at91/ 2>/dev/null | head -n1)/git"
   export dts="$linux/arch/arm/boot/dts"
 }
 
