@@ -1,7 +1,7 @@
 alias docker='sudo docker'
 
 function dshell() {
-  if [ "$1" == "-h" ] || [ $# -gt 3 ]; then
+  if [ "$1" = "-h" ] || [ $# -gt 3 ]; then
     echo "Usage: dshell <container_name> [user_name] [shell]"
     return 0
   fi
