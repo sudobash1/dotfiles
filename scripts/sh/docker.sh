@@ -1,8 +1,12 @@
 alias docker='sudo docker'
 
 function dshell() {
-  if [ $# -eq 0 ] || [ $# -gt 3 ]; then
+  if [ "$1" == "-h" ] || [ $# -gt 3 ]; then
     echo "Usage: dshell <container_name> [user_name] [shell]"
+    return 0
+  fi
+  if [ $# -eq 0 ]; then
+    sudo docker ps -a
     return 1
   fi
   docker_ps=$(sudo docker ps -a | awk '$NF == "'"$1"'"')

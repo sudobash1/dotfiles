@@ -428,6 +428,8 @@ if &term =~ '^screen'
     set ttymouse=xterm2
 endif
 
+autocmd BufEnter * syntax sync fromstart
+
 "}}}
 
 "============================= GENERAL CONFIG ============================= {{{
@@ -811,6 +813,10 @@ autocmd FileType vim nnoremap <buffer> K :execute "help " . expand('<cword>')<CR
 autocmd FileType vim vnoremap <buffer> K "ty:help <C-R>t<CR>
 " }}}
 
+" Vim {{{
+autocmd FileType tmux nnoremap <F9> :wa<bar>:!tmux source ~/.tmux.conf<CR>
+" }}}
+
 " Special Indentation Rules {{{
 
 autocmd FileType html setlocal shiftwidth=2
@@ -893,7 +899,7 @@ function GenerateBreakpoint()
   echo l:cmd
 endfunction
 autocmd Filetype c nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
-autocmd Filetype c++ nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
+autocmd Filetype cpp nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
 " }}}
 
 "The directory the MAKEFILE is in.
