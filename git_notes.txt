@@ -1,6 +1,8 @@
 To push a repo without checking it out, the explicit form is:
-
 git push some_repo local_branch:refs/heads/new_branch
+
+To push a specific commit, use:
+git push <remotename> <commit_number>:<remotebranchname>
 
 
 You can put per repository ignore patterns in .git/info/exclude in each repository.
