@@ -24,6 +24,11 @@ export LC_COLLATE="C"
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 export LESS="${LESS}SFRX"
 
+# Do not use italics in less, use a yellow highlight
+# https://unix.stackexchange.com/questions/179173/make-less-highlight-search-patterns-instead-of-italicizing-them/297708#297708
+export LESS_TERMCAP_so=$'\E[30;43m'
+export LESS_TERMCAP_se=$'\E[39;49m'
+
 # }}}
 
 # ------------------- Aliases & Functions ------------------- {{{
