@@ -2,6 +2,8 @@
 
 # set dir to the location of this script
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1; pwd)"
+DOTFILES_REPO="$dir"
+export DOTFILES_REPO
 
 mkdir -p "$dir/local"
 
@@ -22,7 +24,6 @@ files=(
 .vim .vimrc .vimrc.local.vim
 .bashrc .bashrc.local.bash
 .zshrc .zshrc.local.zsh
-.Xresources .Xresources.d
 .ctags
 )
 
@@ -92,12 +93,6 @@ echo "using $(get_local_file zsh) as local zsh config"
 ln -s "$(get_local_file zsh)" .zshrc.local.zsh
 echo
 
-# Xresources
-echo "Setting up .Xresources and .Xresources.d"
-ln -s "$dir/Xresources" .Xresources
-ln -s "$dir/Xresources.d" .Xresources.d
-echo
-
 # CTAGS
 echo "Setting up .ctags"
 ln -s "$dir/ctags" .ctags
@@ -136,3 +131,7 @@ else
   git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git "$dir/oh-my-zsh"
   )
 fi
+
+# X11
+echo "Calling x11_init.sh"
+"$dir/x11_init.sh"
