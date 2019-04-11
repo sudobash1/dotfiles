@@ -241,7 +241,22 @@ function deploy_bin() {
     host="${2-$(__get_target_addr)}"
     dest_dir="${3-/usr/bin}"
     scp $1 root@$host:/tmp
-    ssh root@$host "chmod 755 /tmp/${1:t} && mkdir -p $dest_dir && mv /tmp/${1:t} $dest_dir"
+    ssh root@$host "chmod 755 /tmp/${1:t} && mkdir -p $dest_dir && mv /tmp/${1:t} $dest_dir && ls ${dest_dir}/${1:t}"
+}
+
+function gen_linux_tags() {
+    (
+        cd $linux || { echo "Linux not built"; exit 1 }
+        setup_build_env
+        make O=. ARCH=arm SUBARCH=at91 COMPILED_SOURCE=1 cscope
+        #could also add tags
+        cd ../git
+        rm -f cscope.{files,out,out.in,out.po}
+        ln -s "${linux:h}/build/cscope.files" cscope.files
+        ln -s "${linux:h}/build/cscope.out" cscope.out
+        ln -s "${linux:h}/build/cscope.out.in" cscope.out.in
+        ln -s "${linux:h}/build/cscope.out.po" cscope.out.po
+    )
 }
 
 export __ZSHRC_LOCAL_DEFAULT_PATH="$PATH"
