@@ -23,7 +23,7 @@ files=(
 .tmux.conf .tmux.local.conf
 .vim .vimrc .vimrc.local.vim
 .bashrc .bashrc.local.bash
-.zshrc .zshrc.local.zsh
+.zshrc .zshenv .zshrc.local.zsh
 .ctags
 )
 
@@ -87,8 +87,9 @@ ln -s "$(get_local_file bash)" .bashrc.local.bash
 echo
 
 # ZSH
-echo "Setting up .zshrc and .zshrc.local.zsh"
+echo "Setting up .zshrc, .zshenv, and .zshrc.local.zsh"
 ln -s "$dir/zshrc" .zshrc
+ln -s "$dir/zshenv" .zshenv
 echo "using $(get_local_file zsh) as local zsh config"
 ln -s "$(get_local_file zsh)" .zshrc.local.zsh
 echo
@@ -131,7 +132,9 @@ else
   git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git "$dir/oh-my-zsh"
   )
 fi
+echo
 
 # X11
 echo "Calling x11_init.sh"
 "$dir/x11_init.sh"
+echo
