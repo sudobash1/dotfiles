@@ -102,7 +102,16 @@ echo
 # GIT
 if [ -e .gitconfig ]; then
   echo "$HOME/.gitconfig already exists."
-  echo "Skipping git configuration"
+  while read -p "Do you want to reconfigure git [y/n]? " reconfigure_git; do
+    case "$reconfigure_git" in
+      Y|y)
+        echo "Calling git_init.sh"
+        "$dir/git_init.sh" ;;
+      N|n) echo "skipping...";;
+      *) continue;;
+    esac
+    break
+  done
 else
   echo "Calling git_init.sh"
   "$dir/git_init.sh"

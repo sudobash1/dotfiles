@@ -1,3 +1,8 @@
+if ! command -v git >/dev/null; then
+  echo "No git command in \$PATH. Skipping git initialization."
+  exit
+fi
+
 git config --global user.name "Stephen Robinson"
 
 # Determine email to use
@@ -16,14 +21,15 @@ else
 fi
 
 # Set up editor and diff tool
-if command -v vim; then
+if command -v vim >/dev/null; then
   git config --global core.editor vim
 else
   git config --global core.editor vi
 fi
-command -v vimdiff && git config --global diff.tool vimdiff
+command -v vimdiff >/dev/null && git config --global diff.tool vimdiff
 
 # Prevent accidentaly pushing branches
 git config --global push.default nothing
 
 git config --global color.ui auto
+git config --global log.decorate auto

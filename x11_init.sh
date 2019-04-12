@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if ! command -v xinit >/dev/null; then
+  echo "No xinit command in \$PATH. Skipping x11 initialization."
+  exit
+fi
+
 install_fonts() {
   cd "$DOTFILES_REPO/fonts"
   for font in *.ttf; do
@@ -18,14 +23,18 @@ install_fonts() {
   fc-cache -f -v
 }
 
-while read -p "Do you want to install fonts [y/n]? " install_fonts; do
-  case "$install_fonts" in
-    Y|y) install_fonts || echo "Could not install fonts";;
-    N|n) ;;
-    *) continue;;
-  esac
-  break
-done
+if command -v fc-cache >/dev/null; then
+  while read -p "Do you want to install fonts [y/n]? " install_fonts; do
+    case "$install_fonts" in
+      Y|y) install_fonts || echo "Could not install fonts";;
+      N|n) ;;
+      *) continue;;
+    esac
+    break
+  done
+else
+  echo "No fc-cache in \$PATH. Skipping font initialization"
+fi
 
 target="$HOME/.Xresources"
 
@@ -74,16 +83,19 @@ function regenerate_resources() {
   xrdb ~/.Xresources
 }
 
-if [[ -e "$target" ]]; then
-  while true; do
-    read -p "Do you want to regenerate $target [y/n]? " regenerate
-    case "$regenerate" in
-      Y|y) regenerate_resources;;
-      N|n) ;;
-      *) continue;;
-    esac
-    break
-  done
+if command -v xrdb >/dev/null; then
+  if [[ -e "$target" ]]; then
+    while true; do
+      read -p "Do you want to regenerate $target [y/n]? " regenerate
+      case "$regenerate" in
+        Y|y) regenerate_resources;;
+        N|n) ;;
+        *) continue;;
+      esac
+      break
+    done
+  else
+    regenerate_resources
+  fi
 else
-  regenerate_resources
-fi
+  echo "No xrdb in \$PATH. Skipping font initialization"
