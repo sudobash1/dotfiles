@@ -119,6 +119,12 @@ bindkey '^R' history-incremental-search-backward
 
 # }}}
 
+# ------------------- Aliases ------------------- {{{
+
+alias reloadzsh="killall -u $(whoami) -USR1 zsh"
+
+# }}}
+
 # Execute the local zshrc (if exists)
 [[ -f $HOME/.zshrc.local.zsh ]] && source $HOME/.zshrc.local.zsh
 
