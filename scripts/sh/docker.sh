@@ -1,5 +1,7 @@
 alias docker='sudo docker'
 
+alias dtime_refresh='sudo docker run --rm --privileged alpine hwclock -s'
+
 function dshell() {
   if [ "$1" = "-h" ] || [ $# -gt 3 ]; then
     echo "Usage: dshell <container_name> [user_name] [shell]"
@@ -24,7 +26,7 @@ function dshell() {
       shell=$3
     fi
 
-    sudo docker exec -it -e "TERM=$TERM" -u "$user" "$1" "$shell"
+    sudo docker exec -it -e "TZ=US/Pacific" -e "TERM=$TERM" -u "$user" "$1" "$shell"
   else
     echo "No such docker container: $1"
   fi
