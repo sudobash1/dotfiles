@@ -286,6 +286,9 @@ autocmd FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<C
 Plugin 'ekalinin/Dockerfile.vim' "Show trailing whitespace {{{
 "}}}
 
+Plugin 'samsaga2/vim-z80' "z80 syntax highlighting {{{
+"}}}
+
 "Unused: {{{
 
 "Plugin 'scrooloose/nerdtree' " Browse files from vim {{{
@@ -800,12 +803,12 @@ autocmd FileType text nnoremap <buffer> A g$a
 " Assembly {{{
 
 "disable tab completion for asm files
-silent autocmd FileType asm let b:SuperTabDisabled = 1
+silent autocmd FileType asm,z80 let b:SuperTabDisabled = 1
 
-autocmd FileType asm setlocal tabstop=8
-autocmd FileType asm setlocal shiftwidth=8
-autocmd FileType asm setlocal softtabstop=8
-autocmd FileType asm setlocal noexpandtab
+autocmd FileType asm,z80 setlocal tabstop=8
+autocmd FileType asm,z80 setlocal shiftwidth=8
+autocmd FileType asm,z80 setlocal softtabstop=8
+autocmd FileType asm,z80 setlocal noexpandtab
 " }}}
 
 " Vim {{{
