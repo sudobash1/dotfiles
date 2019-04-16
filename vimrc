@@ -427,8 +427,12 @@ if &term =~ '^screen' || &term =~ '^tmux'
     execute "set <xRight>=\e[1;*C"
     execute "set <xLeft>=\e[1;*D"
 
-    " tmux know the extended mouse mode
-    set ttymouse=xterm2
+    " tmux knows the extended mouse mode
+    if has("mouse_sgr")
+      set ttymouse=sgr " For columns beyond 223
+    else
+      set ttymouse=xterm2
+    end
 endif
 
 autocmd BufEnter * syntax sync fromstart
