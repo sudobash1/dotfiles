@@ -91,6 +91,10 @@ setopt extendedglob
 # pound sign in interactive prompt
 setopt interactivecomments
 
+# Do not automatically cd if you provide a directory name
+# without a cd
+unsetopt auto_cd
+
 # ------------------- History ------------------- {{{
 
 HISTFILE=~/.zhistory
