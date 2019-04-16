@@ -420,7 +420,7 @@ filetype plugin indent on    " required
 
 "============================== HACKS CONFIG ============================== {{{
 
-if &term =~ '^screen'
+if &term =~ '^screen' || &term =~ '^tmux'
     " tmux will send xterm-style keys when its xterm-keys option is on
     execute "set <xUp>=\e[1;*A"
     execute "set <xDown>=\e[1;*B"
