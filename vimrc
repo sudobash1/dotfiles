@@ -1015,7 +1015,7 @@ endfunction
 function! VIMRC_Tabline()
   let prelen = 0    " Length of tab labels before the active one
   let activelen = 0 " Length of active tab label
-  let postlen = 0   " Length fo tab labels after the active one
+  let postlen = 0   " Length of tab labels after the active one
   let postarrow = 0 " Use a > at end
 
   let prestrs = []   " Tab labels before the active one
@@ -1030,11 +1030,13 @@ function! VIMRC_Tabline()
     let bufname = bufname(bufnr)
     let tabname = gettabvar(tab, "tab_name", bufname)
     let bufmodified = getbufvar(bufnr, "&mod")
-    let active = tab == tabpagenr()
+    let active = (tab == tabpagenr())
 
-    let s = ' ' . tab .':'
-    let s .= (tabname != '' ? '['. fnamemodify(tabname, ':t') . '] ' : '[No Name] ')
+    let s = ' ' . tab .':['
+    let s .= (tabname != '' ? fnamemodify(tabname, ':t') : 'No Name')
+    let s .= '] '
 
+    " Only add modified flag if the tab name is the same as the buffer name
     if bufmodified && tabname == bufname
       let s .= '[+] '
     endif
@@ -1052,46 +1054,57 @@ function! VIMRC_Tabline()
 
   endfor
 
-  while prelen + activelen + postlen + postarrow > &columns
-    if postlen > 0
-      let trimed = remove(poststrs, -1)
-      let postlen -= strlen(trimed)
-      let postarrow = 1
-    else
-      "We can't even display the entire active tab :(
-      let postarrow = 1
+  let screen_width=&columns-2
+
+  let activei = (len(prestrs)+1)
+  let s = '%' . activei . 'T%#TabLineSel#' . activestr
+  let total_len = activelen
+  let prearrow = 0
+  let postarrow = 0
+  let i = 0
+  while len(prestrs) + len(poststrs)
+    let i += 1
+    let pre = (len(prestrs) ? remove(prestrs, -1) : "" )
+    let post = (len(poststrs) ? remove(poststrs, 0) : "" )
+    let arrow_len = (len(prestrs) != 0) + (len(poststrs) != 0)
+    let new_len = total_len + strlen(pre) + strlen(post)
+    if new_len > screen_width
+      " We have too many things on the screen. We need to start trimming off
+      " characters from tabs
+      while new_len > screen_width && (strlen(pre) || strlen(post))
+        if strlen(post)
+          let post = post[0:-2]
+          let new_len -= 1
+          let postarrow = 1
+        endif
+        if new_len > screen_width && strlen(pre)
+          let pre = pre[1:-1]
+          let new_len -= 1
+          let prearrow = 1
+        endif
+      endwhile
+    endif
+
+    if strlen(pre)
+      let s = '%' . (activei - i) . 'T%#TabLine#' . pre . s
+    endif
+    if strlen(post)
+      let s .= '%' . (activei + i) . 'T%#TabLine#' . post
+    endif
+    let total_len += strlen(pre) + strlen(post)
+
+    if new_len >= screen_width
+      " If we include the arrows, we have used up 100% of the screen_width
+      " Stop here!
       break
     endif
   endwhile
 
-  let total_len = prelen + activelen + postlen + postarrow
-
-  " Padding between end of tagline and >
-  let padding = 0
-
-  if postarrow == 1
-    let padding =  &columns - total_len - 1
-    if padding < 0
-      let padding = 0
-    endif
+  if len(prestrs) || prearrow
+    let s = '<' . s
   endif
-
-  let s = ""
-
-  for i in range(len(prestrs))
-    let s .= '%' . (i+1) . 'T%#TabLine#' . prestrs[i]
-  endfor
-
-  let s .= '%' . (len(prestrs)+1) . 'T%#TabLineSel#' . activestr
-
-  for i in range(len(poststrs))
-    let s .= '%' . (i+len(prestrs)+2) . 'T%#TabLine#' . poststrs[i]
-  endfor
-
-  if postarrow
-    let s .= "%#TabLine#" . repeat(' ', padding) . ">"
-  else
-    let s .= '%#TabLineFill#'
+  if len(poststrs) || postarrow
+    let s .= '%=>'
   endif
 
   return s
