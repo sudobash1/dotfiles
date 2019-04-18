@@ -143,6 +143,22 @@ else
 fi
 echo
 
+# TERMINFO
+if command -v infocmp >/dev/null; then
+  if ! infocmp tmux-256color >/dev/null 2>&1; then
+    echo "No 'tmux-256color' terminfo found..."
+    echo "Getting latest terminfo."
+    "$dir/scripts/misc/get_latest_terminfo.sh"
+  else
+    echo "Already have 'tmux-256color' terminfo."
+    echo "Skipping fetching terminfo."
+  fi
+else
+  echo "No 'infocmp' command"
+  echo "Skipping fetching terminfo."
+fi
+echo
+
 # X11
 echo "Calling x11_init.sh"
 "$dir/x11_init.sh"
