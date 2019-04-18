@@ -99,3 +99,4 @@ if command -v xrdb >/dev/null; then
   fi
 else
   echo "No xrdb in \$PATH. Skipping font initialization"
+fi
