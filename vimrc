@@ -1100,6 +1100,8 @@ function! VIMRC_Tabline()
     endif
   endwhile
 
+  let s .= '%#TabLine#' " In case the last tab is active
+
   if len(prestrs) || prearrow
     let s = '<' . s
   endif
