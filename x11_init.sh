@@ -80,7 +80,7 @@ function regenerate_resources() {
     printf '#include "%s/Xresources.d/%s"\n' "$DOTFILES_REPO" "$f" >> "$target"
   done
 
-  xrdb ~/.Xresources
+  [[ -n "$DISPLAY" ]] && xrdb ~/.Xresources
 }
 
 if command -v xrdb >/dev/null; then
