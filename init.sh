@@ -118,6 +118,22 @@ else
 fi
 echo
 
+# TERMINFO
+if command -v infocmp >/dev/null; then
+  if ! infocmp tmux-256color >/dev/null 2>&1; then
+    echo "No 'tmux-256color' terminfo found..."
+    echo "Getting latest terminfo."
+    "$dir/scripts/misc/get_latest_terminfo.sh"
+  else
+    echo "Already have 'tmux-256color' terminfo."
+    echo "Skipping fetching terminfo."
+  fi
+else
+  echo "No 'infocmp' command"
+  echo "Skipping fetching terminfo."
+fi
+echo
+
 # VUNDLE
 if [[ -e "$dir/vim/bundle/Vundle.vim/.git" ]]; then
   echo "Skipping Vundle initialization"
@@ -140,22 +156,6 @@ else
 
   git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git "$dir/oh-my-zsh"
   )
-fi
-echo
-
-# TERMINFO
-if command -v infocmp >/dev/null; then
-  if ! infocmp tmux-256color >/dev/null 2>&1; then
-    echo "No 'tmux-256color' terminfo found..."
-    echo "Getting latest terminfo."
-    "$dir/scripts/misc/get_latest_terminfo.sh"
-  else
-    echo "Already have 'tmux-256color' terminfo."
-    echo "Skipping fetching terminfo."
-  fi
-else
-  echo "No 'infocmp' command"
-  echo "Skipping fetching terminfo."
 fi
 echo
 
