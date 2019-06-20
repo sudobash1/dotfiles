@@ -1,6 +1,11 @@
-#!/bin/sh
+#!/bin/bash -e
 
-if [ -f /etc/issue ]; then
+if command -v nvim 2>/dev/null; then
+  echo "nvim is already installed."
+  exit 1
+fi
+
+if [[ -f /etc/issue ]]; then
   # Ubuntu
   if grep -q "Ubuntu" /etc/issue; then
     # Xenial (16.04)
@@ -9,11 +14,14 @@ if [ -f /etc/issue ]; then
       sudo add-apt-repository ppa:neovim-ppa/stable
       sudo apt-get update
       sudo apt-get install neovim
+
       echo "Making sure required python utils are installed"
-      sudo apt-get install python-dev python-pip python3-dev python3-pip
+      sudo apt-get install python-dev python-pip
+
       echo "Installing pynvim for current user"
       pip3 install --user --upgrade pynvim
       pip2 install --user --upgrade pynvim
+
       echo "Done"
       exit 0
     fi

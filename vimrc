@@ -43,6 +43,7 @@
 "
 " }}}
 
+"============================= PREINIT ============================= {{{
 let g:vimrc_autoinit = 1
 if index(['1', 'yes', 'on', 'true', 'y', 't', 'enable'], tolower($VIM_AUTOINIT)) >= 0
   let g:vimrc_autoinit = 1
@@ -50,17 +51,24 @@ elseif index(['0', 'no', 'off', 'false', 'n', 'f', 'disable'], tolower($VIM_AUTO
   let g:vimrc_autoinit = 0
 endif
 
+if has('nvim')
+  if filereadable(expand($NVIM_PYTHON3))
+    let g:python3_host_prog = expand($NVIM_PYTHON3)
+  endif
+  if filereadable(expand($NVIM_PYTHON))
+    let g:python_host_prog = expand($NVIM_PYTHON)
+  endif
+endif
+
+" }}}
+
 set nocompatible " be iMproved, required
 
 "============================= VUNDLE CONFIG ============================= {{{
 filetype off "required for now to use vundle
 
 " set the runtime path to include Vundle and initialize
-if has('nvim')
-  set rtp+=~/.vim/bundle/Vundle.vim
-else
-  set rtp+=~/.vim/nvim_bundle/Vundle.vim
-endif
+set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
 "alternatively, pass a path where Vundle should install plugins
@@ -204,8 +212,12 @@ endif
 
 " Async completion (Shougo/deoplete.nvim) {{{
 if has('nvim') && has('python3')
-  Plugin 'Shougo/deoplete.nvim'
-  let g:deoplete#enable_at_startup = 1
+  " deoplete requires python3.6.1+ to be installed:
+  py3 import sys
+  if py3eval("sys.version_info[1] > 6 or (sys.version_info[1] == 6 and sys.version_info[2] > 1)")
+    Plugin 'Shougo/deoplete.nvim'
+    let g:deoplete#enable_at_startup = 1
+  endif
 endif
 "}}}
 
