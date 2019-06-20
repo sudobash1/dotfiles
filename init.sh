@@ -142,32 +142,35 @@ fi
 echo
 
 # VUNDLE
-if [[ -e "$dir/vim/bundle/Vundle.vim/.git" ]]; then
-  echo "Skipping Vundle initialization"
+echo "Initializing vim-plug"
+if [[ -e "$dir/vim/autoload/plug.vim" ]]; then
+  echo "vim-plug already installed"
 else
-  echo "Initializing Vundle"
-  mkdir -p "$dir/vim/bundle"
-  cd "$dir/vim/bundle"
-  git clone https://github.com/VundleVim/Vundle.vim.git
-  vim +PluginInstall +qall
+  echo "Installing vim-plug"
+  mkdir -p "$dir/vim/autoload"
+  if command -v curl 2>/dev/null; then
+    curl -fLo "$dir/vim/autoload/plug.vim" \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  elif command -v wget 2>/dev/null; then
+    wget -O "$dir/vim/autoload/plug.vim" \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  else
+    echo "Install failed. No curl or wget in path"
+  fi
 fi
+[[ -e "$dir/vim/autoload/plug.vim" ]] && vim +PlugInstall +qall
 echo
 
-# NVIM VUNDLE
+# NVIM VIM-PLUG
 if command -v nvim >/dev/null; then
-  if [[ -e "$dir/vim/nvim_bundle/Vundle.vim/.git" ]]; then
-    echo "Skipping nvim Vundle initialization"
-  else
-    echo "Initializing nvim Vundle"
-    mkdir -p "$dir/vim/nvim_bundle"
-    cd "$dir/vim/nvim_bundle"
-    git clone https://github.com/VundleVim/Vundle.vim.git
-    nvim +PluginInstall +qall
-    nvim +UpdateRemotePlugins +qall
+  if [[ -e "$dir/vim/autoload/plug.vim" ]]; then
+    echo "Initializing vim-plug for nvim"
+    nvim +PlugInstall +qall
   fi
 else
   echo "No 'nvim' command"
-  echo "Not installing nvim Vundle."
+  echo "Not initializing vim-plug for nvim."
+  echo "Try using $dir/scripts/misc/install_nvim.sh"
 fi
 echo
 

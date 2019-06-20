@@ -64,26 +64,19 @@ endif
 
 set nocompatible " be iMproved, required
 
-"============================= VUNDLE CONFIG ============================= {{{
-filetype off "required for now to use vundle
+"============================= VIM PLUG CONFIG ============================= {{{
+call plug#begin('~/.vim/bundle')
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
+" have plug install itself
+Plug 'junegunn/vim-plug'
 
-call vundle#begin()
-"alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-Plugin 'tpope/vim-fugitive.git' " Intigrate vim with git {{{
+Plug 'tpope/vim-fugitive' " Intigrate vim with git {{{
 "}}}
 
-Plugin 'ntpeters/vim-better-whitespace' "Show trailing whitespace {{{
+Plug 'ntpeters/vim-better-whitespace' "Show trailing whitespace {{{
 "}}}
 
-Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file finder {{{
+Plug 'ctrlpvim/ctrlp.vim' " Fuzzy file finder {{{
 let g:ctrlp_map = '<F1>'
 let g:ctrlp_cmd = 'call VIMRC_do_ctrlp()'
 let g:ctrlp_by_filename = 1
@@ -106,7 +99,7 @@ endfunc
 
 " }}}
 
-Plugin 'ervandew/supertab' " Tab completion anywhere {{{
+Plug 'ervandew/supertab' " Tab completion anywhere {{{
 let g:SuperTabDefaultCompletionType = "context" " Detect if in a pathname, etc...
 let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>" " If above detect fails fallback to cxcp
 "let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
@@ -125,7 +118,7 @@ autocmd FileType python call SuperTabSetDefaultCompletionType("<C-X><C-O>")
 
 " }}}
 
-Plugin 'milkypostman/vim-togglelist' " Toggle Location list and Quickfix list {{{
+Plug 'milkypostman/vim-togglelist' " Toggle Location list and Quickfix list {{{
 let g:toggle_list_no_mappings = 1 "Define mapping(s) myself
 "let g:toggle_list_copen_command = "copen 30"
 let g:toggle_list_copen_command = "botright copen" "Always fill the lenght of the screen
@@ -133,12 +126,12 @@ nnoremap <silent> <F4> :call ToggleQuickfixList()<CR>
 "nnoremap <silent> <F5> :call ToggleLocationList()<CR>
 " }}}
 
-Plugin 'ton/vim-bufsurf' " Allow navigating through buffer history {{{
+Plug 'ton/vim-bufsurf' " Allow navigating through buffer history {{{
 nnoremap gb :BufSurfBack<CR>
 nnoremap gn :BufSurfForward<CR>
 " }}}
 
-Plugin 'majutsushi/tagbar' "Show an overview of tags for current file {{{
+Plug 'majutsushi/tagbar' "Show an overview of tags for current file {{{
 
   nnoremap <silent> <F2> :TagbarToggle<CR>
 
@@ -153,13 +146,13 @@ Plugin 'majutsushi/tagbar' "Show an overview of tags for current file {{{
   let g:tagbar_show_visibility = 1
 ""}}}
 
-Plugin 'craigemery/vim-autotag' " Automatically re-generate tag files {{{
+Plug 'craigemery/vim-autotag' " Automatically re-generate tag files {{{
 " }}}
 
-Plugin 'captbaritone/better-indent-support-for-php-with-html' " Indent PHP + HTML files {{{
+Plug 'captbaritone/better-indent-support-for-php-with-html' " Indent PHP + HTML files {{{
 "}}}
 
-Plugin 'derekwyatt/vim-fswitch' " Toggle between header and source files {{{
+Plug 'derekwyatt/vim-fswitch' " Toggle between header and source files {{{
 	nnoremap <silent> <Leader>tt :FSHere<cr>
 	nnoremap <silent> <Leader>tl :FSRight<cr>
 	nnoremap <silent> <Leader>tL :FSSplitRight<cr>
@@ -171,7 +164,7 @@ Plugin 'derekwyatt/vim-fswitch' " Toggle between header and source files {{{
 	nnoremap <silent> <Leader>tJ :FSSplitBelow<cr>
 "}}}
 
-Plugin 'mattn/emmet-vim' " html editing tools {{{
+Plug 'mattn/emmet-vim' " html editing tools {{{
 let g:user_emmet_leader_key='<C-e>'
 let g:user_emmet_settings = { 'html' : { 'quote_char' : "'" } }
 
@@ -179,11 +172,11 @@ let g:user_emmet_install_global = 0
 autocmd FileType html,css,php,xml EmmetInstall
 "}}}
 
-Plugin 'kergoth/vim-bitbake' " Bitbake syntax and file support for vim {{{
+Plug 'kergoth/vim-bitbake' " Bitbake syntax and file support for vim {{{
 "}}}
 
 if has('cscope')
-  Plugin 'sudobash1/cscope_dynamic' "{{{
+  Plug 'sudobash1/cscope_dynamic' "{{{
   let g:cscopedb_big_file = "cscope.out"
   let g:cscopedb_small_file = "cache_cscope.out"
   let g:cscopedb_auto_init = g:vimrc_autoinit
@@ -215,18 +208,18 @@ if has('nvim') && has('python3')
   " deoplete requires python3.6.1+ to be installed:
   py3 import sys
   if py3eval("sys.version_info[1] > 6 or (sys.version_info[1] == 6 and sys.version_info[2] > 1)")
-    Plugin 'Shougo/deoplete.nvim'
+    Plug 'Shougo/deoplete.nvim'
     let g:deoplete#enable_at_startup = 1
 
     " Find list of deoplete plugins at https://github.com/Shougo/deoplete.nvim/wiki/Completion-Sources
-    Plugin 'Shougo/neco-vim' " deoplete for vimL {{{
+    Plug 'Shougo/neco-vim' " deoplete for vimL {{{
     "}}}
 
   endif
 endif
 "}}}
 
-Plugin 'mrtazz/DoxygenToolkit.vim' "{{{
+Plug 'mrtazz/DoxygenToolkit.vim' "{{{
 let g:DoxygenToolkit_authorName="Stephen Robinson"
 let g:DoxygenToolkit_briefTag_pre=""
 let g:DoxygenToolkit_startCommentTag = "/**"
@@ -252,7 +245,7 @@ nnoremap <leader>db :DoxBlock<CR>
 syntax region DoxComment start="\/\*\*" end="\*\/" transparent fold
 "}}}
 
-Plugin 'junkblocker/patchreview-vim' "{{{ Open up patches or git diffs in separate tabs
+Plug 'junkblocker/patchreview-vim' "{{{ Open up patches or git diffs in separate tabs
 "Reviewing current changes in your workspace:
 ":DiffReview
 "
@@ -268,18 +261,18 @@ Plugin 'junkblocker/patchreview-vim' "{{{ Open up patches or git diffs in separa
 "See :h patchreview for details
 "}}}
 
-Plugin 'sudobash1/vimwits' " Settings for a project {{{
+Plug 'sudobash1/vimwits' " Settings for a project {{{
 let g:vimwits_enable = g:vimrc_autoinit
 autocmd Filetype vim,make,sh let b:vimwits_valid_hi_groups = ["", "Identifier"]
 "}}}
 
-Plugin 'simeji/winresizer' " Resize window mode {{{
+Plug 'simeji/winresizer' " Resize window mode {{{
 let g:winresizer_start_key = '<leader>w'
 let g:winresizer_vert_resize = 1
 let g:winresizer_horiz_resize = 1
 "}}}
 
-Plugin 'yssl/QFEnter'  " Open quickfix entry in previous window (and more) {{{
+Plug 'yssl/QFEnter'  " Open quickfix entry in previous window (and more) {{{
 " Be like CtrP
 let g:qfenter_keymap = {}
 let g:qfenter_keymap.open = ['<CR>', '<2-LeftMouse>']
@@ -288,10 +281,10 @@ let g:qfenter_keymap.hopen = ['<C-CR>', '<C-s>', '<C-x>']
 let g:qfenter_keymap.topen = ['<C-t>']
 "}}}
 
-Plugin 'ekalinin/Dockerfile.vim' "Show trailing whitespace {{{
+Plug 'ekalinin/Dockerfile.vim' "Show trailing whitespace {{{
 "}}}
 
-Plugin 'samsaga2/vim-z80' "z80 syntax highlighting {{{
+Plug 'samsaga2/vim-z80' "z80 syntax highlighting {{{
 "}}}
 
 "Unused: {{{
@@ -442,9 +435,7 @@ Plugin 'samsaga2/vim-z80' "z80 syntax highlighting {{{
 
 ""}}}
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+call plug#end()
 " }}}
 
 "============================== HACKS CONFIG ============================== {{{
@@ -469,6 +460,8 @@ autocmd BufEnter * syntax sync fromstart
 "}}}
 
 "============================= GENERAL CONFIG ============================= {{{
+
+filetype plugin indent on
 
 "let mapleader=","
 
