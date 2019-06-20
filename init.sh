@@ -22,6 +22,7 @@ files=(
 .profile .shrc .shrc.local.sh
 .tmux.conf .tmux.local.conf
 .vim .vimrc .vimrc.local.vim
+.config/nvim/init.vim .local/share/nvim/site
 .bashrc .bashrc.local.bash
 .zshrc .zshenv .zshrc.local.zsh
 .ctags
@@ -62,6 +63,12 @@ ln -s "$dir/vim" .vim
 echo "using $(get_local_file vim) as local vim config"
 ln -s "$(get_local_file vim)" .vimrc.local.vim
 ln -s "$dir/vimrc" .vimrc
+echo
+
+# NVIM
+echo "Setting up .config/nvim/init.vim and .local/share/nvim/site"
+ln -s "$dir/vimrc" .config/nvim/init.vim
+ln -s "$dir/vim" .local/share/nvim/site
 echo
 
 # TMUX
@@ -143,6 +150,24 @@ else
   cd "$dir/vim/bundle"
   git clone https://github.com/VundleVim/Vundle.vim.git
   vim +PluginInstall +qall
+fi
+echo
+
+# NVIM VUNDLE
+if command -v nvim >/dev/null; then
+  if [[ -e "$dir/vim/nvim_bundle/Vundle.vim/.git" ]]; then
+    echo "Skipping nvim Vundle initialization"
+  else
+    echo "Initializing nvim Vundle"
+    mkdir -p "$dir/vim/nvim_bundle"
+    cd "$dir/vim/nvim_bundle"
+    git clone https://github.com/VundleVim/Vundle.vim.git
+    nvim +PluginInstall +qall
+    nvim +UpdateRemotePlugins +qall
+  fi
+else
+  echo "No 'nvim' command"
+  echo "Not installing nvim Vundle."
 fi
 echo
 

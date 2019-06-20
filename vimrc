@@ -56,7 +56,12 @@ set nocompatible " be iMproved, required
 filetype off "required for now to use vundle
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
+if has('nvim')
+  set rtp+=~/.vim/bundle/Vundle.vim
+else
+  set rtp+=~/.vim/nvim_bundle/Vundle.vim
+endif
+
 call vundle#begin()
 "alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
@@ -197,6 +202,13 @@ if has('cscope')
   "}}}
 endif
 
+" Async completion (Shougo/deoplete.nvim) {{{
+if has('nvim') && has('python3')
+  Plugin 'Shougo/deoplete.nvim'
+  let g:deoplete#enable_at_startup = 1
+endif
+"}}}
+
 Plugin 'mrtazz/DoxygenToolkit.vim' "{{{
 let g:DoxygenToolkit_authorName="Stephen Robinson"
 let g:DoxygenToolkit_briefTag_pre=""
@@ -259,30 +271,6 @@ let g:qfenter_keymap.hopen = ['<C-CR>', '<C-s>', '<C-x>']
 let g:qfenter_keymap.topen = ['<C-t>']
 "}}}
 
-Plugin 'davidhalter/jedi-vim' " Context completion for Python {{{
-"let g:jedi#popup_select_first = 0
-"let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
-
-" s:jedigoto {{{
-func s:jedigoto()
-  echo
-  redir => l:goto_output
-  silent call jedi#goto_assignments()
-  redir END
-  if l:goto_output != ""
-    try
-      tag expand("<cword>")
-    catch /E257/
-      echohl WarningMsg
-      echo "Tag not found"
-      echohl None
-    endtry
-  endif
-endfunc
-" }}}
-autocmd FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
-" }}}
-
 Plugin 'ekalinin/Dockerfile.vim' "Show trailing whitespace {{{
 "}}}
 
@@ -290,6 +278,30 @@ Plugin 'samsaga2/vim-z80' "z80 syntax highlighting {{{
 "}}}
 
 "Unused: {{{
+
+"Plugin 'davidhalter/jedi-vim' " Context completion for Python {{{
+""let g:jedi#popup_select_first = 0
+""let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
+"
+"" s:jedigoto {{{
+"func s:jedigoto()
+"  echo
+"  redir => l:goto_output
+"  silent call jedi#goto_assignments()
+"  redir END
+"  if l:goto_output != ""
+"    try
+"      tag expand("<cword>")
+"    catch /E257/
+"      echohl WarningMsg
+"      echo "Tag not found"
+"      echohl None
+"    endtry
+"  endif
+"endfunc
+"" }}}
+"autocmd FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
+"" }}}
 
 "Plugin 'scrooloose/nerdtree' " Browse files from vim {{{
 "nnoremap <silent> <F3> :NERDTreeToggle<CR>
