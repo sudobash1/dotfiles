@@ -217,6 +217,11 @@ if has('nvim') && has('python3')
   if py3eval("sys.version_info[1] > 6 or (sys.version_info[1] == 6 and sys.version_info[2] > 1)")
     Plugin 'Shougo/deoplete.nvim'
     let g:deoplete#enable_at_startup = 1
+
+    " Find list of deoplete plugins at https://github.com/Shougo/deoplete.nvim/wiki/Completion-Sources
+    Plugin 'Shougo/neco-vim' " deoplete for vimL {{{
+    "}}}
+
   endif
 endif
 "}}}
