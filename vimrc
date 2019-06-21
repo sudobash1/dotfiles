@@ -553,12 +553,7 @@ syn on "turn on syntax highlighting
 
 "if running in terminal use custom colors.
 if !has("gui_running")
-  set t_Co=8
-  if has ('nvim')
-    autocmd VimEnter * colorscheme custom
-  else
-    colorscheme custom
-  endif
+  colorscheme custom
 endif
 
 "indenting defaults
