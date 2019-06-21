@@ -576,23 +576,26 @@ set splitright
 
 if executable('ag')
   " Use ag if we have it
-  set grepprg=ag\ --nogroup\ --nocolor\ --vimgrep
+  set grepprg=ag\ --nogroup\ --nocolor\ --vimgrep\ --ignore\ tags\ --ignore\ cscope.out
+  "set grepprg=ag\ --nogroup\ --nocolor\ --vimgrep
   set grepformat^=%f:%l:%c:%m   " file:line:column:message
 else
-  set grepprg=grep\ -n\ -r
+  set grepprg=grep\ -n\ -r\ -E
 endif
 
 func s:ag(search_a, search_b)
+  let args = ""
   if a:search_a != ""
     let search=a:search_a
   else
     let search=a:search_b
+    let args .= " -w -F"
   endif
   if search == ""
       echom "ERROR: You must have the cursor on a word or provide an argument"
       return
   endif
-  execute "silent! grep!" search
+  execute "silent! grep! -w -F " . search
   botright cwindow
   redraw!
 endfunc
