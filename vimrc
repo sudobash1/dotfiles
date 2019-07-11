@@ -566,6 +566,8 @@ set foldlevel=99 "Don't fold by default
 "set textauto "recognize ^M files
 syn on "turn on syntax highlighting
 
+set listchars=eol:$,tab:>-,space:.
+
 "if running in terminal use custom colors.
 if !has("gui_running")
   colorscheme custom
