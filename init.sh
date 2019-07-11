@@ -7,6 +7,8 @@ export DOTFILES_REPO
 
 mkdir -p "$dir/local"
 
+source "$DOTFILES_REPO/scripts/init/util.sh"
+
 # Get hostname
 hostname=${DOTFILE_HOSTNAME-$([[ -e .hostname ]] && cat .hostname || uname -n)}
 echo
@@ -106,31 +108,12 @@ echo "Setting up .ctags"
 ln -s "$dir/ctags" .ctags
 echo
 
-# GIT
-if [ -e .gitconfig ]; then
-  echo "$HOME/.gitconfig already exists."
-  while read -p "Do you want to reconfigure git [y/n]? " reconfigure_git; do
-    case "$reconfigure_git" in
-      Y|y)
-        echo "Calling git_init.sh"
-        "$dir/git_init.sh" ;;
-      N|n) echo "skipping...";;
-      *) continue;;
-    esac
-    break
-  done
-else
-  echo "Calling git_init.sh"
-  "$dir/git_init.sh"
-fi
-echo
-
 # TERMINFO
 if command -v infocmp >/dev/null; then
   if ! infocmp tmux-256color >/dev/null 2>&1; then
     echo "No 'tmux-256color' terminfo found..."
-    echo "Getting latest terminfo."
-    "$dir/scripts/misc/get_latest_terminfo.sh"
+    choose_yn "Do you want to get the latest terminfo" \
+      "$dir/scripts/misc/get_latest_terminfo.sh" "" "y"
   else
     echo "Already have 'tmux-256color' terminfo."
     echo "Skipping fetching terminfo."
@@ -141,7 +124,7 @@ else
 fi
 echo
 
-# VUNDLE
+# VIM-PLUG
 echo "Initializing vim-plug"
 if [[ -e "$dir/vim/autoload/plug.vim" ]]; then
   echo "vim-plug already installed"
@@ -157,22 +140,26 @@ else
   else
     echo "Install failed. No curl or wget in path"
   fi
+  if [[ -e "$dir/vim/autoload/plug.vim" ]]; then
+    do_vimplug_install=1
+    vim +PlugInstall +qall
+  fi
 fi
-[[ -e "$dir/vim/autoload/plug.vim" ]] && vim +PlugInstall +qall
 echo
 
 # NVIM VIM-PLUG
 if command -v nvim >/dev/null; then
-  if [[ -e "$dir/vim/autoload/plug.vim" ]]; then
+  if [[ -n $do_vimplug_install ]]; then
     echo "Initializing vim-plug for nvim"
     nvim +PlugInstall +qall
+    echo
   fi
 else
   echo "No 'nvim' command"
   echo "Not initializing vim-plug for nvim."
   echo "Try using $dir/scripts/misc/install_nvim.sh"
+  echo
 fi
-echo
 
 # OH-MY-ZSH
 if [[ -d "$dir/oh-my-zsh" ]]; then
@@ -187,7 +174,10 @@ else
 fi
 echo
 
-# X11
-echo "Calling x11_init.sh"
-"$dir/x11_init.sh"
+# Extra init scripts
+for script in "$DOTFILES_REPO"/scripts/init/*_init.sh; do
+  echo "Calling $(basename "$script")"
+  "$script"
+  echo
+done
 echo

@@ -1,9 +1,20 @@
 #!/bin/bash
 
+source "$DOTFILES_REPO/scripts/init/util.sh"
+
 if ! command -v xinit >/dev/null; then
   echo "No xinit command in \$PATH. Skipping x11 initialization."
   exit
 fi
+
+check_fonts_installed() {
+  cd "$DOTFILES_REPO/fonts"
+  for font in *.ttf; do
+    file="$HOME/.fonts/$font"
+    [[ -e "$file" ]] || return 1
+  done
+  return 0
+}
 
 install_fonts() {
   cd "$DOTFILES_REPO/fonts"
@@ -24,14 +35,12 @@ install_fonts() {
 }
 
 if command -v fc-cache >/dev/null; then
-  while read -p "Do you want to install fonts [y/n]? " install_fonts; do
-    case "$install_fonts" in
-      Y|y) install_fonts || echo "Could not install fonts";;
-      N|n) ;;
-      *) continue;;
-    esac
-    break
-  done
+  if ! check_fonts_installed; then
+    choose_yn "Do you want to install fonts" \
+      'install_fonts || echo "Could not install fonts"' '' 'y'
+  else
+    echo "Fonts already installed. Skipping font initialization"
+  fi
 else
   echo "No fc-cache in \$PATH. Skipping font initialization"
 fi
@@ -85,15 +94,7 @@ function regenerate_resources() {
 
 if command -v xrdb >/dev/null; then
   if [[ -e "$target" ]]; then
-    while true; do
-      read -p "Do you want to regenerate $target [y/n]? " regenerate
-      case "$regenerate" in
-        Y|y) regenerate_resources;;
-        N|n) ;;
-        *) continue;;
-      esac
-      break
-    done
+    choose_yn "Do you want to regenerate $target" regenerate_resources "" "n"
   else
     regenerate_resources
   fi

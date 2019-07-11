@@ -1,6 +1,15 @@
+#!/bin/bash
+
+source "$DOTFILES_REPO/scripts/init/util.sh"
+
 if ! command -v git >/dev/null; then
   echo "No git command in \$PATH. Skipping git initialization."
   exit
+fi
+
+if [ -e .gitconfig ]; then
+  echo "$HOME/.gitconfig already exists."
+  choose_yn "Do you want to reconfigure git" "" "exit" "n"
 fi
 
 git config --global user.name "Stephen Robinson"
