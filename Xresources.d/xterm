@@ -1,9 +1,19 @@
 XTerm*saveLines: 16384
 XTerm*loginShell: true
+! charClass to include URLs:
+! xterm*charClass: 33:48,37-38:48,45-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35:48
 XTerm*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48
 XTerm*eightBitInput: false
 
+Xterm*on2Clicks: word
+xterm*on3Clicks: regex [^ \n]+
+Xterm*on4Clicks: line
+
 *customization: -color
 XTerm*termName: xterm-256color
+
+*VT100*translations: #override \
+    Ctrl Shift <Btn1Up>: exec-formatted("xdg-open '%t'", PRIMARY) \n\
+    Ctrl Shift <Btn3Up>: exec-formatted("xdg-open 'https://www.duckduckgo.com/?q=%t'", PRIMARY)
 
 ! vim:ft=xdefaults
