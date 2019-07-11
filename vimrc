@@ -41,6 +41,9 @@
 "
 "  To "dereference" a string into a var, do {"foobar"} or g:{"foobar"}
 "
+"  To insert a check (✓) type <C-K>OK. To insert an X (✗) type <C-K>XX
+"  See :h digraph-table
+"
 " }}}
 
 "============================= PREINIT ============================= {{{
@@ -320,6 +323,18 @@ Plug 'ekalinin/Dockerfile.vim' "Show trailing whitespace {{{
 "}}}
 
 Plug 'samsaga2/vim-z80' "z80 syntax highlighting {{{
+"}}}
+
+Plug 'godlygeek/tabular' " Allign with the :Tab /<regex> command {{{
+" Note: this is required by vim-markdown below
+"}}}
+
+Plug 'plasticboy/vim-markdown' " Render markdown in vim {{{
+" ~~Strikethrough~~
+let g:vim_markdown_strikethrough = 1
+" Allow for following file links without .md extention
+let g:vim_markdown_no_extensions_in_markdown = 1
+" Use <c-t> and <c-d> to indent or de-indent bullets
 "}}}
 
 "Unused: {{{
@@ -798,6 +813,16 @@ nnoremap gp `[v`]
 
 " }}}
 
+"============================= CUSTOM HIGHLIGHTS ============================= {{{
+
+hi GoodText ctermfg=lightgreen cterm=bold
+au filetype markdown call matchadd("GoodText", "✓")
+
+hi BadText ctermfg=red cterm=bold
+au filetype markdown call matchadd("BadText", "✗")
+
+" }}}
+
 "============================ FILETYPE CONFIG ============================ {{{
 
 "Change c indentation rules to match my style:
@@ -841,22 +866,24 @@ autocmd FileType sml setlocal softtabstop=2
 " }}}
 
 " Text {{{
-autocmd FileType text setlocal linebreak
-autocmd FileType text setlocal cc=0
-autocmd FileType text setlocal nonu
-autocmd FileType text setlocal spell
+autocmd FileType text,markdown setlocal linebreak
+autocmd FileType text,markdown setlocal cc=0
+autocmd FileType text,markdown setlocal nonu
+autocmd FileType text,markdown setlocal spell
 autocmd FileType help setlocal nospell
-autocmd FileType text setlocal textwidth=0
-autocmd FileType text setlocal tabstop=4
-autocmd FileType text setlocal noexpandtab
-autocmd FileType text noremap <buffer> <up> gk
-autocmd FileType text noremap <buffer> k gk
-autocmd FileType text noremap <buffer> <down> gj
-autocmd FileType text noremap <buffer> j gj
-autocmd FileType text noremap <buffer> ^ g^
-autocmd FileType text noremap <buffer> $ g$
-autocmd FileType text nnoremap <buffer> I g^i
-autocmd FileType text nnoremap <buffer> A g$a
+autocmd FileType text,markdown setlocal textwidth=0
+autocmd FileType text,markdown setlocal tabstop=4
+autocmd FileType text,markdown noremap <buffer> <up> gk
+autocmd FileType text,markdown noremap <buffer> k gk
+autocmd FileType text,markdown noremap <buffer> <down> gj
+autocmd FileType text,markdown noremap <buffer> j gj
+autocmd FileType text,markdown noremap <buffer> ^ g^
+autocmd FileType text,markdown noremap <buffer> $ g$
+autocmd FileType text,markdown nnoremap <buffer> I g^i
+autocmd FileType text,markdown nnoremap <buffer> A g$a
+" Never conseal MD characters on the current (or visually selected) line
+autocmd FileType markdown setlocal concealcursor=
+
 " }}}
 
 " Assembly {{{
