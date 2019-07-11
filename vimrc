@@ -823,6 +823,9 @@ au filetype markdown call matchadd("GoodText", "✓")
 hi BadText ctermfg=red cterm=bold
 au filetype markdown call matchadd("BadText", "✗")
 
+hi StarText ctermfg=yellow cterm=bold
+au filetype markdown call matchadd("StarText", "★")
+
 " }}}
 
 "============================ FILETYPE CONFIG ============================ {{{
@@ -869,6 +872,7 @@ autocmd FileType sml setlocal softtabstop=2
 
 " Text {{{
 autocmd FileType text,markdown setlocal linebreak
+autocmd FileType text,markdown setlocal breakindent
 autocmd FileType text,markdown setlocal cc=0
 autocmd FileType text,markdown setlocal nonu
 autocmd FileType text,markdown setlocal spell
