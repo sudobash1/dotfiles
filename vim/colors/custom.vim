@@ -20,6 +20,7 @@ if exists("syntax_on")
 endif
 
 hi Comment    ctermfg=blue   cterm=italic
+hi Title      ctermfg=LightMagenta cterm=bold
 
 hi Search ctermbg=178
 
@@ -31,6 +32,11 @@ hi ColorColumn ctermbg=red
 hi DiffAdd ctermbg=9
 hi DiffText ctermbg=1
 hi DiffChange ctermbg=13
+
+hi htmlItalic   cterm=italic
+hi mkdItalic    cterm=italic
+hi htmlBold     cterm=bold
+hi mkdBold      cterm=bold
 
 let colors_name = "custom"
 
