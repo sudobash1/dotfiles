@@ -872,7 +872,9 @@ autocmd FileType sml setlocal softtabstop=2
 
 " Text {{{
 autocmd FileType text,markdown setlocal linebreak
-autocmd FileType text,markdown setlocal breakindent
+if (v:version > 704 || v:version == 704 && has("patch338")) && has("linebreak")
+  autocmd FileType text,markdown setlocal breakindent
+endif
 autocmd FileType text,markdown setlocal cc=0
 autocmd FileType text,markdown setlocal nonu
 autocmd FileType text,markdown setlocal spell
