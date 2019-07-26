@@ -566,7 +566,10 @@ set foldlevel=99 "Don't fold by default
 "set textauto "recognize ^M files
 syn on "turn on syntax highlighting
 
-set listchars=eol:$,tab:>-,space:.
+set listchars=eol:$,tab:>-
+if (v:version > 704 || v:version == 704 && has("patch710"))
+  set listchars+=space:.
+endif
 
 "if running in terminal use custom colors.
 if !has("gui_running")
