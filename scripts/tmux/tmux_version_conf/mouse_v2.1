@@ -4,4 +4,8 @@ set-option -g mouse on
 bind -n WheelUpPane if-shell -F -t = "#{mouse_any_flag}" "send-keys -M" "if -Ft= '#{pane_in_mode}' 'send-keys -M' 'select-pane -t=; copy-mode -e; send-keys -M'"
 bind -n WheelDownPane select-pane -t= \; send-keys -M
 
+# Drag windows on the status bar
+bind-key -n MouseDrag1Status swap-window -t=
+bind-key -n DoubleClick1Status if -F "#{@sbr_hide_window}" "setw @sbr_hide_window ''" "setw @sbr_hide_window 1"
+
 # vim:ft=tmux
