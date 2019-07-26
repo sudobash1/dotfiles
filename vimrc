@@ -777,22 +777,6 @@ nnoremap <leader><leader> :CustCMD
 
 nnoremap <leader>h :echo printf("0x%x", expand('<cword>'))<CR>
 
-"Move current/selected lines up/down
-"nnoremap <C-Up> "zddkk$p
-"nnoremap <C-Down> "zdd$p
-"vnoremap <C-Up> "zxkk$p
-"vnoremap <C-Down> "zx$p
-
-"in buffer movement
-nnoremap gj <PageDown>
-nnoremap gk <PageUp>
-nnoremap gh <Home>
-nnoremap gl <End>
-vnoremap gj <PageDown>
-vnoremap gk <PageUp>
-vnoremap gh <Home>
-vnoremap gl <End>
-
 "System clipboard
 nnoremap <C-P> "+p
 nnoremap <C-Y> "+y
