@@ -854,6 +854,10 @@ au vimrc FileType sml setlocal shiftwidth=2
 au vimrc FileType sml setlocal softtabstop=2
 " }}}
 
+" JSON {{{
+au vimrc FileType json setlocal conceallevel=0
+" }}}
+
 " Text {{{
 au vimrc FileType text,markdown setlocal linebreak
 if (v:version > 704 || v:version == 704 && has("patch338")) && has("linebreak")
