@@ -15,7 +15,7 @@
 "
 " use i<character> as a selection command to select inside something.
 " ie vi( will select inside parens. a<character> will select around them
-"
+",
 " To fix the indentation of something, use the = button.
 " ie =% reindent entire file == reindent line
 "
@@ -522,6 +522,8 @@ filetype plugin indent on
 
 " place backups in ~/.vim/tmp if it exists
 set backupdir=~/.local/tmp/vim,.
+" Use a unitfied .swp directory for both vim and nvim
+set directory=.,~/tmp,/var/tmp,/tmp
 
 " patterns to put to ignore when completing file names
 set wildignore=*/*.bak,*/*~,*/*.o,*/*.info,*/*.sw?,*/*.class,*/*.d
