@@ -347,6 +347,8 @@ let g:vim_markdown_no_extensions_in_markdown = 1
 
 
 
+Plug 'guns/xterm-color-table.vim', {'on': 'XtermColorTable'}
+
 "Unused: {{{
 
 "Plugin 'scrooloose/nerdtree' " Browse files from vim {{{
