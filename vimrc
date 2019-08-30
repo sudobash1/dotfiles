@@ -265,6 +265,16 @@ if has('nvim') && has('python3')
 endif
 "}}}
 
+" Async linting [nvim only] (dense-analysis/ale) {{{
+if has('nvim')
+  Plug 'dense-analysis/ale'
+
+  " Use quickfix list instead of location-list
+  let g:ale_set_loclist = 0
+  let g:ale_set_quickfix = 1
+endif
+" }}}
+
 Plug 'mrtazz/DoxygenToolkit.vim' "{{{
 let g:DoxygenToolkit_authorName="Stephen Robinson"
 let g:DoxygenToolkit_briefTag_pre=""
