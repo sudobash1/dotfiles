@@ -47,6 +47,8 @@
 " }}}
 
 "============================= PREINIT ============================= {{{
+set nocompatible
+
 let g:vimrc_autoinit = 1
 if index(['1', 'yes', 'on', 'true', 'y', 't', 'enable'], tolower($VIM_AUTOINIT)) >= 0
   let g:vimrc_autoinit = 1
@@ -63,9 +65,12 @@ if has('nvim')
   endif
 endif
 
+augroup vimrc
+" If this vimrc is being resourced, clear the autocommands so they can be
+" defined again without duplicates.
+au!
+augroup END
 " }}}
-
-set nocompatible " be iMproved, required
 
 "============================= VIM PLUG CONFIG ============================= {{{
 call plug#begin('~/.vim/bundle')
@@ -81,12 +86,12 @@ Plug 'ntpeters/vim-better-whitespace' "Show trailing whitespace {{{
 
 Plug 'ctrlpvim/ctrlp.vim', {'on': ['CtrlPBuffer','CtrlPTag','CtrlP']} " Fuzzy file finder {{{
 let g:ctrlp_map = ''
-nnoremap <F1> :call VIMRC_do_ctrlp()<CR>
+nnoremap <F1> :call <SID>do_ctrlp()<CR>
 let g:ctrlp_by_filename = 1
 let g:ctrlp_match_window = 'results:100'
 
 " Find files in all directories that are not hidden or of forbidden extention types
-function VIMRC_do_ctrlp()
+function! s:do_ctrlp()
   if v:count == 2
     CtrlPBuffer
   elseif v:count == 3
@@ -110,14 +115,14 @@ let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>" " If above detect fail
 
 let g:SuperTabClosePreviewOnPopupClose = 1
 "Should be the same as
-autocmd CompleteDone * pclose
+au vimrc CompleteDone * pclose
 
 " Jedi vim should be allowed to autocomplete in cases like "from os import "
-" autocmd FileType python let b:SuperTabNoCompleteAfter = ['^']
+" au vimrc FileType python let b:SuperTabNoCompleteAfter = ['^']
 " Allow Jedi vim to take precidence
-"autocmd FileType python let b:SuperTabDefaultCompletionType = "<C-X><C-O>"
+"au vimrc FileType python let b:SuperTabDefaultCompletionType = "<C-X><C-O>"
 " Allow Jedi vim to be the fallback if context fails
-" autocmd FileType python call SuperTabSetDefaultCompletionType("<C-X><C-O>")
+" au vimrc FileType python call SuperTabSetDefaultCompletionType("<C-X><C-O>")
 
 " }}}
 
@@ -172,7 +177,7 @@ let g:user_emmet_leader_key='<C-e>'
 let g:user_emmet_settings = { 'html' : { 'quote_char' : "'" } }
 
 let g:user_emmet_install_global = 0
-autocmd FileType html,css,php,xml EmmetInstall
+au vimrc FileType html,css,php,xml EmmetInstall
 "}}}
 
 Plug 'kergoth/vim-bitbake' " Bitbake syntax and file support for vim {{{
@@ -185,7 +190,7 @@ if has('cscope')
   let g:cscopedb_auto_init = g:vimrc_autoinit
   let g:cscopedb_auto_files = 1
 
-  function s:autodir_cscope()
+  function! s:autodir_cscope()
     let l:dir = getcwd()
     while l:dir != expand("~") && l:dir != "/"
       if filereadable(expand(l:dir . "/" . g:cscopedb_big_file))
@@ -199,7 +204,7 @@ if has('cscope')
     call s:autodir_cscope()
   endif
 
-  func InitCScope()
+  func! InitCScope()
     call s:autodir_cscope()
     execute "normal \<Plug>CscopeDBInit"
   endfunc
@@ -233,7 +238,7 @@ if has('nvim') && has('python3')
       let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
 
       " s:jedigoto {{{
-      func s:jedigoto()
+      func! s:jedigoto()
         echo
         redir => l:goto_output
         silent call jedi#goto_assignments()
@@ -249,8 +254,8 @@ if has('nvim') && has('python3')
         endif
       endfunc
       " }}}
-      autocmd FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
-      autocmd FileType python call jedi#configure_call_signatures()
+      au vimrc FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
+      au vimrc FileType python call jedi#configure_call_signatures()
     " }}}
 
   endif
@@ -301,7 +306,7 @@ Plug 'junkblocker/patchreview-vim' "{{{ Open up patches or git diffs in separate
 
 Plug 'sudobash1/vimwits' " Settings for a project {{{
 let g:vimwits_enable = g:vimrc_autoinit
-autocmd Filetype vim,make,sh let b:vimwits_valid_hi_groups = ["", "Identifier"]
+au vimrc Filetype vim,make,sh let b:vimwits_valid_hi_groups = ["", "Identifier"]
 "}}}
 
 Plug 'simeji/winresizer' " Resize window mode {{{
@@ -360,7 +365,7 @@ let g:vim_markdown_no_extensions_in_markdown = 1
 "  endif
 "endfunc
 "" }}}
-"autocmd FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
+"au vimrc FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
 "" }}}
 
 "Plugin 'scrooloose/nerdtree' " Browse files from vim {{{
@@ -505,7 +510,7 @@ if &term =~ '^screen' || &term =~ '^tmux'
     end
 endif
 
-autocmd BufEnter * syntax sync fromstart
+au vimrc BufEnter * syntax sync fromstart
 
 "}}}
 
@@ -602,7 +607,7 @@ else
   set grepprg=grep\ -n\ -r\ -E
 endif
 
-func s:ag(search_a, search_b)
+func! s:ag(search_a, search_b)
   let l:args = ""
   if a:search_a != ""
     let l:search=a:search_a
@@ -619,7 +624,7 @@ func s:ag(search_a, search_b)
   redraw!
 endfunc
 
-command -nargs=* -complete=file CustCMDag call <SID>ag("<args>", expand("<cword>"))
+command! -nargs=* -complete=file CustCMDag call <SID>ag("<args>", expand("<cword>"))
 
 " }}}
 
@@ -647,7 +652,7 @@ if has('cscope')
 "  "}}}
 
   " s:cscopecmd {{{
-  func s:cscopecmd(cmd, ...)
+  func! s:cscopecmd(cmd, ...)
 
     let word = ""
 
@@ -717,7 +722,7 @@ if has('cscope')
   " }}}
 
   " s:cscopeGotoIncludeFile {{{
-  func s:cscopeGotoIncludeFile(file)
+  func! s:cscopeGotoIncludeFile(file)
     if a:file != ""
       let file = a:file
     else
@@ -733,18 +738,18 @@ if has('cscope')
   endfunc
   " }}}
 
-  func s:curtag()
+  func! s:curtag()
     return substitute(tagbar#currenttag('%s',''),"()","","")
   endfunc
 
-  command -nargs=? CustCMDcs call <SID>cscopecmd("s", "<args>", expand("<cword>"))
-  command -nargs=? CustCMDcg call <SID>cscopecmd("g", "<args>", expand("<cword>"))
-  command CustCMDcd call <SID>cscopecmd("d", s:curtag())
-  command -nargs=? CustCMDcc call <SID>cscopecmd("c", "<args>", expand("<cword>"))
-  command -nargs=? CustCMDcf call <SID>cscopeGotoIncludeFile("<args>")
-  command -nargs=? CustCMDci call <SID>cscopecmd("i", "<args>", fnamemodify(expand('%'), ':t'))
-  command -nargs=? CustCMDct call <SID>cscopecmd("t", "<args>", expand("<cword>"))
-  command -nargs=? CustCMDcp call <SID>cscopecmd("p", "<args>", expand("<cword>"))
+  command! -nargs=? CustCMDcs call <SID>cscopecmd("s", "<args>", expand("<cword>"))
+  command! -nargs=? CustCMDcg call <SID>cscopecmd("g", "<args>", expand("<cword>"))
+  command! CustCMDcd call <SID>cscopecmd("d", s:curtag())
+  command! -nargs=? CustCMDcc call <SID>cscopecmd("c", "<args>", expand("<cword>"))
+  command! -nargs=? CustCMDcf call <SID>cscopeGotoIncludeFile("<args>")
+  command! -nargs=? CustCMDci call <SID>cscopecmd("i", "<args>", fnamemodify(expand('%'), ':t'))
+  command! -nargs=? CustCMDct call <SID>cscopecmd("t", "<args>", expand("<cword>"))
+  command! -nargs=? CustCMDcp call <SID>cscopecmd("p", "<args>", expand("<cword>"))
 
 endif
 " }}}
@@ -756,7 +761,7 @@ cnoreabbrev wd w<BAR>bn<BAR>bd #
 "cnoremap w!! w !sudo tee % >/dev/null
 cnoreabbrev  w!! w !sudo tee % >/dev/null
 
-command BD bp<BAR>bd #
+command! BD bp<BAR>bd #
 
 " }}}
 
@@ -804,13 +809,13 @@ nnoremap gp `[v`]
 "============================= CUSTOM HIGHLIGHTS ============================= {{{
 
 hi GoodText ctermfg=lightgreen cterm=bold
-au filetype markdown call matchadd("GoodText", "✓")
+au vimrc filetype markdown call matchadd("GoodText", "✓")
 
 hi BadText ctermfg=red cterm=bold
-au filetype markdown call matchadd("BadText", "✗")
+au vimrc filetype markdown call matchadd("BadText", "✗")
 
 hi StarText ctermfg=yellow cterm=bold
-au filetype markdown call matchadd("StarText", "★")
+au vimrc filetype markdown call matchadd("StarText", "★")
 
 " }}}
 
@@ -822,100 +827,91 @@ set cinoptions+=(4m1 "This makes only one indentation happen after (
 set cinoptions+=g0 "disable for access modifiers
 
 " commit messages {{{
-autocmd Filetype svn,*commit* setlocal spell
+au vimrc Filetype svn,*commit* setlocal spell
 " }}}
 
 " Java {{{
-"autocmd Filetype java set errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
-"autocmd Filetype java inoremap {<CR> {<CR>}<C-O>O
-"autocmd Filetype java inoremap {{ <CR>{<CR>}<C-O>O
-"autocmd Filetype java inoremap { {}<Left>
-"autocmd Filetype java inoremap {<ESC> <C-O>a
-"autocmd Filetype java inoremap {[ {
+"au vimrc Filetype java set errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
+"au vimrc Filetype java inoremap {<CR> {<CR>}<C-O>O
+"au vimrc Filetype java inoremap {{ <CR>{<CR>}<C-O>O
+"au vimrc Filetype java inoremap { {}<Left>
+"au vimrc Filetype java inoremap {<ESC> <C-O>a
+"au vimrc Filetype java inoremap {[ {
 
 " }}}
 
 " C++ {{{
-"autocmd Filetype cpp set errorformat=%f:%l:%c:%m,%f:kk%l:\ %m,In\ file\ included\ from\ %f:%l:,\^I\^Ifrom\ %f:%l%m,\"%f\"\\\,\ line\ %l.%c:%m\,\ %f:%l:%m,%f:%l:%c:%m
-"autocmd Filetype cpp set errorformat^=%-GIn\ file\ included\ %.%# 
-"autocmd Filetype cpp set errorformat^=%-Gavrdude%.%#
-autocmd Filetype cpp set foldmethod=syntax
-" }}}
-
-" C {{{
-"autocmd Filetype c set errorformat=%f:%l:%c:%m,%f:kk%l:\ %m,In\ file\ included\ from\ %f:%l:,\^I\^Ifrom\ %f:%l%m,\"%f\"\\\,\ line\ %l.%c:%m\,\ %f:%l:%m,%f:%l:%c:%m
-"autocmd Filetype c set errorformat^=%-GIn\ file\ included\ %.%# 
-"autocmd Filetype c set errorformat^=%-Gavrdude%.%#
+au vimrc Filetype cpp set foldmethod=syntax
 " }}}
 
 " SML {{{
 " no autowrap XXX Why can't I put the t and c on one line?
-autocmd FileType sml setlocal formatoptions-=t
-autocmd FileType sml setlocal formatoptions-=c
-autocmd FileType sml setlocal shiftwidth=2
-autocmd FileType sml setlocal softtabstop=2
+au vimrc FileType sml setlocal formatoptions-=t
+au vimrc FileType sml setlocal formatoptions-=c
+au vimrc FileType sml setlocal shiftwidth=2
+au vimrc FileType sml setlocal softtabstop=2
 " }}}
 
 " Text {{{
-autocmd FileType text,markdown setlocal linebreak
+au vimrc FileType text,markdown setlocal linebreak
 if (v:version > 704 || v:version == 704 && has("patch338")) && has("linebreak")
-  autocmd FileType text,markdown setlocal breakindent
+  au vimrc FileType text,markdown setlocal breakindent
 endif
-autocmd FileType text,markdown setlocal cc=0
-autocmd FileType text,markdown setlocal nonu
-autocmd FileType text,markdown setlocal spell
-autocmd FileType help setlocal nospell
-autocmd FileType text,markdown setlocal textwidth=0
-autocmd FileType text,markdown setlocal tabstop=4
-autocmd FileType text,markdown noremap <buffer> <up> gk
-autocmd FileType text,markdown noremap <buffer> k gk
-autocmd FileType text,markdown noremap <buffer> <down> gj
-autocmd FileType text,markdown noremap <buffer> j gj
-autocmd FileType text,markdown noremap <buffer> ^ g^
-autocmd FileType text,markdown noremap <buffer> $ g$
-autocmd FileType text,markdown nnoremap <buffer> I g^i
-autocmd FileType text,markdown nnoremap <buffer> A g$a
+au vimrc FileType text,markdown setlocal cc=0
+au vimrc FileType text,markdown setlocal nonu
+au vimrc FileType text,markdown setlocal spell
+au vimrc FileType help setlocal nospell
+au vimrc FileType text,markdown setlocal textwidth=0
+au vimrc FileType text,markdown setlocal tabstop=4
+au vimrc FileType text,markdown noremap <buffer> <up> gk
+au vimrc FileType text,markdown noremap <buffer> k gk
+au vimrc FileType text,markdown noremap <buffer> <down> gj
+au vimrc FileType text,markdown noremap <buffer> j gj
+au vimrc FileType text,markdown noremap <buffer> ^ g^
+au vimrc FileType text,markdown noremap <buffer> $ g$
+au vimrc FileType text,markdown nnoremap <buffer> I g^i
+au vimrc FileType text,markdown nnoremap <buffer> A g$a
 " Never conseal MD characters on the current (or visually selected) line
-autocmd FileType markdown setlocal concealcursor=
+au vimrc FileType markdown setlocal concealcursor=
 
 " }}}
 
 " Assembly {{{
 
 "disable tab completion for asm files
-silent autocmd FileType asm,z80 let b:SuperTabDisabled = 1
+silent au vimrc FileType asm,z80 let b:SuperTabDisabled = 1
 
-autocmd FileType asm,z80 setlocal tabstop=8
-autocmd FileType asm,z80 setlocal shiftwidth=8
-autocmd FileType asm,z80 setlocal softtabstop=8
-autocmd FileType asm,z80 setlocal noexpandtab
+au vimrc FileType asm,z80 setlocal tabstop=8
+au vimrc FileType asm,z80 setlocal shiftwidth=8
+au vimrc FileType asm,z80 setlocal softtabstop=8
+au vimrc FileType asm,z80 setlocal noexpandtab
 " }}}
 
 " Vim {{{
-autocmd FileType vim nnoremap <buffer> K :execute "help " . expand('<cword>')<CR>
-autocmd FileType vim vnoremap <buffer> K "ty:help <C-R>t<CR>
+au vimrc FileType vim nnoremap <buffer> K :execute "help " . expand('<cword>')<CR>
+au vimrc FileType vim vnoremap <buffer> K "ty:help <C-R>t<CR>
 " }}}
 
 " Vim {{{
-autocmd FileType tmux nnoremap <F9> :wa<bar>:!tmux source ~/.tmux.conf<CR>
+au vimrc FileType tmux nnoremap <F9> :wa<bar>:!tmux source ~/.tmux.conf<CR>
 " }}}
 
 " Special Indentation Rules {{{
 
-autocmd FileType html setlocal shiftwidth=2
-autocmd FileType php setlocal shiftwidth=2
-autocmd FileType css setlocal shiftwidth=2
-autocmd FileType vim setlocal shiftwidth=2
-autocmd FileType sh setlocal shiftwidth=2
+au vimrc FileType html setlocal shiftwidth=2
+au vimrc FileType php setlocal shiftwidth=2
+au vimrc FileType css setlocal shiftwidth=2
+au vimrc FileType vim setlocal shiftwidth=2
+au vimrc FileType sh setlocal shiftwidth=2
 
-autocmd FileType make setlocal tabstop=8
-autocmd FileType make setlocal noexpandtab
+au vimrc FileType make setlocal tabstop=8
+au vimrc FileType make setlocal noexpandtab
 
 set softtabstop=-1 " use shiftwidth
 
 " }}}
 
-autocmd Filetype java,asm,c,cpp,make nnoremap <F9> :wa<CR>:call Make()<CR>
+au vimrc Filetype java,asm,c,cpp,make nnoremap <F9> :wa<CR>:call Make()<CR>
 
 " }}}
 
@@ -923,7 +919,7 @@ autocmd Filetype java,asm,c,cpp,make nnoremap <F9> :wa<CR>:call Make()<CR>
 
 " ToDo Lister {{{
 " List all the TODO & XXX & FIXME & DEBUG comments
-  function ToDoLister()
+  function! ToDoLister()
     let l:ext=&filetype
     if l:ext == 'c' || l:ext == 'cpp' || l:ext == 'cc' || l:ext == "h" || l:ext == "hpp"
       noautocmd vimgrep /TODO\|XXX\|FIXME\|DEBUG/j **/*.h **/*.c **/*.cpp **/*.hpp **/*.cc
@@ -937,14 +933,12 @@ autocmd Filetype java,asm,c,cpp,make nnoremap <F9> :wa<CR>:call Make()<CR>
 " }}}
 
 " Return to previous position when reopening file {{{
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-endif
+au vimrc BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 " }}}
 
 " Make line {{{
 " Make a line of the specified character to the colorcolumn
-function MakeLine(char)
+function! MakeLine(char)
   let l:dist=&colorcolumn
   if l:dist == 0
     let l:dist = 80
@@ -959,7 +953,7 @@ nnoremap <leader>l :call MakeLine('')<left><left>
 
 "" DISABLED: Always spell correct {{{
 "" Always allow spelling correction, even when not 'set spell'
-"function s:SpellCorrect()
+"function! s:SpellCorrect()
 "  if &spell
 "    normal! z=
 "  else
@@ -973,7 +967,7 @@ nnoremap <leader>l :call MakeLine('')<left><left>
 " }}}
 
 " Generate gdb break for current line {{{
-function GenerateBreakpoint()
+function! GenerateBreakpoint()
   " TODO: what about paths with spaces?
   let l:cmd = "break " . expand('%:p') . ":" . line('.')
   let l:buf = shellescape(l:cmd)
@@ -981,8 +975,8 @@ function GenerateBreakpoint()
   redraw!
   echo l:cmd
 endfunction
-autocmd Filetype c nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
-autocmd Filetype cpp nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
+au vimrc Filetype c nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
+au vimrc Filetype cpp nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
 " }}}
 
 "The directory the MAKEFILE is in.
@@ -993,7 +987,7 @@ let g:make_pos = "botright"
 let g:make_autojump = 0
 let g:make_autofocus = 1
 
-function Make(...)
+function! Make(...)
     let dir = get(a:000, 0, g:make_dir)
     let file = get(a:000, 1, g:make_file)
     let opts = get(a:000, 2, g:make_opts)
@@ -1009,7 +1003,7 @@ function Make(...)
     endif
 endfunction
 
-function MakeSetup()
+function! MakeSetup()
   try
 
     call inputsave()
@@ -1045,7 +1039,7 @@ function MakeSetup()
   endtry
 endfunction
 
-function GnuIndent()
+function! GnuIndent()
   setlocal cindent
   setlocal cinoptions=>4,n-2,{2,^-2,:2,=2,g0,h2,p5,t0,+2,(0,u0,w1,m1
   setlocal shiftwidth=2
@@ -1088,7 +1082,7 @@ function! Cscope_dynamic_update_hook(updating)
 endfunction
 
 "modified from https://github.com/mkitt/tabline.vim/blob/master/plugin/tabline.vim
-function! VIMRC_Tabline()
+function! s:tabline()
   let prelen = 0    " Length of tab labels before the active one
   let activelen = 0 " Length of active tab label
   let postlen = 0   " Length of tab labels after the active one
@@ -1187,9 +1181,9 @@ function! VIMRC_Tabline()
 
   return s
 endfunction
-set tabline=%!VIMRC_Tabline()
+set tabline=%!<sid>tabline()
 
-command -nargs=? Tabname if "<args>" != "" | let t:tab_name="<args>" | else | unlet t:tab_name | endif | redraw!
+command! -nargs=? Tabname if "<args>" != "" | let t:tab_name="<args>" | else | unlet t:tab_name | endif | redraw!
 
 " }}}
 
