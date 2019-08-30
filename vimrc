@@ -354,6 +354,7 @@ let g:vim_markdown_no_extensions_in_markdown = 1
 " Use <c-t> and <c-d> to indent or de-indent bullets
 "}}}
 
+Plug 'Vimjas/vim-python-pep8-indent' " Force vim to follow pep8
 
 
 
