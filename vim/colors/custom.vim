@@ -19,25 +19,34 @@ if exists("syntax_on")
   syntax reset
 endif
 
-hi Comment    ctermfg=blue   cterm=italic
-hi Title      ctermfg=LightMagenta cterm=bold
+hi Comment          ctermfg=12  cterm=italic
+hi Constant         ctermfg=13
+hi Identifier       ctermfg=14  cterm=bold
+hi PreProc          ctermfg=115
+hi Type             ctermfg=10
+hi Special          ctermfg=182
+hi Statement        ctermfg=11
 
-hi Search ctermbg=178
+hi Title            ctermfg=13  cterm=bold
 
-hi SpellBad ctermbg=none ctermfg=196 cterm=underline,reverse
-hi SpellRare ctermbg=none ctermfg=202 cterm=underline,reverse
+hi ColorColumn      ctermbg=1
+hi Search           ctermbg=178
+hi Folded           ctermfg=4   ctermbg=249
 
-hi ColorColumn ctermbg=red
+hi SpellBad         ctermbg=196 ctermfg=0 cterm=underline
+hi SpellRare        ctermbg=202 ctermfg=0 cterm=underline
 
-hi DiffAdd ctermbg=9
-hi DiffText ctermbg=1
-hi DiffChange ctermbg=13
+hi DiffAdd          ctermbg=52
+hi DiffText         ctermbg=88  cterm=bold
+hi DiffChange       ctermbg=237
 
-hi htmlItalic   cterm=italic
-hi mkdItalic    cterm=italic
-hi htmlBold     cterm=bold
-hi mkdBold      cterm=bold
+hi htmlItalic       cterm=italic
+hi mkdItalic        cterm=italic
+hi htmlBold         cterm=bold
+hi mkdBold          cterm=bold
+hi mkdCode          ctermfg=12 ctermbg=8
+hi mkdCodeDelimiter ctermfg=4
 
 let colors_name = "custom"
 
-" vim: sw=2
+" vim: sw=5
