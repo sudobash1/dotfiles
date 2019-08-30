@@ -211,7 +211,33 @@ if has('cscope')
   "}}}
 endif
 
-" Async completion (Shougo/deoplete.nvim) {{{
+Plug 'davidhalter/jedi-vim' " Context completion for Python {{{
+let g:jedi#popup_select_first = 0
+let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
+let g:jedi#auto_vim_configuration = 0 " Don't set completeopt
+
+" s:jedigoto {{{
+func s:jedigoto()
+  echo
+  redir => l:goto_output
+  silent call jedi#goto_assignments()
+  redir END
+  if l:goto_output != ""
+    try
+      tag expand("<cword>")
+    catch /E257/
+      echohl WarningMsg
+      echo "Tag not found"
+      echohl None
+    endtry
+  endif
+endfunc
+" }}}
+au vimrc FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
+au vimrc FileType python nnoremap <buffer> <silent> K :call jedi#show_documentation()<CR>
+" }}}
+
+" Async completion [nvim only] (Shougo/deoplete.nvim) {{{
 if has('nvim') && has('python3')
   " deoplete requires python3.6.1+ to be installed:
   py3 import sys
@@ -229,35 +255,13 @@ if has('nvim') && has('python3')
     Plug 'tweekmonster/deoplete-clang2' " deoplete for C/C++ {{{
     "}}}
 
-    " Experimentally using jedi-vim for parameter display
-    Plug 'davidhalter/jedi-vim' " Context completion for Python {{{
+    " Experimentally using jedi-vim for parameter display only {{{
       let g:jedi#auto_initialization = 0 " Don't initialize!
       let g:jedi#completions_enabled = 0 " We are using deoplete-jedi for completions
       let g:jedi#auto_vim_configuration = 0 " Don't set completeopt
       let g:jedi#popup_select_first = 0 " Don't auto select first entry
       let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
-
-      " s:jedigoto {{{
-      func! s:jedigoto()
-        echo
-        redir => l:goto_output
-        silent call jedi#goto_assignments()
-        redir END
-        if l:goto_output != ""
-          try
-            tag expand("<cword>")
-          catch /E257/
-            echohl WarningMsg
-            echo "Tag not found"
-            echohl None
-          endtry
-        endif
-      endfunc
-      " }}}
-      au vimrc FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
-      au vimrc FileType python call jedi#configure_call_signatures()
     " }}}
-
   endif
 endif
 "}}}
@@ -342,31 +346,10 @@ let g:vim_markdown_no_extensions_in_markdown = 1
 " Use <c-t> and <c-d> to indent or de-indent bullets
 "}}}
 
-"Unused: {{{
 
-"Plugin 'davidhalter/jedi-vim' " Context completion for Python {{{
-""let g:jedi#popup_select_first = 0
-""let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
-"
-"" s:jedigoto {{{
-"func s:jedigoto()
-"  echo
-"  redir => l:goto_output
-"  silent call jedi#goto_assignments()
-"  redir END
-"  if l:goto_output != ""
-"    try
-"      tag expand("<cword>")
-"    catch /E257/
-"      echohl WarningMsg
-"      echo "Tag not found"
-"      echohl None
-"    endtry
-"  endif
-"endfunc
-"" }}}
-"au vimrc FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
-"" }}}
+
+
+"Unused: {{{
 
 "Plugin 'scrooloose/nerdtree' " Browse files from vim {{{
 "nnoremap <silent> <F3> :NERDTreeToggle<CR>
