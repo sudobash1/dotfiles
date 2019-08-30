@@ -78,6 +78,9 @@ call plug#begin('~/.vim/bundle')
 " have plug install itself
 Plug 'junegunn/vim-plug'
 
+Plug 'tpope/vim-repeat' " Helper plugin for vim-surround
+
+Plug 'tpope/vim-surround' " Extra surround keymaps
 
 Plug 'tpope/vim-fugitive' " Intigrate vim with git
 
