@@ -247,7 +247,7 @@ if has('nvim') && has('python3')
     " Find list of deoplete plugins at https://github.com/Shougo/deoplete.nvim/wiki/Completion-Sources
     Plug 'Shougo/neco-vim' " deoplete for vimL {{{
     "}}}
-    Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' } " Machine learning autocomplete {{{
+    "Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' } " Machine learning autocomplete {{{
     "}}}
     Plug 'deoplete-plugins/deoplete-jedi' " deoplete for python {{{
     "}}}
