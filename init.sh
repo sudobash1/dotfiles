@@ -69,6 +69,8 @@ echo
 
 # NVIM
 echo "Setting up .config/nvim/init.vim and .local/share/nvim/site"
+mkdir -p .config/nvim
+mkdir -p .local/share/nvim
 ln -s "$dir/vimrc" .config/nvim/init.vim
 ln -s "$dir/vim" .local/share/nvim/site
 echo
