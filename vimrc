@@ -908,8 +908,8 @@ au vimrc FileType vim nnoremap <buffer> K :execute "help " . expand('<cword>')<C
 au vimrc FileType vim vnoremap <buffer> K "ty:help <C-R>t<CR>
 " }}}
 
-" Vim {{{
-au vimrc FileType tmux nnoremap <F9> :wa<bar>:!tmux source ~/.tmux.conf<CR>
+" Tmux {{{
+au vimrc  FileType tmux nnoremap <F9> :wa<bar>:!tmux source ~/.tmux.conf<CR>
 " }}}
 
 " Special Indentation Rules {{{
