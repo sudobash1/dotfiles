@@ -78,11 +78,10 @@ call plug#begin('~/.vim/bundle')
 " have plug install itself
 Plug 'junegunn/vim-plug'
 
-Plug 'tpope/vim-fugitive' " Intigrate vim with git {{{
-"}}}
 
-Plug 'ntpeters/vim-better-whitespace' "Show trailing whitespace {{{
-"}}}
+Plug 'tpope/vim-fugitive' " Intigrate vim with git
+
+Plug 'ntpeters/vim-better-whitespace' "Show trailing whitespace
 
 Plug 'ctrlpvim/ctrlp.vim', {'on': ['CtrlPBuffer','CtrlPTag','CtrlP']} " Fuzzy file finder {{{
 let g:ctrlp_map = ''
@@ -154,11 +153,9 @@ Plug 'majutsushi/tagbar' "Show an overview of tags for current file {{{
   let g:tagbar_show_visibility = 1
 ""}}}
 
-Plug 'craigemery/vim-autotag' " Automatically re-generate tag files {{{
-" }}}
+Plug 'craigemery/vim-autotag' " Automatically re-generate tag files
 
-Plug 'captbaritone/better-indent-support-for-php-with-html' " Indent PHP + HTML files {{{
-"}}}
+Plug 'captbaritone/better-indent-support-for-php-with-html' " Indent PHP + HTML files
 
 Plug 'derekwyatt/vim-fswitch' " Toggle between header and source files {{{
 	nnoremap <silent> <Leader>tt :FSHere<cr>
@@ -180,8 +177,7 @@ let g:user_emmet_install_global = 0
 au vimrc FileType html,css,php,xml EmmetInstall
 "}}}
 
-Plug 'kergoth/vim-bitbake' " Bitbake syntax and file support for vim {{{
-"}}}
+Plug 'kergoth/vim-bitbake' " Bitbake syntax and file support for vim
 
 if has('cscope')
   Plug 'sudobash1/cscope_dynamic' "{{{
@@ -334,9 +330,8 @@ Plug 'ekalinin/Dockerfile.vim' "Show trailing whitespace {{{
 Plug 'samsaga2/vim-z80' "z80 syntax highlighting {{{
 "}}}
 
-Plug 'godlygeek/tabular' " Allign with the :Tab /<regex> command {{{
+Plug 'godlygeek/tabular' " Allign with the :Tab /<regex> command
 " Note: this is required by vim-markdown below
-"}}}
 
 Plug 'plasticboy/vim-markdown' " Render markdown in vim {{{
 " ~~Strikethrough~~
