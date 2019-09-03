@@ -20,11 +20,11 @@ if exists("syntax_on")
 endif
 
 hi Comment          ctermfg=12  cterm=italic
-hi Constant         ctermfg=13
+hi Constant         ctermfg=160
 hi Identifier       ctermfg=14  cterm=bold
-hi PreProc          ctermfg=115
+hi PreProc          ctermfg=13
 hi Type             ctermfg=10
-hi Special          ctermfg=182
+hi Special          ctermfg=13  cterm=bold
 hi Statement        ctermfg=11
 
 hi Title            ctermfg=13  cterm=bold
