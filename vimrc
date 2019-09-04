@@ -846,8 +846,8 @@ au vimrc Filetype svn,*commit* setlocal spell
 
 " }}}
 
-" C++ {{{
-au vimrc Filetype cpp set foldmethod=syntax
+" C/C++ {{{
+au vimrc Filetype c,cpp set foldmethod=syntax
 " }}}
 
 " SML {{{
