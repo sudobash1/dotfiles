@@ -495,6 +495,16 @@ call plug#end()
 
 "============================== HACKS CONFIG ============================== {{{
 
+if !has('nvim')
+  " Use a bar cursor instead of a block one for insert mode.
+  if &term =~ '^xterm' || &term =~ '^tmux'
+    " From https://stackoverflow.com/a/42118416
+    let &t_SI = "\e[6 q"
+    let &t_EI = "\e[2 q"
+    autocmd VimEnter * silent !echo -ne "\e[2 q"
+  endif
+endif
+
 if &term =~ '^screen' || &term =~ '^tmux'
     " tmux will send xterm-style keys when its xterm-keys option is on
     execute "set <xUp>=\e[1;*A"
