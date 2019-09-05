@@ -5,7 +5,7 @@ XTerm*faceSize1: 3
 XTerm*faceSize2: 5
 XTerm*faceSize3: 8
 XTerm*faceSize4: 9.5
-XTerm*faceSize5: 14
+XTerm*faceSize5: 13.5
 XTerm*faceSize6: 20
 
 ! vim:ft=xdefaults
