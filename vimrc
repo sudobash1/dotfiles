@@ -221,7 +221,7 @@ let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you pre
 let g:jedi#auto_vim_configuration = 0 " Don't set completeopt
 
 " s:jedigoto {{{
-func s:jedigoto()
+func! s:jedigoto()
   echo
   redir => l:goto_output
   silent call jedi#goto_assignments()
