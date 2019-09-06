@@ -992,6 +992,7 @@ au vimrc Filetype c nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
 au vimrc Filetype cpp nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
 " }}}
 
+" Makefile helper {{{
 "The directory the MAKEFILE is in.
 let g:make_dir = "."
 let g:make_file = "Makefile"
@@ -1015,6 +1016,7 @@ function! Make(...)
       wincmd p
     endif
 endfunction
+command! Make :call Make()<CR>
 
 function! MakeSetup()
   try
@@ -1051,7 +1053,10 @@ function! MakeSetup()
     let &wildmode = wildmode
   endtry
 endfunction
+command! MakeSetup :call MakeSetup()<CR>
+" }}}
 
+" Set C indentation settings to the Gnu standard {{{
 function! GnuIndent()
   setlocal cindent
   setlocal cinoptions=>4,n-2,{2,^-2,:2,=2,g0,h2,p5,t0,+2,(0,u0,w1,m1
@@ -1060,6 +1065,8 @@ function! GnuIndent()
   setlocal textwidth=79
   setlocal fo-=ro fo+=cql
 endfunction
+command! GnuIndent :call GnuIndent()<CR>
+" }}}
 
 " }}}
 
