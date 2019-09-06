@@ -337,11 +337,9 @@ let g:qfenter_keymap.hopen = ['<C-CR>', '<C-s>', '<C-x>']
 let g:qfenter_keymap.topen = ['<C-t>']
 "}}}
 
-Plug 'ekalinin/Dockerfile.vim' "Show trailing whitespace {{{
-"}}}
+Plug 'ekalinin/Dockerfile.vim' "Show trailing whitespace
 
-Plug 'samsaga2/vim-z80' "z80 syntax highlighting {{{
-"}}}
+Plug 'samsaga2/vim-z80' "z80 syntax highlighting
 
 Plug 'godlygeek/tabular' " Allign with the :Tab /<regex> command
 " Note: this is required by vim-markdown below
