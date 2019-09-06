@@ -70,6 +70,11 @@ augroup vimrc
 " defined again without duplicates.
 au!
 augroup END
+
+" Modified from example code from :help <SID>
+fun! s:SID()
+  return matchstr(expand('<sfile>'), '\zs<SNR>\d\+_\zeSID$')
+endfun
 " }}}
 
 "============================= VIM PLUG CONFIG ============================= {{{
@@ -1189,7 +1194,7 @@ function! s:tabline()
 
   return s
 endfunction
-set tabline=%!<sid>tabline()
+exec 'set tabline=%!' . s:SID() . 'tabline()'
 
 command! -nargs=? Tabname if "<args>" != "" | let t:tab_name="<args>" | else | unlet t:tab_name | endif | redraw!
 
