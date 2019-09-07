@@ -358,6 +358,9 @@ let g:vim_markdown_strikethrough = 1
 " Allow for following file links without .md extention
 let g:vim_markdown_no_extensions_in_markdown = 1
 " Use <c-t> and <c-d> to indent or de-indent bullets
+
+" Make o and O insert another bullet. Fix gq on single bullets
+au vimrc filetype markdown set fo+=o fo-=q
 "}}}
 
 Plug 'Vimjas/vim-python-pep8-indent' " Force vim to follow pep8
