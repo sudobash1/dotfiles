@@ -589,6 +589,9 @@ if !has("gui_running")
   colorscheme custom
 endif
 
+set sessionoptions=blank,buffers,curdir,folds,help,localoptions,options,slash
+set sessionoptions+=tabpages,unix,winsize
+
 "indenting defaults
 set shiftwidth=4
 set softtabstop=4
@@ -992,6 +995,119 @@ function! GenerateBreakpoint()
 endfunction
 au vimrc Filetype c nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
 au vimrc Filetype cpp nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
+" }}}
+
+" Find and load (or create) a Session.vim file, rewrite it before exit {{{
+function! VIMRC_confirm_quit()
+  let l:c = confirm("Do you want to save session before quitting?",
+                    \ "&Yes\n&No", 0)
+  if l:c == 1
+    call s:make_session()
+  endif
+endfunction
+function! s:make_session(...)
+  let l:path = get(a:000, 0, "")
+  if (l:path == "")
+    if (v:this_session == "")
+      let l:path = "Session.vim"
+    else
+      let l:path = v:this_session
+    endif
+  endif
+  let l:cmds = [
+      \ "augroup VIMRC_session",
+      \ "au!",
+      \ "au VimLeavePre * call VIMRC_confirm_quit()",
+      \ "augroup END",
+      \]
+  let l:globals = copy(get(g:, "session_globals", []))
+  let l:global_pats = get(g:, "session_global_pats", [])
+  call add(l:cmds, "let g:session_globals = " . string(l:globals))
+  call add(l:cmds, "let g:session_global_pats = " . string(l:global_pats))
+  for l:v in l:globals
+    let l:v = "g:" . l:v
+    if exists(l:v)
+      call add(l:cmds, "let " . l:v . " = " . string(eval(l:v)))
+    endif
+  endfor
+  for l:pat in l:global_pats
+    " Not sure why there would be quote chars, but anyway...
+    let l:pat = escape(l:pat, '"')
+    call extend(l:globals, filter(keys(g:), 'v:val !~# "' . l:pat . '"'))
+  endfor
+  for l:t in range(tabpagenr('$'))
+    let l:t = l:t + 1
+    for l:var in g:session_tab_vars
+      let l:val = gettabvar(l:t, l:var, "VIMRC_DNE_VIMRC")
+      if l:val !=# "VIMRC_DNE_VIMRC"
+        let l:val = string(l:val)
+        call add(l:cmds, "call settabvar(".l:t.",'".l:var."',".l:val.")")
+      endif
+    endfor
+  endfor
+  for l:b in range(bufnr('$'))
+    let l:b = l:b + 1
+    if !bufexists(l:b) | continue | endif
+    for l:var in g:session_buf_vars
+      let l:val = getbufvar(l:b, l:var, "VIMRC_DNE_VIMRC")
+      if l:val !=# "VIMRC_DNE_VIMRC"
+        let l:val = string(l:val)
+        call add(l:cmds, "call setbufvar(".l:b.",'".l:var."',".l:val.")")
+      endif
+    endfor
+  endfor
+
+  exec "mksession!" l:path
+  let l:ses_lines = readfile(l:path)
+  let l:end = index(l:ses_lines, "doautoall SessionLoadPost")
+  if l:end <= 0 || l:end >= len(l:ses_lines)
+    " Odd... Fallback
+    let l:lines = extend(l:ses_lines, l:cmds)
+  else
+    exec "let l:lines_start = copy(l:ses_lines[:".(l:end-1)."])"
+    exec "let l:lines_end = copy(l:ses_lines[".l:end.":])"
+    let l:lines = extend(extend(l:lines_start, l:cmds), l:lines_end)
+  endif
+  call writefile(l:lines, l:path)
+endfunction
+command! -nargs=? Mksession call <SID>make_session("<args>")
+
+function! s:start_session()
+  set sessionoptions=blank,buffers,folds,help,localoptions,options,sesdir
+  set sessionoptions+=slash,tabpages,unix,winsize,
+
+  let l:dir = getcwd()
+  let l:session_dir = ""
+  while l:dir != expand("~") && l:dir != "/"
+    let l:session_path = l:dir . "/Session.vim"
+    if filereadable(expand(l:dir . "/Session.vim"))
+      let l:session_dir = l:dir
+      break
+    endif
+    let l:dir = simplify(expand(l:dir . "/.."))
+  endwhile
+  if !empty(l:session_dir)
+    exec "source" l:session_path
+  else
+    let l:session_path = getcwd() . "/Session.vim"
+    echo "No session found, creating session in " .getcwd()
+    call s:make_session(l:session_path)
+  endif
+
+  augroup VIMRC_session
+    au!
+    au VimLeavePre * call VIMRC_confirm_quit(l:session_path)
+  augroup END
+endfunction
+
+command! StartSession call s:start_session()
+let g:session_globals = [
+    \ "make_dir", "make_file", "make_opts", "make_pos", "make_autojump",
+    \ "make_autofocus",
+\]
+let g:session_global_pats = ["ale_*"]
+let g:session_tab_vars = ["tab_name"]
+let g:session_buf_vars = ["SuperTabDisabled"]
 " }}}
 
 " Makefile helper {{{
