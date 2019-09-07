@@ -2,6 +2,8 @@
 "
 "to convert the current char to ascii use ga
 "
+" to paste in insert mode use <Ctrl-R><register> (eg ^R")
+"
 " to convert from ^M files to unix files, run :set ff=unix
 " to test if something is "set" in vimscript use the ampersand & prefix
 " to use a regsiter in vimscript use the at @ prefix
