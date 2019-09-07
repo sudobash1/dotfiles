@@ -151,6 +151,7 @@ nnoremap gn :BufSurfForward<CR>
 Plug 'majutsushi/tagbar' "Show an overview of tags for current file {{{
 
   nnoremap <silent> <F2> :TagbarToggle<CR>
+  nnoremap <silent> 2<F2> :TagbarOpenAutoClose<CR>
 
   let g:tagbar_map_togglefold = "<Space>"
   let g:tagbar_map_showproto = "s"
