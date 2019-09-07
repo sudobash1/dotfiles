@@ -1327,7 +1327,12 @@ function! s:tabline()
 endfunction
 exec 'set tabline=%!' . s:SID() . 'tabline()'
 
-command! -nargs=? Tabname if "<args>" != "" | let t:tab_name="<args>" | else | unlet t:tab_name | endif | redraw!
+command! -nargs=? Tabname if "<args>" != "" |
+                          \   let t:tab_name="<args>" |
+                          \ else |
+                          \   unlet t:tab_name |
+                          \ endif |
+                          \ redraw!
 
 " }}}
 
