@@ -6,6 +6,7 @@ export DOTFILES_REPO=$(dirname $(find ~/.bashrc -prune -printf "%l\n"))
 # ------------------- Basic settings ------------------- {{{
 
 PATH="$HOME/bin:$HOME/.local/bin:$HOME/.sbr_local/bin:$PATH"
+MANPATH="$HOME/.local/share/man:$HOME/.sbr_local/share/man:$MANPATH"
 
 # We want vim! We want vim!
 export EDITOR=/usr/bin/vim
