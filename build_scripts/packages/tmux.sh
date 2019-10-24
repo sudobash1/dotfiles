@@ -1,0 +1,13 @@
+DEPENDS=(
+  make
+  gcc
+  autoconf
+  automake
+  pkg-config
+)
+LDEPENDS=(
+  libevent
+  ncurses
+)
+VERSION=1.9a
+SRC="https://github.com/tmux/tmux/archive/${VERSION}.tar.gz"
