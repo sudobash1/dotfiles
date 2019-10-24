@@ -59,11 +59,13 @@ elseif index(['0', 'no', 'off', 'false', 'n', 'f', 'disable'], tolower($VIM_AUTO
 endif
 
 if has('nvim')
-  if filereadable(expand($NVIM_PYTHON3))
-    let g:python3_host_prog = expand($NVIM_PYTHON3)
+  let py3_path = exepath($NVIM_PYTHON3)
+  if ! empty(py3_path)
+    let g:python3_host_prog = py3_path
   endif
-  if filereadable(expand($NVIM_PYTHON))
-    let g:python_host_prog = expand($NVIM_PYTHON)
+  let py_path = exepath($NVIM_PYTHON)
+  if ! empty(py_path)
+    let g:python_host_prog = py_path
   endif
 endif
 
@@ -284,6 +286,14 @@ if has('nvim')
   " Use quickfix list instead of location-list
   let g:ale_set_loclist = 0
   let g:ale_set_quickfix = 1
+
+  " Python {{{
+  if has("python3")
+    py3 import sys
+    let g:ale_python_mypy_options = ' --python-version ' .
+                                     \ py3eval("'3.'+str(sys.version_info[1])")
+  endif
+  " }}}
 endif
 " }}}
 
