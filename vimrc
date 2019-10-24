@@ -567,7 +567,7 @@ set ttimeoutlen=50
 
 "Allow conceal mode
 set conceallevel=2
-set concealcursor=inv
+set concealcursor=nv
 
 set nu
 set laststatus=2 "Always show status bar
