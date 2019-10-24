@@ -2,13 +2,14 @@
 
 set -e
 
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 
 export PKGDIR=$(pwd)/packages
 export LIBDIR=$(pwd)/lib
 
 if [[ -z "$1" ]]; then
-  echo "Usage: $(basename $0) package-name"
+  echo "Usage: $(basename "$0") package-name"
+  exit 1
 fi
 
 unset DEP_BUILD # paranoia

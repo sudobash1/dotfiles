@@ -94,6 +94,7 @@ function try() {
         assemble_array \$a;
       done;
       source '$LIBDIR/tools.sh';
+      source '$LIBDIR/default_build_funcs.sh';
       $func "'"$@"'";
       pwd>'$LF'
     " bash "$@"

@@ -9,7 +9,7 @@ export SRC=""
 export DEPENDS=()
 export LDEPENDS=()
 export CONFIGURE_FLAGS=""
-export STATIC=1
+export STATIC="DEF_STATIC"
 export CFLAGS=""
 export LDFLAGS=""
 
@@ -17,58 +17,13 @@ export PKGNAME="$1"
 export PKGSCRIPT="$PKGDIR/$PKGNAME.sh"
 
 source "$LIBDIR/common.sh"
+source "$LIBDIR/default_build_funcs.sh"
 
-# Setup default functions
-do_fetch() {
-  if [[ -z "$SRC" ]]; then
-    error "\$SRC is undefined in $PKGNAME"
-    return 1
-  fi
-  download_extract "$SRC"
-}
-do_patch() {
-  for p in "$PKGDIR"/patches/"$PKGNAME"_*.patch; do
-    [[ ! -f $p ]] && continue
-    verbose "Applying $p"
-    patch -p1 < "$p"
-  done
-}
-do_build() {
-  [[ -x ./configure ]] || ./autogen.sh
-  if istrue "$IS_LIB"; then
-    prefix="$LIB_PREFIX"
-  else
-    prefix="$PREFIX"
-  fi
-  if istrue "$STATIC"; then
-    STATIC_FLAG="-static"
-  fi
-  export LDFLAGS="$(printf '%q' "-L$PREFIX") \
-                  $(printf '%q' "-L$LIB_PREFIX") \
-                  $STATIC_FLAG \
-                  $LDFLAGS"
-  export CFLAGS="-isystem $(printf '%q' "$LIB_PREFIX/include") \
-                -isystem $(printf '%q' "$PREFIX/include") \
-                $CFLAGS"
-  ./configure --prefix="$(printf '%q' "$prefix")" "${CONFIGURE_FLAGS[@]}"
-  if [[ -n $MAKE_J ]]; then
-    make "$MAKE_J"
-  else
-    make
-  fi
-}
-do_install() {
-  make install
-}
-do_check() {
-  istrue "$NO_CHECK" && return 0
-  if istrue "$IS_LIB" || istrue "$LIB_BUILD"; then
-    local vv="VERSION_$PKGNAME"
-    library_exists "$PKGNAME" "${VERSION-${!vv}}"
-  else
-    command_exists "$PKGNAME"
-  fi
-}
+do_fetch() { def_do_fetch; }
+do_patch() { def_do_patch; }
+do_build() { def_do_build; }
+do_install() { def_do_install; }
+do_check() { def_do_check; }
 
 if [[ ! -f "$PKGSCRIPT" ]]; then
   if istrue "$DEP_BUILD"; then
@@ -82,6 +37,14 @@ if [[ ! -f "$PKGSCRIPT" ]]; then
 fi
 
 source "$PKGSCRIPT"
+
+if [[ $STATIC = "DEF_STATIC" ]]; then
+  if istrue "$IS_LIB"; then
+    STATIC=0
+  else
+    STATIC=1
+  fi
+fi
 
 for dep in "${DEPENDS[@]}"; do
   verbose "Checking dependancy $dep"
