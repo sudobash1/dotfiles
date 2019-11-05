@@ -9,6 +9,7 @@ export DEPENDS=(
 )
 export LDEPENDS=(
   "libffi"
+  "openssl"
 )
 VERSION=3.7.4
 export SRC=https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tar.xz

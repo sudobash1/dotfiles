@@ -19,6 +19,7 @@ source "$LIBDIR/common.sh"
 
 export PATH="$PREFIX/bin:$LIB_PREFIX/bin:$PATH"
 export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$LIB_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
+export LD_LIBRARY_PATH="$PREFIX/lib:$LIB_PREFIX/lib:$LD_LIBRARY_PATH"
 
 while [[ $# -ne 0 ]]; do
   "$LIBDIR/build.sh" "$1"

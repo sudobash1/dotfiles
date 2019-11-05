@@ -182,9 +182,13 @@ function postinstall() {
   mkdir -p "$PACKAGES_LOG"
   comm -23 "$postinst_files" "$preinst_files" >> "$new_installed_files"
   comm -13 "$postinst_files" "$preinst_files" >> "$removed_files"
-  sort "$PACKAGES_LOG/$PKGNAME" "$new_installed_files" \
-    | uniq > "$all_installed_files"
-  mv "$all_installed_files" "$PACKAGES_LOG/$PKGNAME"
+  if [[ -s "$PACKAGES_LOG/$PKGNAME" ]]; then
+    sort "$PACKAGES_LOG/$PKGNAME" "$new_installed_files" \
+      | uniq > "$all_installed_files"
+    mv "$all_installed_files" "$PACKAGES_LOG/$PKGNAME"
+  else
+    cp "$new_installed_files" "$PACKAGES_LOG/$PKGNAME"
+  fi
   if [[ -s $removed_files ]]; then
     warn "Files were removed:"
     cat "$removed_files" >&2
