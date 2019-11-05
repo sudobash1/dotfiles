@@ -17,11 +17,6 @@ env_vars=(
 extra_vars=(
   NUM_CORES VERBOSE
 )
-# Variables which are arrays to be expored by export_array() if they
-# exist
-array_vars=(
-  CONFIGURE_FLAGS
-)
 
 # Get the hash of a passed in func/script ($1)
 function get_hash() {
@@ -79,10 +74,6 @@ function try() {
     return 1
   }
   (
-    for a in "${array_vars[@]}"; do
-      export_array $a
-    done
-    export ARRAY_VARS="${array_vars[@]}"
     export LF=$LASTDIR_FILE
     if [[ $(type -t "$func") = "function" ]]; then
       export -f "$func"
@@ -90,11 +81,9 @@ function try() {
     export -f assemble_array
     exec bash -c "
       set -e;
-      for a in \$ARRAY_VARS; do
-        assemble_array \$a;
-      done;
       source '$LIBDIR/tools.sh';
       source '$LIBDIR/default_build_funcs.sh';
+      [[ -f '$PKGDIR/${PKGNAME}.sh' ]] && source '$PKGDIR/${PKGNAME}.sh'
       $func "'"$@"'";
       pwd>'$LF'
     " bash "$@"
@@ -147,31 +136,31 @@ function make_dirs() {
   cd "$orig_dir"
 }
 
-# Export an array ($1) into multiple variables    
-function export_array() {    
-  name="$1"    
-  #shellcheck disable=2016    
-  eval 'array=("${'"$name"'[@]}")'    
-  len=${#array[@]}    
-  declare -gx "${name}_len=$len"    
-  for ((i=0; i<len; i++)); do    
-    declare -gx "${name}_${i}=${array[$i]}"    
-  done    
-}    
-    
-# Reassemble an array from export_array into var named $1    
-function assemble_array() {    
-  name="$1"    
-  array=()    
-  len_var="${name}_len"    
-  len=${!len_var}    
-  for ((i=0; i<len; i++)); do    
-    var="${name}_${i}"    
-    array+=("${!var}")    
-  done    
-  #shellcheck disable=2016    
-  declare -ag "$name=("'"${array[@]}")'    
-}    
+# Export an array ($1) into multiple variables
+function export_array() {
+  name="$1"
+  #shellcheck disable=2016
+  eval 'array=("${'"$name"'[@]}")'
+  len=${#array[@]}
+  declare -gx "${name}_len=$len"
+  for ((i=0; i<len; i++)); do
+    declare -gx "${name}_${i}=${array[$i]}"
+  done
+}
+
+# Reassemble an array from export_array into var named $1
+function assemble_array() {
+  name="$1"
+  array=()
+  len_var="${name}_len"
+  len=${!len_var}
+  for ((i=0; i<len; i++)); do
+    var="${name}_${i}"
+    array+=("${!var}")
+  done
+  #shellcheck disable=2016
+  declare -ag "$name=("'"${array[@]}")'
+}
 
 verify_settings
 make_dirs

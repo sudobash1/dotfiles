@@ -17,13 +17,7 @@ def_do_patch() {
 }
 
 # BUILD
-def_autoconf() {
-  [[ -x ./configure ]] || ./autogen.sh
-  if istrue "$IS_LIB"; then
-    prefix="$LIB_PREFIX"
-  else
-    prefix="$PREFIX"
-  fi
+def_confenv() {
   if istrue "$STATIC"; then
     STATIC_FLAG="-static"
   fi
@@ -34,17 +28,31 @@ def_autoconf() {
   export CFLAGS="-isystem $(printf '%q' "$LIB_PREFIX/include") \
                 -isystem $(printf '%q' "$PREFIX/include") \
                 $CFLAGS"
-  ./configure --prefix="$(printf '%q' "$prefix")" "${CONFIGURE_FLAGS[@]}"
+}
+def_autoconf() {
+  [[ -x ./configure ]] || ./autogen.sh
+  def_confenv
+  ./configure --prefix="$(getprefix)" "${CONFIGURE_FLAGS[@]}"
+}
+def_cmakeconfig() {
+  SRCDIR="$(getdirpath ${SRCDIR:-$(pwd)})"
+  BUILDDIR="${BUILDDIR:-./build}"
+  def_confenv
+  mkdir "$BUILDDIR"
+  cd "$BUILDDIR"
+  cmake "$SRCDIR" -DCMAKE_INSTALL_PREFIX="$(getprefix)" \
+    -G "${CMAKE_GENERATOR}" \
+    "${CONFIGURE_FLAGS[@]}"
 }
 def_make() {
-  if [[ -n $MAKE_J ]]; then
-    make "$MAKE_J"
-  else
-    make
-  fi
+  multicore_make
 }
 def_do_build() {
-  def_autoconf
+  if [[ -f CMakeLists.txt ]] || istrue "$USE_CMAKE"; then
+    def_cmakeconfig
+  else
+    def_autoconf
+  fi
   def_make
 }
 

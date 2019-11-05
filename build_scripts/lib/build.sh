@@ -6,12 +6,16 @@ export NO_CHECK=0
 export VERSION=""
 export IS_LIB=0
 export SRC=""
+export SRCDIR="."
+export BUILDDIR=""
 export DEPENDS=()
 export LDEPENDS=()
-export CONFIGURE_FLAGS=""
+export CONFIGURE_FLAGS=()
+export CMAKE_GENERATOR="Unix Makefiles"
 export STATIC="DEF_STATIC"
 export CFLAGS=""
 export LDFLAGS=""
+export USE_CMAKE=""
 
 export PKGNAME="$1"
 export PKGSCRIPT="$PKGDIR/$PKGNAME.sh"

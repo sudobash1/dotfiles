@@ -79,6 +79,28 @@ function library_exists() {
     fi
 }
 
+function getprefix() {
+  if istrue "$IS_LIB"; then
+    prefix="$LIB_PREFIX"
+  else
+    prefix="$PREFIX"
+  fi
+  printf '%q' "$prefix"
+}
+
+function getdirpath() (
+  cd "$1"
+  pwd
+)
+
+function multicore_make() {
+  if [[ -n $MAKE_J ]]; then
+    make "$MAKE_J" "$@"
+  else
+    make "$@"
+  fi
+}
+
 if [[ -n "$NUM_CORES" ]]; then
   export MAKE_J="-j${NUM_CORES}"
 else
