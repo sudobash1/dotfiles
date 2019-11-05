@@ -1,11 +1,12 @@
 # Exit on any error
 set -e
 
-export TMPDIR=${TMPDIR:-$(pwd)/tmp}
-export PREFIX=${PREFIX:-$HOME/.sbr_local}
-export LIB_PREFIX=${LIB_PREFIX:-$PREFIX/lib_root}
-export VERBOSE=${VERBOSE:-0}
-export NUM_CORES=${NUM_CORES:-1}
+export TMPDIR="${TMPDIR:-$(pwd)/tmp}"
+export PREFIX="${PREFIX:-$HOME/.sbr_local}"
+export LIB_PREFIX="${LIB_PREFIX:-$PREFIX/lib_root}"
+export VERBOSE="${VERBOSE:-0}"
+export NUM_CORES="${NUM_CORES:-1}"
+export PACKAGES_LOG="${PACKAGES_LOG:-$PREFIX/var/packages}"
 
 # Variables which affect the build and should be included in the hash
 # Users should also confirm them
@@ -160,6 +161,34 @@ function assemble_array() {
   done
   #shellcheck disable=2016
   declare -ag "$name=("'"${array[@]}")'
+}
+
+# Find all files in PREFIX and LIB_PREFIX and write them to $PREINSTALL_FILE
+function preinstall() {
+  verbose "Prepairing to install ${PKGNAME}"
+  preinst_files="$TMPDIR/$PKGNAME/preinst.files"
+  sort <(find "$PREFIX") <(find "$LIB_PREFIX") | uniq > "$preinst_files"
+}
+
+# Find all files in PREFIX and LIB_PREFIX and compare them to $PREINSTALL_FILE
+function postinstall() {
+  verbose "Logging install of ${PKGNAME}"
+  preinst_files="$TMPDIR/$PKGNAME/preinst.files"
+  postinst_files="$TMPDIR/$PKGNAME/postinst.files"
+  new_installed_files="$TMPDIR/$PKGNAME/new_installed.files"
+  all_installed_files="$TMPDIR/$PKGNAME/all_installed.files"
+  removed_files="$TMPDIR/$PKGNAME/postinst.rmed.files"
+  sort <(find "$PREFIX") <(find "$LIB_PREFIX") | uniq > "$postinst_files"
+  mkdir -p "$PACKAGES_LOG"
+  comm -23 "$postinst_files" "$preinst_files" >> "$new_installed_files"
+  comm -13 "$postinst_files" "$preinst_files" >> "$removed_files"
+  sort "$PACKAGES_LOG/$PKGNAME" "$new_installed_files" \
+    | uniq > "$all_installed_files"
+  mv "$all_installed_files" "$PACKAGES_LOG/$PKGNAME"
+  if [[ -s $removed_files ]]; then
+    warn "Files were removed:"
+    cat "$removed_files" >&2
+  fi
 }
 
 verify_settings

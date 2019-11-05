@@ -90,8 +90,12 @@ verbose "All dependencies good. Starting build"
   run_function do_patch
   verbose "Running ${PKGNAME}.build"
   run_function do_build
+
+  preinstall
   verbose "Running ${PKGNAME}.install"
   run_function do_install
+  postinstall
+
   verbose "Running ${PKGNAME}.check"
   run_function do_check
 ) || exit 1

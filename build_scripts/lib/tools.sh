@@ -7,6 +7,13 @@ function verbose() {
     fi
   fi
 }
+function warn() {
+  if [[ -n "$PKGNAME" ]]; then
+    echo "$PKGNAME: Warning: $@" >&2
+  else
+    echo "Warning: $@" >&2
+  fi
+}
 function error() {
   if [[ -n "$PKGNAME" ]]; then
     echo "$PKGNAME: Error: $@" >&2
