@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source "$DOTFILES_REPO/scripts/init/util.sh"
+
 dest_dir="$HOME/.local/bin"
 
 function install_utilities() {
