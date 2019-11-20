@@ -658,8 +658,8 @@ func! s:ag(search_a, search_b)
       echom "ERROR: You must have the cursor on a word or provide an argument"
       return
   endif
-  if exists(":Grep")
-    call async_grep#grep(l:search, l:args)
+  if exists(":LGrep")
+    call async_grep#lgrep(l:search, l:args)
   else
     execute "silent! grep! " . l:args . l:search
     botright cwindow
