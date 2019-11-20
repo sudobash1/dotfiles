@@ -614,7 +614,7 @@ set sessionoptions+=tabpages,unix,winsize
 
 "indenting defaults
 set shiftwidth=4
-set softtabstop=4
+set softtabstop=-1 " use shiftwidth
 "set tabstop=4
 set expandtab
 set autoindent
@@ -625,6 +625,14 @@ set smartindent
 "Where new splits will happen.
 set splitbelow
 set splitright
+
+"Change c indentation rules to match my style:
+set cinoptions+=(4m1 "This makes only one indentation happen after (
+
+set cinoptions+=g0 "disable for access modifiers
+
+" Enable spellcheck for commit messages
+au vimrc Filetype svn,*commit* setlocal spell
 
 " }}}
 
@@ -844,119 +852,6 @@ nnoremap gp `[v`]
 
 " }}}
 
-"============================= CUSTOM HIGHLIGHTS ============================= {{{
-
-hi GoodText ctermfg=lightgreen cterm=bold
-au vimrc filetype markdown call matchadd("GoodText", "✓")
-
-hi BadText ctermfg=red cterm=bold
-au vimrc filetype markdown call matchadd("BadText", "✗")
-
-hi StarText ctermfg=yellow cterm=bold
-au vimrc filetype markdown call matchadd("StarText", "★")
-
-" }}}
-
-"============================ FILETYPE CONFIG ============================ {{{
-
-"Change c indentation rules to match my style:
-set cinoptions+=(4m1 "This makes only one indentation happen after (
-
-set cinoptions+=g0 "disable for access modifiers
-
-" commit messages {{{
-au vimrc Filetype svn,*commit* setlocal spell
-" }}}
-
-" Java {{{
-"au vimrc Filetype java set errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
-"au vimrc Filetype java inoremap {<CR> {<CR>}<C-O>O
-"au vimrc Filetype java inoremap {{ <CR>{<CR>}<C-O>O
-"au vimrc Filetype java inoremap { {}<Left>
-"au vimrc Filetype java inoremap {<ESC> <C-O>a
-"au vimrc Filetype java inoremap {[ {
-
-" }}}
-
-" C/C++ {{{
-au vimrc Filetype c,cpp set foldmethod=syntax
-" }}}
-
-" SML {{{
-" no autowrap XXX Why can't I put the t and c on one line?
-au vimrc FileType sml setlocal formatoptions-=t
-au vimrc FileType sml setlocal formatoptions-=c
-au vimrc FileType sml setlocal shiftwidth=2
-au vimrc FileType sml setlocal softtabstop=2
-" }}}
-
-" JSON {{{
-au vimrc FileType json setlocal conceallevel=0
-" }}}
-
-" Text {{{
-au vimrc FileType text,markdown setlocal linebreak
-if (v:version > 704 || v:version == 704 && has("patch338")) && has("linebreak")
-  au vimrc FileType text,markdown setlocal breakindent
-endif
-au vimrc FileType text,markdown setlocal cc=0
-au vimrc FileType text,markdown setlocal nonu
-au vimrc FileType text,markdown setlocal spell
-au vimrc FileType help setlocal nospell
-au vimrc FileType text,markdown setlocal textwidth=0
-au vimrc FileType text,markdown setlocal tabstop=4
-au vimrc FileType text,markdown noremap <buffer> <up> gk
-au vimrc FileType text,markdown noremap <buffer> k gk
-au vimrc FileType text,markdown noremap <buffer> <down> gj
-au vimrc FileType text,markdown noremap <buffer> j gj
-au vimrc FileType text,markdown noremap <buffer> ^ g^
-au vimrc FileType text,markdown noremap <buffer> $ g$
-au vimrc FileType text,markdown nnoremap <buffer> I g^i
-au vimrc FileType text,markdown nnoremap <buffer> A g$a
-" Never conseal MD characters on the current (or visually selected) line
-au vimrc FileType markdown setlocal concealcursor=
-
-" }}}
-
-" Assembly {{{
-
-"disable tab completion for asm files
-silent au vimrc FileType asm,z80 let b:SuperTabDisabled = 1
-
-au vimrc FileType asm,z80 setlocal tabstop=8
-au vimrc FileType asm,z80 setlocal shiftwidth=8
-au vimrc FileType asm,z80 setlocal softtabstop=8
-au vimrc FileType asm,z80 setlocal noexpandtab
-" }}}
-
-" Vim {{{
-au vimrc FileType vim nnoremap <buffer> K :execute "help " . expand('<cword>')<CR>
-au vimrc FileType vim vnoremap <buffer> K "ty:help <C-R>t<CR>
-" }}}
-
-" Tmux {{{
-au vimrc  FileType tmux nnoremap <F9> :wa<bar>:!tmux source ~/.tmux.conf<CR>
-" }}}
-
-" Special Indentation Rules {{{
-
-au vimrc FileType html setlocal shiftwidth=2
-au vimrc FileType php setlocal shiftwidth=2
-au vimrc FileType css setlocal shiftwidth=2
-au vimrc FileType vim setlocal shiftwidth=2
-au vimrc FileType sh setlocal shiftwidth=2
-
-au vimrc FileType make setlocal tabstop=8
-au vimrc FileType make setlocal noexpandtab
-
-set softtabstop=-1 " use shiftwidth
-
-" }}}
-
-au vimrc Filetype java,asm,c,cpp,make nnoremap <F9> :wa<CR>:call Make()<CR>
-
-" }}}
-
 "============================== MINI SCRIPTS ============================= {{{
 
 " ToDo Lister {{{
@@ -1006,19 +901,6 @@ nnoremap <leader>l :call MakeLine('')<left><left>
 "endfunction
 "
 "nnoremap z= :call <SID>SpellCorrect()<CR>
-" }}}
-
-" Generate gdb break for current line {{{
-function! GenerateBreakpoint()
-  " TODO: what about paths with spaces?
-  let l:cmd = "break " . expand('%:p') . ":" . line('.')
-  let l:buf = shellescape(l:cmd)
-  exec 'silent ! [ "$TMUX" ] && tmux set-buffer ' . l:buf
-  redraw!
-  echo l:cmd
-endfunction
-au vimrc Filetype c nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
-au vimrc Filetype cpp nnoremap <buffer> <leader>b :call GenerateBreakpoint()<CR>
 " }}}
 
 " Find and load (or create) a Session.vim file, rewrite it before exit {{{
@@ -1196,18 +1078,6 @@ function! MakeSetup()
   endtry
 endfunction
 command! MakeSetup :call MakeSetup()<CR>
-" }}}
-
-" Set C indentation settings to the Gnu standard {{{
-function! GnuIndent()
-  setlocal cindent
-  setlocal cinoptions=>4,n-2,{2,^-2,:2,=2,g0,h2,p5,t0,+2,(0,u0,w1,m1
-  setlocal shiftwidth=2
-  setlocal softtabstop=2
-  setlocal textwidth=79
-  setlocal fo-=ro fo+=cql
-endfunction
-command! GnuIndent :call GnuIndent()<CR>
 " }}}
 
 " }}}
