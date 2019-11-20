@@ -2,6 +2,8 @@
 
 source "$DOTFILES_REPO/scripts/init/util.sh"
 
+FONTS_DEST="$HOME/.fonts"
+
 if ! command -v xinit >/dev/null; then
   echo "No xinit command in \$PATH. Skipping x11 initialization."
   exit
@@ -18,9 +20,10 @@ check_fonts_installed() {
 
 install_fonts() {
   error=false
+  mkdir -p "$FONTS_DEST"
   cd "$DOTFILES_REPO/fonts"
   for font in *.ttf; do
-    file="$HOME/.fonts/$font"
+    file="$FONTS_DEST/$font"
     [[ -h "$file" ]] && rm "$file"
     if [ -e "$file" ]; then
       echo "$file already exists and is not a link"
