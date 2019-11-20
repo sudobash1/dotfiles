@@ -2,3 +2,4 @@ vim/bundle/*
 vim/nvim_bundle/*
 oh-my-zsh
 *~
+vim/autoload/plug.vim
