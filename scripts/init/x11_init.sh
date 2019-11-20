@@ -17,16 +17,20 @@ check_fonts_installed() {
 }
 
 install_fonts() {
+  error=false
   cd "$DOTFILES_REPO/fonts"
   for font in *.ttf; do
     file="$HOME/.fonts/$font"
     [[ -h "$file" ]] && rm "$file"
     if [ -e "$file" ]; then
       echo "$file already exists and is not a link"
-      error=1
+      error=true
     fi
   done
-  [[ "$error" ]] && return 1
+  if $error; then
+    echo "Not installing fonts"
+    return 1
+  fi
   for font in *.ttf; do
     ln -s "$DOTFILES_REPO/fonts/$font" "$HOME/.fonts/$font"
   done
@@ -37,7 +41,7 @@ install_fonts() {
 if command -v fc-cache >/dev/null; then
   if ! check_fonts_installed; then
     choose_yn "Do you want to install fonts" \
-      'install_fonts || echo "Could not install fonts"' '' 'y'
+      'install_fonts' '' 'y'
   else
     echo "Fonts already installed. Skipping font initialization"
   fi

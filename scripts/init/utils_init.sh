@@ -24,22 +24,9 @@ function do_install() {
   mkdir -p "$dest_dir"
   for dir in "$DOTFILES_REPO"/scripts/utils/*; do
     if [[ -d $dir ]]; then
-      read -p "Do you want to install $(basename $dir) utilities? [y/n]? " prompt
-      case "$prompt" in
-        Y|y|"") install_utilities "$dir";;
-        N|n) ;;
-        *) continue;;
-      esac
+      choose_yn "Do you want to install $(basename $dir) utilities" "install_utilities '$dir'"
     fi
   done
 }
 
-while true; do
-  read -p "Do you want to install utilities [Y/n]? " prompt
-  case "$prompt" in
-    Y|y|"") do_install;;
-    N|n) ;;
-    *) continue;;
-  esac
-  break
-done
+choose_yn "Do you want to install utilities" do_install '' 'y'

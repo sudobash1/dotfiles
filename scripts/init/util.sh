@@ -9,8 +9,8 @@ shopt -s extglob
 #
 function choose_yn() {
   local prompt="${1?Error: choose_yn: prompt not set}"
-  local yes_action="$2"
-  local no_action="$3"
+  local yes_action="${2-":"}"
+  local no_action="${3-":"}"
   local y="y"
   local n="n"
   local case_y="@(y|Y)"
