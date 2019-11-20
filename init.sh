@@ -27,7 +27,7 @@ files=(
 .config/nvim/init.vim .local/share/nvim/site
 .bashrc .bashrc.local.bash
 .zshrc .zshenv .zshrc.local.zsh
-.ctags
+.ctags .Xmodmap
 )
 
 error=
@@ -103,7 +103,10 @@ ln -s "$dir/zshrc" .zshrc
 ln -s "$dir/zshenv" .zshenv
 echo "using $(get_local_file zsh) as local zsh config"
 ln -s "$(get_local_file zsh)" .zshrc.local.zsh
-echo
+
+# X11
+echo "Setting up .Xmodmap"
+ln -s "$dir/Xmodmap" .Xmodmap
 
 # CTAGS
 echo "Setting up .ctags"
