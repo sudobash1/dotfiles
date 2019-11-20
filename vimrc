@@ -599,6 +599,8 @@ set foldlevel=99 "Don't fold by default
 "set textauto "recognize ^M files
 syn on "turn on syntax highlighting
 
+set virtualedit=block " Allow cursor to go where there is no text selected in block select mode
+
 set listchars=eol:$,tab:>-
 if (v:version > 704 || v:version == 704 && has("patch710"))
   set listchars+=space:.
