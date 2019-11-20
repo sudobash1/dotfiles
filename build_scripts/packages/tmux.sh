@@ -9,5 +9,5 @@ LDEPENDS=(
   libevent
   ncurses
 )
-VERSION=1.9a
+VERSION=2.9a
 SRC="https://github.com/tmux/tmux/archive/${VERSION}.tar.gz"

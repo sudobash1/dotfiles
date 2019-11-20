@@ -30,9 +30,9 @@ def_confenv() {
                 $CFLAGS"
 }
 def_autoconf() {
-  [[ -x ./configure ]] || ./autogen.sh
+  [[ -x "./$CONFIGURE_SCRIPT" ]] || ./autogen.sh
   def_confenv
-  ./configure --prefix="$(getprefix)" "${CONFIGURE_FLAGS[@]}"
+  "./$CONFIGURE_SCRIPT" --prefix="$(getprefix)" "${CONFIGURE_FLAGS[@]}"
 }
 def_cmakeconfig() {
   SRCDIR="$(getdirpath ${SRCDIR:-$(pwd)})"

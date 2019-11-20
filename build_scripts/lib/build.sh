@@ -11,11 +11,13 @@ export BUILDDIR=""
 export DEPENDS=()
 export LDEPENDS=()
 export CONFIGURE_FLAGS=()
+export CONFIGURE_SCRIPT="configure"
 export CMAKE_GENERATOR="Unix Makefiles"
 export STATIC="DEF_STATIC"
 export CFLAGS=""
 export LDFLAGS=""
 export USE_CMAKE=""
+export MULTITHREAD=true
 
 export PKGNAME="$1"
 export PKGSCRIPT="$PKGDIR/$PKGNAME.sh"

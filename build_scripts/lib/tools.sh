@@ -101,7 +101,7 @@ function getdirpath() (
 )
 
 function multicore_make() {
-  if [[ -n $MAKE_J ]]; then
+  if [[ -n $MAKE_J ]] && istrue "$MULTITHREAD"; then
     make "$MAKE_J" "$@"
   else
     make "$@"
