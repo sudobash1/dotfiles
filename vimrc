@@ -854,6 +854,23 @@ nnoremap gp `[v`]
 
 "============================== MINI SCRIPTS ============================= {{{
 
+"Error window / Loc window dynamic mappings {{{
+if exists("*getwininfo")
+  function! s:setup_qfkeymap()
+    let l:w = getwininfo(win_getid())[0]
+    if l:w.loclist
+      nnoremap <F10> :silent lprevious<CR>
+      nnoremap <F11> :silent lnext<CR>
+    elseif l:w.quickfix
+      nnoremap <F10> :silent cprevious<CR>
+      nnoremap <F11> :silent cnext<CR>
+    endif
+  endfunc
+  autocmd BufEnter * call <SID>setup_qfkeymap()
+  autocmd BufReadPost * call <SID>setup_qfkeymap()
+endif
+" }}}
+
 " ToDo Lister {{{
 " List all the TODO & XXX & FIXME & DEBUG comments
   function! ToDoLister()
