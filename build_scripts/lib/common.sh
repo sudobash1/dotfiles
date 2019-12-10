@@ -195,7 +195,74 @@ function postinstall() {
   fi
 }
 
-verify_settings
+# Remove all installed files for packagename ($1)
+function uninstall() {
+  pkglog="${PACKAGES_LOG}/${1}"
+  dirs=()
+
+  if [[ ! -f "$pkglog" ]]; then
+    error "$1 not installed"
+    return 1
+  fi
+
+  # The realpath command is required to avoid removing files outside of the
+  # prefix like this:
+  #
+  # /path/to/prefix/../../../file
+  #
+  # That should never happen, but automated file removal is not something we want to have happen.
+  if ! command -v realpath 2>&- 1>&-; then
+    warn "Unable to uninstall $1. Missing the realpath command"
+  fi
+
+  # Reverse-sort for the dir removal below
+  sort -r "$pkglog" | while read instpath; do
+    realpath=$(realpath "$instpath" 2>&-)
+    if [[ -z $realpath ]]; then
+      warn "No such path \`$instpath'"
+      continue
+    fi
+
+    # Save dirs for later after the files have been removed
+    if [[ -d "$realpath" ]]; then
+      dirs+=("$realpath")
+      continue
+    fi
+
+    # Make sure the file is within a prefix.
+    case ${realpath} in
+      $(realpath "$PREFIX")/*) ;;
+      $(realpath "$LIB_PREFIX")/*) ;;
+      *) warn "Path not in prefix: \`$instpath'"; continue ;;
+    esac
+
+    if [[ -f "$realpath" ]]; then
+      verbose "Removing \`${realpath}'"
+    else
+      verbose "File missing: \`${realpath}'"
+    fi
+
+    rm -f "${realpath}"
+  done
+
+  # Scan for now empty directories. Assume that directories with files
+  # remaining in them are shared by other packages. This may result in orphaned
+  # directories, but better be safe than sorry.
+  #
+  # Any empty dirs containing other empty dirs should have the subdirs removed
+  # first because the pkg install files were reversed sorted
+  for dir in "${dirs[@]}"; do
+    if [[ "$(find "$dir" -mindepth 1 2>&-)" ]]; then
+      warn "Skipping non-empty directory \`$dir'"
+    else
+      verbose "Removing empty directory \`$dir'"
+      rmdir "$dir"
+    fi
+  done
+  rm -f "$pkglog"
+  verbose "Finished uninstalling $1"
+}
+
 make_dirs
 
 source "$LIBDIR/tools.sh"
