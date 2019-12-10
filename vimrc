@@ -95,6 +95,16 @@ endif
 
 Plug 'tpope/vim-surround' " Extra surround keymaps
 
+if (v:version > 704 || v:version == 704 && has("patch1689"))
+Plug 'andymass/vim-matchup' " Improve matchparan {{{
+  if (v:version > 704 || v:version == 704 && has("patch2180"))
+    let g:matchup_matchparen_deferred = 1
+  endif
+  " let g:matchup_matchparen_offscreen = { 'method': 'popup' }
+  let g:matchup_matchparen_offscreen = {}
+" }}}
+endif
+
 Plug 'tpope/vim-fugitive' " Intigrate vim with git
 
 Plug 'ntpeters/vim-better-whitespace' "Show trailing whitespace
