@@ -18,11 +18,11 @@ function doinit() {
 
 export build="$HOME/tisdk/build"
 export tmp="$build/arago-tmp-external-linaro-toolchain"
-export images="$tmp/deploy/images/am335x-evm"
+export images="$tmp/deploy/images/act-dl"
 export ipk="$tmp/deploy/ipk/armv7ahf-neon"
-export ipkm="$tmp/deploy/ipk/am335x-evm"
+export ipkm="$tmp/deploy/ipk/act-dl"
 export ipka="$tmp/deploy/ipk/all"
 export builds="$tmp/work/armv7ahf-neon-linux-gnueabi"
-export buildsm="$tmp/work/am335x_evm-linux-gnueabi"
+export buildsm="$tmp/work/act_dl-linux-gnueabi"
 export buildsa="$tmp/work/all-linux"
-
+export actdl="$builds/actdl-application/1.0-r0/git"
