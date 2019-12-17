@@ -275,7 +275,7 @@ if has('nvim') && has('python3')
     "}}}
     Plug 'deoplete-plugins/deoplete-jedi' " deoplete for python {{{
     "}}}
-    Plug 'tweekmonster/deoplete-clang2' " deoplete for C/C++ {{{
+    Plug 'Shougo/deoplete-clangx' " deoplete for C/C++ {{{
     "}}}
 
     " Experimentally using jedi-vim for parameter display only {{{
