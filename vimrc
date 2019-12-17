@@ -105,7 +105,9 @@ Plug 'andymass/vim-matchup' " Improve matchparan {{{
 " }}}
 endif
 
-Plug 'tpope/vim-fugitive' " Intigrate vim with git
+Plug 'tpope/vim-fugitive' " Intigrate vim with git {{{
+command! -nargs=* Gshow Git show <args>
+"}}}
 
 Plug 'ntpeters/vim-better-whitespace' "Show trailing whitespace
 
