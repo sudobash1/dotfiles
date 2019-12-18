@@ -210,9 +210,11 @@ function uninstall() {
   #
   # /path/to/prefix/../../../file
   #
-  # That should never happen, but automated file removal is not something we want to have happen.
+  # That should never happen, but unintended automated file removal is not
+  # something we want to have happen.
   if ! command -v realpath 2>&- 1>&-; then
-    warn "Unable to uninstall $1. Missing the realpath command"
+    error "Unable to uninstall $1. Missing the realpath command"
+    return
   fi
 
   # Reverse-sort for the dir removal below

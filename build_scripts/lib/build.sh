@@ -77,11 +77,6 @@ if [[ -n "$FROM_PKGNAME" ]] && check_hash "$FROM_PKGNAME"; then
   remove_hash "$FROM_PKGNAME"
 fi
 
-# Remove any files from a previous install
-if [[ -f "${PACKAGES_LOG}/${PKGNAME}" ]]; then
-  uninstall "$PKGNAME"
-fi
-
 verbose "All dependencies good. Starting build"
 
 (
