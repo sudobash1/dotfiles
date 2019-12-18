@@ -17,6 +17,7 @@ export STATIC="DEF_STATIC"
 export CFLAGS=""
 export LDFLAGS=""
 export USE_CMAKE=""
+export USE_AUTOCONF=""
 export MULTITHREAD=true
 
 export PKGNAME="$1"

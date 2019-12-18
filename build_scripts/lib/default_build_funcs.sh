@@ -46,7 +46,11 @@ def_make() {
   multicore_make
 }
 def_do_build() {
-  if [[ -f CMakeLists.txt ]] || istrue "$USE_CMAKE"; then
+  if istrue "$USE_AUTOCONF"; then
+    def_autoconf
+  elif istrue "$USE_CMALE"; then
+    def_cmakeconfig
+  elif [[ -f CMakeLists.txt ]]; then
     def_cmakeconfig
   else
     def_autoconf

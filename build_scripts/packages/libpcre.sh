@@ -7,3 +7,4 @@ DEPENDS=(
 VERSION=8.43
 SRC="https://ftp.pcre.org/pub/pcre/pcre-$VERSION.tar.gz"
 IS_LIB=true
+USE_AUTOCONF=true
