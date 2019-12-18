@@ -3,7 +3,6 @@ set -e
 
 export TMPDIR="${TMPDIR:-$(pwd)/tmp}"
 export PREFIX="${PREFIX:-$HOME/.sbr_local}"
-export LIB_PREFIX="${LIB_PREFIX:-$PREFIX/lib_root}"
 export VERBOSE="${VERBOSE:-0}"
 export NUM_CORES="${NUM_CORES:-1}"
 export PACKAGES_LOG="${PACKAGES_LOG:-$PREFIX/var/packages}"
@@ -11,7 +10,7 @@ export PACKAGES_LOG="${PACKAGES_LOG:-$PREFIX/var/packages}"
 # Variables which affect the build and should be included in the hash
 # Users should also confirm them
 env_vars=(
-  TMPDIR PREFIX LIB_PREFIX
+  TMPDIR PREFIX
 )
 # Variables which do not affect the build, but should still be
 # confirmed by the user
@@ -163,14 +162,14 @@ function assemble_array() {
   declare -ag "$name=("'"${array[@]}")'
 }
 
-# Find all files in PREFIX and LIB_PREFIX and write them to $PREINSTALL_FILE
+# Find all files in PREFIX and write them to $PREINSTALL_FILE
 function preinstall() {
   verbose "Prepairing to install ${PKGNAME}"
   preinst_files="$TMPDIR/$PKGNAME/preinst.files"
-  sort <(find "$PREFIX") <(find "$LIB_PREFIX") | uniq > "$preinst_files"
+  find "$PREFIX" | sort > "$preinst_files"
 }
 
-# Find all files in PREFIX and LIB_PREFIX and compare them to $PREINSTALL_FILE
+# Find all files in PREFIX and compare them to $PREINSTALL_FILE
 function postinstall() {
   verbose "Logging install of ${PKGNAME}"
   preinst_files="$TMPDIR/$PKGNAME/preinst.files"
@@ -178,7 +177,7 @@ function postinstall() {
   new_installed_files="$TMPDIR/$PKGNAME/new_installed.files"
   all_installed_files="$TMPDIR/$PKGNAME/all_installed.files"
   removed_files="$TMPDIR/$PKGNAME/postinst.rmed.files"
-  sort <(find "$PREFIX") <(find "$LIB_PREFIX") | uniq > "$postinst_files"
+  find "$PREFIX" | sort > "$postinst_files"
   mkdir -p "$PACKAGES_LOG"
   comm -23 "$postinst_files" "$preinst_files" >> "$new_installed_files"
   comm -13 "$postinst_files" "$preinst_files" >> "$removed_files"
@@ -231,10 +230,9 @@ function uninstall() {
       continue
     fi
 
-    # Make sure the file is within a prefix.
+    # Make sure the file is within the prefix.
     case ${realpath} in
       $(realpath "$PREFIX")/*) ;;
-      $(realpath "$LIB_PREFIX")/*) ;;
       *) warn "Path not in prefix: \`$instpath'"; continue ;;
     esac
 

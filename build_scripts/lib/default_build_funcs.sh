@@ -22,17 +22,15 @@ def_confenv() {
     STATIC_FLAG="-static"
   fi
   export LDFLAGS="$(printf '%q' "-L$PREFIX") \
-                  $(printf '%q' "-L$LIB_PREFIX") \
                   $STATIC_FLAG \
                   $LDFLAGS"
-  export CFLAGS="-isystem $(printf '%q' "$LIB_PREFIX/include") \
-                -isystem $(printf '%q' "$PREFIX/include") \
-                $CFLAGS"
+  export CFLAGS="-isystem $(printf '%q' "$PREFIX/include") \
+                 $CFLAGS"
 }
 def_autoconf() {
   [[ -x "./$CONFIGURE_SCRIPT" ]] || ./autogen.sh
   def_confenv
-  "./$CONFIGURE_SCRIPT" --prefix="$(getprefix)" "${CONFIGURE_FLAGS[@]}"
+  "./$CONFIGURE_SCRIPT" --prefix="$PREFIX" "${CONFIGURE_FLAGS[@]}"
 }
 def_cmakeconfig() {
   SRCDIR="$(getdirpath ${SRCDIR:-$(pwd)})"
@@ -40,7 +38,7 @@ def_cmakeconfig() {
   def_confenv
   mkdir "$BUILDDIR"
   cd "$BUILDDIR"
-  cmake "$SRCDIR" -DCMAKE_INSTALL_PREFIX="$(getprefix)" \
+  cmake "$SRCDIR" -DCMAKE_INSTALL_PREFIX="$PREFIX" \
     -G "${CMAKE_GENERATOR}" \
     "${CONFIGURE_FLAGS[@]}"
 }

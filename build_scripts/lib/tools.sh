@@ -86,15 +86,6 @@ function library_exists() {
     fi
 }
 
-function getprefix() {
-  if istrue "$IS_LIB"; then
-    prefix="$LIB_PREFIX"
-  else
-    prefix="$PREFIX"
-  fi
-  printf '%q' "$prefix"
-}
-
 function getdirpath() (
   cd "$1"
   pwd

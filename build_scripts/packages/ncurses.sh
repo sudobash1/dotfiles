@@ -16,7 +16,7 @@ CONFIGURE_FLAGS=(
   --without-debug
   --enable-widec
   --enable-pc-files
-  --with-pkg-config-libdir="$LIB_PREFIX/lib/pkgconfig"
+  --with-pkg-config-libdir="$PREFIX/lib/pkgconfig"
 )
 
 do_install() {
@@ -25,6 +25,6 @@ do_install() {
   # most pkg-config searches will just look for ncurses. Use symlinks to get
   # around this.
   for l in ncurses ncurses++ form menu panel; do
-    ln -s "$LIB_PREFIX/lib/pkgconfig/${l}w.pc" "$LIB_PREFIX/lib/pkgconfig/${l}.pc"
+    ln -s "$PREFIX/lib/pkgconfig/${l}w.pc" "$LIB_PREFIX/lib/pkgconfig/${l}.pc"
   done
 }
