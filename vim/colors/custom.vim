@@ -19,6 +19,9 @@ if exists("syntax_on")
   syntax reset
 endif
 
+hi NonText          ctermfg=242
+hi SpecialKey       ctermfg=242
+
 hi Comment          ctermfg=12  cterm=italic
 hi Constant         ctermfg=160
 hi Identifier       ctermfg=14
