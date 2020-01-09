@@ -883,11 +883,19 @@ if exists("*getwininfo")
   function! s:setup_qfkeymap()
     let l:w = getwininfo(win_getid())[0]
     if l:w.loclist
-      nnoremap <F10> :silent lprevious<CR>
-      nnoremap <F11> :silent lnext<CR>
+      unmap <F4>
+      unmap <F10>
+      unmap <F11>
+      nnoremap <silent> <F10> :silent lprevious<CR>
+      nnoremap <silent> <F11> :silent lnext<CR>
+      nnoremap <silent> <F4> :silent call ToggleLocationList()<CR>
     elseif l:w.quickfix
-      nnoremap <F10> :silent cprevious<CR>
-      nnoremap <F11> :silent cnext<CR>
+      unmap <F4>
+      unmap <F10>
+      unmap <F11>
+      nnoremap <silent> <F10> :silent cprevious<CR>
+      nnoremap <silent> <F11> :silent cnext<CR>
+      nnoremap <silent> <F4> :silent call ToggleQuickfixList()<CR>
     endif
   endfunc
   autocmd BufEnter * call <SID>setup_qfkeymap()
