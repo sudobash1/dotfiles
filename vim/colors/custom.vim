@@ -50,6 +50,8 @@ hi mkdBold          cterm=bold
 hi mkdCode          ctermfg=12 ctermbg=8
 hi mkdCodeDelimiter ctermfg=4
 
+hi NormalFloat      ctermbg=235
+
 let colors_name = "custom"
 
 " vim: sw=5
