@@ -540,12 +540,14 @@ if &term =~ '^screen' || &term =~ '^tmux'
     execute "set <xRight>=\e[1;*C"
     execute "set <xLeft>=\e[1;*D"
 
-    " tmux knows the extended mouse mode
-    if has("mouse_sgr")
-      set ttymouse=sgr " For columns beyond 223
-    else
-      set ttymouse=xterm2
-    end
+    if ! has("nvim")
+        " tmux knows the extended mouse mode
+        if has("mouse_sgr")
+          set ttymouse=sgr " For columns beyond 223
+        else
+          set ttymouse=xterm2
+        end
+    endif
 endif
 
 au vimrc BufEnter * syntax sync fromstart
