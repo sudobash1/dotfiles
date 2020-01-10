@@ -627,7 +627,10 @@ set nomousehide "show the mouse in gvim
 set noerrorbells visualbell "make no noise
 set lazyredraw "Faster redraw
 set switchbuf=useopen "How to jump to errors in quickfix
-set modeline "You can set vim variables in comments
+if exists("+nomodelineexpr")
+  set modeline "You can set vim options in comments
+  set nomodelineexpr "But don't execute anything!
+endif
 set tabpagemax=25 "set the maximum number of pages
 set foldmethod=indent "set the method of determining where to fold
 set foldlevel=99 "Don't fold by default
