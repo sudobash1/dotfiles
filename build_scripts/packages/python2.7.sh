@@ -16,6 +16,14 @@ export SRC=https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tar.xz
 
 STATIC=false
 
+CONFIGURE_FLAGS=(
+  --enable-optimizations
+)
+
 do_check() {
   [[ -x "$PREFIX/bin/python2.7" ]] || return 1
+}
+
+do_install() {
+  make altinstall maninstall
 }
