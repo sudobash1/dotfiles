@@ -3,10 +3,15 @@ if !exists(":Denite")
 endif
 
 if has("nvim-0.4.0")
-  let s:denite_split = "-split=floating"
+  call denite#custom#option("_", 'split', 'floating')
 else
-  let s:denite_split = "-split=horizontal"
+  call denite#custom#option("_", 'split', 'horizontal')
 endif
+
+"TODO: tune -max-dynamic-update-candidates
+call denite#custom#option("_", 'max-dynamic-update-candidates', 3000)
+
+call denite#custom#option("_", 'prompt', '> ')
 
 if executable('ag')
   call denite#custom#var('grep', 'command', ['ag'])
@@ -25,27 +30,29 @@ call denite#custom#alias('source', 'file/rec/git', 'file/rec')
 call denite#custom#var('file/rec/git', 'command',
 \ ['git', 'ls-files', '-co', '--exclude-standard'])
 
-"TODO: tune -max-dynamic-update-candidates
 function! s:do_denite(source)
-  if a:source ==# "file/rec" && finddir('.git', ';') != ''
-    let l:source = "file/rec/git"
-  else
-    let l:source = a:source
-  endif
+  "if a:source ==# "file/rec" && finddir('.git', ';') != ''
+  "  let l:source = "file/rec/git"
+  "else
+  "  let l:source = a:source
+  "endif
   exec "Denite " .
-     \ l:source . " " .
+     \ a:source . " " .
      \ "-start-filter " .
-     \ "-max-dynamic-update-candidates=3000"
-     \ s:denite_split . " " .
      \ "-matchers=matcher/substring,matcher/hide_hidden_files," .
                \ "matcher/ignore_globs,matcher/ignore_current_buffer"
 endfunction
 
-nnoremap <F1> :call <SID>do_denite("file/rec")<CR>
-nnoremap <S-F1> :call <SID>do_denite("file/rec")<CR>
-nnoremap <F3> :call <SID>do_denite("tag")<CR>
-exec "nnoremap <leader>f :<c-u>DeniteCursorWord grep " . s:denite_split . "<CR>"
-exec "command! Help Denite help -start-filter " . s:denite_split
+nnoremap <silent> <F1> :call <SID>do_denite("file/rec")<CR>
+nnoremap <silent> <F3> :call <SID>do_denite("tag")<CR>
+if has('nvim')
+  " <S-F13> is <F13> in neovim
+  nnoremap <silent> <F13> :call <SID>do_denite("buffer")<CR>
+  nnoremap <silent> <F15> :<c-u>Denite grep:::! -start-filter -resume -buffer-name="greper"<CR>
+endif
+nnoremap <leader>f :<c-u>DeniteCursorWord grep <CR>
+command! Help Denite help -start-filter
+
 
 autocmd FileType denite-filter call s:denite_filter_my_settings()
 function! s:denite_filter_my_settings() abort
@@ -66,6 +73,10 @@ function! s:denite_filter_my_settings() abort
   \ denite#do_map('do_action', 'vsplit')
   inoremap <silent><buffer><expr> <C-s>
   \ denite#do_map('do_action', 'split')
+  imap <silent><buffer> <Up>
+  \ <Plug>(denite_filter_quit)k
+  imap <silent><buffer> <Down>
+  \ <Plug>(denite_filter_quit)j
 endfunction
 
 autocmd FileType denite call s:denite_my_settings()
