@@ -82,6 +82,9 @@ source $ZSH/oh-my-zsh.sh
 
 # }}}
 
+fpath=($HOME/.sbr_local/share/zsh/site-functions $fpath)
+compinit
+
 # ------------------- Basic settings ------------------- {{{
 
 # Allow ** globs and more
