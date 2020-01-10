@@ -68,6 +68,14 @@ if has('nvim')
     let g:python_host_prog = py_path
   endif
 endif
+if has('python3')
+  py3 import sys
+  let s:has_py36 = py3eval("sys.version_info[1] > 6 or " .
+                         \ "(sys.version_info[1] == 6 and " .
+                         \ " sys.version_info[2] > 1)")
+else
+  let s:has_py36 = 0
+endif
 
 augroup vimrc
 " If this vimrc is being resourced, clear the autocommands so they can be
@@ -113,7 +121,7 @@ Plug 'ntpeters/vim-better-whitespace' "Show trailing whitespace
 
 Plug 'ConradIrwin/vim-bracketed-paste' " Automatically enter and leave paste mode
 
-if has('nvim')
+if has('nvim') && s:has_py36
   " Plug 'Shougo/denite.nvim' "{{{
   Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
   "}}}
@@ -141,25 +149,6 @@ else
   endfunc
   " }}}
 endif
-
-Plug 'ervandew/supertab' " Tab completion anywhere {{{
-let g:SuperTabDefaultCompletionType = "context" " Detect if in a pathname, etc...
-let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>" " If above detect fails fallback to cxcp
-"let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
-"let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
-
-let g:SuperTabClosePreviewOnPopupClose = 1
-"Should be the same as
-au vimrc CompleteDone * pclose
-
-" Jedi vim should be allowed to autocomplete in cases like "from os import "
-" au vimrc FileType python let b:SuperTabNoCompleteAfter = ['^']
-" Allow Jedi vim to take precidence
-"au vimrc FileType python let b:SuperTabDefaultCompletionType = "<C-X><C-O>"
-" Allow Jedi vim to be the fallback if context fails
-" au vimrc FileType python call SuperTabSetDefaultCompletionType("<C-X><C-O>")
-
-" }}}
 
 Plug 'milkypostman/vim-togglelist' " Toggle Location list and Quickfix list {{{
 let g:toggle_list_no_mappings = 1 "Define mapping(s) myself
@@ -270,34 +259,60 @@ au vimrc FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<
 au vimrc FileType python nnoremap <buffer> <silent> K :call jedi#show_documentation()<CR>
 " }}}
 
-" Async completion [nvim only] (Shougo/deoplete.nvim) {{{
-if has('nvim') && has('python3')
-  " deoplete requires python3.6.1+ to be installed:
-  py3 import sys
-  if py3eval("sys.version_info[1] > 6 or (sys.version_info[1] == 6 and sys.version_info[2] > 1)")
+if has('nvim') && s:has_py36
+  " Async completion [nvim only] (Shougo/deoplete.nvim) {{{
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    let g:deoplete#enable_at_startup = 1
+  let g:deoplete#enable_at_startup = 1
 
-    " Find list of deoplete plugins at https://github.com/Shougo/deoplete.nvim/wiki/Completion-Sources
-    Plug 'Shougo/neco-vim' " deoplete for vimL {{{
-    "}}}
-    "Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' } " Machine learning autocomplete {{{
-    "}}}
-    Plug 'deoplete-plugins/deoplete-jedi' " deoplete for python {{{
-    "}}}
-    Plug 'Shougo/deoplete-clangx' " deoplete for C/C++ {{{
-    "}}}
+  " Make like SuperTab
+  " https://github.com/Shougo/deoplete.nvim/issues/816#issuecomment-409119635
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+  endfunction
+  inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ deoplete#manual_complete()
 
-    " Experimentally using jedi-vim for parameter display only {{{
-      let g:jedi#auto_initialization = 0 " Don't initialize!
-      let g:jedi#completions_enabled = 0 " We are using deoplete-jedi for completions
-      let g:jedi#auto_vim_configuration = 0 " Don't set completeopt
-      let g:jedi#popup_select_first = 0 " Don't auto select first entry
-      let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
-    " }}}
-  endif
+  " Find list of deoplete plugins at https://github.com/Shougo/deoplete.nvim/wiki/Completion-Sources
+  Plug 'Shougo/neco-vim' " deoplete for vimL {{{
+  "}}}
+  "Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' } " Machine learning autocomplete {{{
+  "}}}
+  Plug 'deoplete-plugins/deoplete-jedi' " deoplete for python {{{
+  "}}}
+  Plug 'Shougo/deoplete-clangx' " deoplete for C/C++ {{{
+  "}}}
+
+  " Experimentally using jedi-vim for parameter display only {{{
+    let g:jedi#auto_initialization = 0 " Don't initialize!
+    let g:jedi#completions_enabled = 0 " We are using deoplete-jedi for completions
+    let g:jedi#auto_vim_configuration = 0 " Don't set completeopt
+    let g:jedi#popup_select_first = 0 " Don't auto select first entry
+    let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
+  " }}}
+  " }}}
+else
+  Plug 'ervandew/supertab' " Tab completion anywhere {{{
+  let g:SuperTabDefaultCompletionType = "context" " Detect if in a pathname, etc...
+  let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>" " If above detect fails fallback to cxcp
+  "let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
+  "let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
+
+  let g:SuperTabClosePreviewOnPopupClose = 1
+  "Should be the same as
+  au vimrc CompleteDone * pclose
+
+  " Jedi vim should be allowed to autocomplete in cases like "from os import "
+  " au vimrc FileType python let b:SuperTabNoCompleteAfter = ['^']
+  " Allow Jedi vim to take precidence
+  "au vimrc FileType python let b:SuperTabDefaultCompletionType = "<C-X><C-O>"
+  " Allow Jedi vim to be the fallback if context fails
+  " au vimrc FileType python call SuperTabSetDefaultCompletionType("<C-X><C-O>")
+
+  " }}}
 endif
-"}}}
 
 " Async linting [nvim only] (dense-analysis/ale) {{{
 if has('nvim')
@@ -343,22 +358,6 @@ nnoremap <leader>db :DoxBlock<CR>
 syntax region DoxComment start="\/\*\*" end="\*\/" transparent fold
 "}}}
 
-Plug 'junkblocker/patchreview-vim' "{{{ Open up patches or git diffs in separate tabs
-"Reviewing current changes in your workspace:
-":DiffReview
-"
-"Reviewing staged git changes:
-":DiffReview git staged --no-color -U5
-"
-"Reviewing a patch:
-":PatchReview some.patch
-"
-"Reviewing a previously applied patch (AKA reverse patch review):
-":ReversePatchReview some.patch
-"
-"See :h patchreview for details
-"}}}
-
 Plug 'sudobash1/vimwits' " Settings for a project {{{
 let g:vimwits_enable = g:vimrc_autoinit
 au vimrc Filetype vim,make,sh let b:vimwits_valid_hi_groups = ["", "Identifier"]
@@ -399,11 +398,25 @@ au vimrc filetype markdown set fo+=o fo-=q
 
 Plug 'Vimjas/vim-python-pep8-indent' " Force vim to follow pep8
 
-
-
 Plug 'guns/xterm-color-table.vim', {'on': 'XtermColorTable'}
 
 "Unused: {{{
+
+"Plug 'junkblocker/patchreview-vim' "{{{ Open up patches or git diffs in separate tabs
+"Reviewing current changes in your workspace:
+":DiffReview
+"
+"Reviewing staged git changes:
+":DiffReview git staged --no-color -U5
+"
+"Reviewing a patch:
+":PatchReview some.patch
+"
+"Reviewing a previously applied patch (AKA reverse patch review):
+":ReversePatchReview some.patch
+"
+"See :h patchreview for details
+"}}}
 
 "Plugin 'scrooloose/nerdtree' " Browse files from vim {{{
 "nnoremap <silent> <F3> :NERDTreeToggle<CR>
@@ -682,6 +695,7 @@ func! s:ag(search_a, search_b)
       echom "ERROR: You must have the cursor on a word or provide an argument"
       return
   endif
+
   if exists(":LGrep")
     call async_grep#lgrep(l:search, l:args)
   else
