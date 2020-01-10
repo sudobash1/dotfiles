@@ -275,7 +275,7 @@ if has('nvim') && has('python3')
   " deoplete requires python3.6.1+ to be installed:
   py3 import sys
   if py3eval("sys.version_info[1] > 6 or (sys.version_info[1] == 6 and sys.version_info[2] > 1)")
-    Plug 'Shougo/deoplete.nvim'
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     let g:deoplete#enable_at_startup = 1
 
     " Find list of deoplete plugins at https://github.com/Shougo/deoplete.nvim/wiki/Completion-Sources
