@@ -318,9 +318,9 @@ endif
 if has('nvim')
   Plug 'dense-analysis/ale'
 
-  " Use quickfix list instead of location-list
-  let g:ale_set_loclist = 0
-  let g:ale_set_quickfix = 1
+  "" Use quickfix list instead of location-list
+  "let g:ale_set_loclist = 0
+  "let g:ale_set_quickfix = 1
 
   " Python {{{
   if has("python3")
