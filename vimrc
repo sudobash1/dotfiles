@@ -587,7 +587,7 @@ set backupdir=~/.local/tmp/vim,.
 set directory=.,~/tmp,/var/tmp,/tmp
 
 " patterns to put to ignore when completing file names
-set wildignore=*/*.bak,*/*~,*/*.o,*/*.info,*/*.sw?,*/*.class,*/*.d
+set wildignore=*.bak,*~,*.o,*.info,*.sw?,*.class,*.d,*.pyc,tags
 
 "Search for tags file between current down to home directory
 set tags=./tags;~
