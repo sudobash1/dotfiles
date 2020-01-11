@@ -8,11 +8,15 @@ else
   call denite#custom#option("_", 'split', 'horizontal')
 endif
 
+call denite#custom#filter('matcher/ignore_globs', 'ignore_globs',
+      \ ['.hg/', '.git/', '.svn/'] + split(&wildignore, '\s*,\s*'))
+
 "TODO: tune -max-dynamic-update-candidates
 "call denite#custom#option("_", "max_dynamic_update_candidates", 20000)
 call denite#custom#option("_", "highlight_filter_background", "DeniteFilter")
-call denite#custom#option("_", "highlight_matched_char", "DeniteMatch ")
-
+call denite#custom#option("_", "highlight_matched_char", "DeniteMatch")
+call denite#custom#option("_", "highlight_matched_range", "DeniteMatchRange")
+call denite#custom#option("_", "start_filter", v:true)
 call denite#custom#option("_", 'prompt', '> ')
 
 if executable('ag')
@@ -40,8 +44,7 @@ function! s:do_denite(source)
   "endif
   exec "Denite " .
      \ a:source . " " .
-     \ "-start-filter " .
-     \ "-matchers=matcher/substring,matcher/hide_hidden_files," .
+     \ "-matchers=matcher/hide_hidden_files,matcher/substring," .
                \ "matcher/ignore_globs,matcher/ignore_current_buffer"
 endfunction
 
@@ -49,12 +52,19 @@ nnoremap <silent> <F1> :call <SID>do_denite("file/rec")<CR>
 nnoremap <silent> <F3> :call <SID>do_denite("tag")<CR>
 if has('nvim')
   " <S-F13> is <F13> in neovim
-  nnoremap <silent> <F13> :call <SID>do_denite("buffer")<CR>
-  nnoremap <silent> <F15> :<c-u>Denite grep:::! -start-filter -resume -buffer-name="greper"<CR>
+  nnoremap <silent> <F13> :<c-u>call <SID>do_denite("buffer")<CR>
+  nnoremap <silent> <F15> :<c-u>Denite grep::-w:! -resume -buffer-name="greper"<CR>
 endif
 nnoremap <leader>f :<c-u>DeniteCursorWord grep <CR>
-command! Help Denite help -start-filter
+command! H Denite help
 
+nnoremap <silent> <bar> :<c-u>Denite line -search<CR>
+augroup SbrDeniteAu
+  au!
+  au FileType c,c++,java,python,bash
+        \ nnoremap <silent> <bar>
+        \ :<c-u>Denite outline line -search<CR>
+augroup END
 
 autocmd FileType denite-filter call s:denite_filter_my_settings()
 function! s:denite_filter_my_settings() abort
@@ -64,8 +74,8 @@ function! s:denite_filter_my_settings() abort
   inoremap <silent><buffer><expr> <CR>
   \ denite#do_map('do_action')
   imap <silent><buffer> <Esc>
-  \ <Plug>()
-  inoremap <silent><buffer><expr> <Esc>
+  \ <Plug>(denite_filter_update)
+  inoremap <silent><buffer><expr> <C-c>
   \ denite#do_map('quit')
   inoremap <silent><buffer><expr> <C-p>
   \ denite#do_map('do_action', 'preview')
@@ -75,10 +85,20 @@ function! s:denite_filter_my_settings() abort
   \ denite#do_map('do_action', 'vsplit')
   inoremap <silent><buffer><expr> <C-s>
   \ denite#do_map('do_action', 'split')
-  imap <silent><buffer> <Up>
-  \ <Plug>(denite_filter_quit)k
-  imap <silent><buffer> <Down>
-  \ <Plug>(denite_filter_quit)j
+  "imap <silent><buffer> <Up>
+  "\ <Plug>(denite_filter_quit)k
+  "imap <silent><buffer> <Down>
+  "\ <Plug>(denite_filter_quit)j
+  inoremap <silent><buffer><expr> <F1>
+  \ denite#do_map('quit')
+  inoremap <silent><buffer><expr> <F3>
+  \ denite#do_map('quit')
+  if has('nvim')
+    inoremap <silent><buffer><expr> <F13>
+    \ denite#do_map('quit')
+    inoremap <silent><buffer><expr> <F15>
+    \ denite#do_map('quit')
+  endif
 endfunction
 
 autocmd FileType denite call s:denite_my_settings()
@@ -103,6 +123,14 @@ function! s:denite_my_settings() abort
   \ denite#do_map('do_action', 'vsplit')
   nnoremap <silent><buffer><expr> <C-s>
   \ denite#do_map('do_action', 'split')
+  nnoremap <silent><buffer><expr> <F1>
+  \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> <F3>
+  \ denite#do_map('quit')
+  if has('nvim')
+    nnoremap <silent><buffer><expr> <F13>
+    \ denite#do_map('quit')
+    nnoremap <silent><buffer><expr> <F15>
+    \ denite#do_map('quit')
+  endif
 endfunction
-
-"TODO: split wildignore and add to denite#custom#filter('matcher/ignore_globs'

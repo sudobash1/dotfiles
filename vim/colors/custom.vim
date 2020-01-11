@@ -54,6 +54,7 @@ hi NormalFloat      ctermbg=235
 
 hi DeniteFilter     ctermbg=237
 hi DeniteMatch      ctermfg=14 cterm=bold
+hi DeniteMatchRange ctermfg=6 cterm=italic
 
 let colors_name = "custom"
 
