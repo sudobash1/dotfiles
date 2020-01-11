@@ -52,6 +52,9 @@ hi mkdCodeDelimiter ctermfg=4
 
 hi NormalFloat      ctermbg=235
 
+hi DeniteFilter     ctermbg=237
+hi DeniteMatch      ctermfg=14 cterm=bold
+
 let colors_name = "custom"
 
 " vim: sw=5

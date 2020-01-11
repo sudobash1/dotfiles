@@ -9,7 +9,9 @@ else
 endif
 
 "TODO: tune -max-dynamic-update-candidates
-call denite#custom#option("_", 'max-dynamic-update-candidates', 3000)
+"call denite#custom#option("_", "max_dynamic_update_candidates", 20000)
+call denite#custom#option("_", "highlight_filter_background", "DeniteFilter")
+call denite#custom#option("_", "highlight_matched_char", "DeniteMatch ")
 
 call denite#custom#option("_", 'prompt', '> ')
 
