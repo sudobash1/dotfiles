@@ -179,7 +179,25 @@ Plug 'majutsushi/tagbar' "Show an overview of tags for current file {{{
   let g:tagbar_show_visibility = 1
 ""}}}
 
-Plug 'craigemery/vim-autotag' " Automatically re-generate tag files
+Plug 'sudobash1/vim-gutentags' " Automatically re-generate tag files {{{
+  if has('cscope')
+    let g:gutentags_modules = ['ctags', 'cscope']
+  endif
+
+  " I don't want tags getting automatically generated on me
+  let g:gutentags_project_root = ['tags', 'cscope.out']
+  let g:gutentags_add_default_project_roots = 0
+  let g:gutentags_generate_on_missing = 0
+  let g:gutentags_generate_on_new = 0
+
+  let g:gutentags_cscope_build_inverted_index = 1
+
+  " I'm currently only using gutentags for c(++) projects
+  let g:gutentags_file_list_command =
+        \ 'find . -type f -iname "*.[ch]" -or ' .
+        \                '-iname "*.[ch]++" -or ' .
+        \                '-iname "*.[ch]xx"'
+"}}}
 
 Plug 'captbaritone/better-indent-support-for-php-with-html' " Indent PHP + HTML files
 
@@ -204,34 +222,6 @@ au vimrc FileType html,css,php,xml EmmetInstall
 "}}}
 
 Plug 'kergoth/vim-bitbake' " Bitbake syntax and file support for vim
-
-if has('cscope')
-  Plug 'sudobash1/cscope_dynamic' "{{{
-  let g:cscopedb_big_file = "cscope.out"
-  let g:cscopedb_small_file = "cache_cscope.out"
-  let g:cscopedb_auto_init = g:vimrc_autoinit
-  let g:cscopedb_auto_files = 1
-
-  function! s:autodir_cscope()
-    let l:dir = getcwd()
-    while l:dir != expand("~") && l:dir != "/"
-      if filereadable(expand(l:dir . "/" . g:cscopedb_big_file))
-        let g:cscopedb_dir = l:dir
-      endif
-      let l:dir = simplify(expand(l:dir . "/.."))
-    endwhile
-  endfunc
-
-  if g:cscopedb_auto_init
-    call s:autodir_cscope()
-  endif
-
-  func! InitCScope()
-    call s:autodir_cscope()
-    execute "normal \<Plug>CscopeDBInit"
-  endfunc
-  "}}}
-endif
 
 Plug 'davidhalter/jedi-vim' " Context completion for Python {{{
 let g:jedi#popup_select_first = 0
@@ -401,6 +391,36 @@ Plug 'Vimjas/vim-python-pep8-indent' " Force vim to follow pep8
 Plug 'guns/xterm-color-table.vim', {'on': 'XtermColorTable'}
 
 "Unused: {{{
+
+"Plug 'craigemery/vim-autotag' " Automatically re-generate tag files
+
+"if has('cscope')
+"  Plug 'sudobash1/cscope_dynamic' "{{{
+"  let g:cscopedb_big_file = "cscope.out"
+"  let g:cscopedb_small_file = "cache_cscope.out"
+"  let g:cscopedb_auto_init = g:vimrc_autoinit
+"  let g:cscopedb_auto_files = 1
+"
+"  function! s:autodir_cscope()
+"    let l:dir = getcwd()
+"    while l:dir != expand("~") && l:dir != "/"
+"      if filereadable(expand(l:dir . "/" . g:cscopedb_big_file))
+"        let g:cscopedb_dir = l:dir
+"      endif
+"      let l:dir = simplify(expand(l:dir . "/.."))
+"    endwhile
+"  endfunc
+"
+"  if g:cscopedb_auto_init
+"    call s:autodir_cscope()
+"  endif
+"
+"  func! InitCScope()
+"    call s:autodir_cscope()
+"    execute "normal \<Plug>CscopeDBInit"
+"  endfunc
+"  "}}}
+"endif
 
 "Plug 'junkblocker/patchreview-vim' "{{{ Open up patches or git diffs in separate tabs
 "Reviewing current changes in your workspace:
