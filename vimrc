@@ -716,6 +716,9 @@ set cinoptions+=(4m1 "This makes only one indentation happen after (
 
 set cinoptions+=g0 "disable for access modifiers
 
+" Don't show the preview window when completing
+set completeopt-=preview
+
 " Enable spellcheck for commit messages
 au vimrc Filetype svn,*commit* setlocal spell
 
