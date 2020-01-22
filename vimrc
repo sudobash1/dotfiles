@@ -209,25 +209,27 @@ Plug 'majutsushi/tagbar' "Show an overview of tags for current file {{{
   let g:tagbar_show_visibility = 1
 ""}}}
 
-Plug 'sudobash1/vim-gutentags' " Automatically re-generate tag files {{{
-  if has('cscope')
-    let g:gutentags_modules = ['ctags', 'cscope']
-  endif
+if has('nvim')
+  Plug 'sudobash1/vim-gutentags' " Automatically re-generate tag files {{{
+    if has('cscope')
+      let g:gutentags_modules = ['ctags', 'cscope']
+    endif
 
-  " I don't want tags getting automatically generated on me
-  let g:gutentags_project_root = ['tags', 'cscope.out']
-  let g:gutentags_add_default_project_roots = 0
-  let g:gutentags_generate_on_missing = 0
-  let g:gutentags_generate_on_new = 0
+    " I don't want tags getting automatically generated on me
+    let g:gutentags_project_root = ['tags', 'cscope.out']
+    let g:gutentags_add_default_project_roots = 0
+    let g:gutentags_generate_on_missing = 0
+    let g:gutentags_generate_on_new = 0
 
-  let g:gutentags_cscope_build_inverted_index = 1
+    let g:gutentags_cscope_build_inverted_index = 1
 
-  " I'm currently only using gutentags for c(++) projects
-  let g:gutentags_file_list_command =
-        \ 'find . -type f -iname "*.[ch]" -or ' .
-        \                '-iname "*.[ch]++" -or ' .
-        \                '-iname "*.[ch]xx"'
-"}}}
+    " I'm currently only using gutentags for c(++) projects
+    let g:gutentags_file_list_command =
+          \ 'find . -type f -iname "*.[ch]" -or ' .
+          \                '-iname "*.[ch]++" -or ' .
+          \                '-iname "*.[ch]xx"'
+  "}}}
+endif
 
 Plug 'captbaritone/better-indent-support-for-php-with-html' " Indent PHP + HTML files
 
