@@ -332,9 +332,9 @@ endif
 if has('nvim')
   Plug 'dense-analysis/ale'
 
-  "" Use quickfix list instead of location-list
-  "let g:ale_set_loclist = 0
-  "let g:ale_set_quickfix = 1
+  " Use location list instead of quickfix list
+  let g:ale_set_loclist = 1
+  let g:ale_set_quickfix = 0
 
   " Python {{{
   if has("python3")
@@ -747,8 +747,8 @@ func! s:ag(search_a, search_b)
       return
   endif
 
-  if exists(":LGrep")
-    call async_grep#lgrep(l:search, l:args)
+  if exists(":Grep")
+    call async_grep#grep(l:search, l:args)
   else
     execute "silent! grep! " . l:args . l:search
     botright cwindow
