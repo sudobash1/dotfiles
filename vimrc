@@ -121,34 +121,64 @@ Plug 'ntpeters/vim-better-whitespace' "Show trailing whitespace
 
 Plug 'ConradIrwin/vim-bracketed-paste' " Automatically enter and leave paste mode
 
-if has('nvim') && s:has_py36
-  " Plug 'Shougo/denite.nvim' "{{{
-  Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-  "}}}
-else
-  "Plug 'ctrlpvim/ctrlp.vim' " Fuzzy file finder {{{
-  Plug 'ctrlpvim/ctrlp.vim', {'on': ['CtrlPBuffer','CtrlPTag','CtrlP']}
-  let g:ctrlp_map = ''
-  nnoremap <F1> :call <SID>do_ctrlp()<CR>
-  let g:ctrlp_by_filename = 1
-  let g:ctrlp_match_window = 'results:100'
+" Plug 'Yggdroot/LeaderF' " Fuzzy Finder {{{
+if (v:version > 704 || v:version == 704 && has("patch330"))
+  Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+  if has("nvim-0.4.2") ||
+        \ (v:version > 801 || v:version == 801 && has("patch1615"))
+    let g:Lf_WindowPosition = 'popup'
+  else
+    let g:Lf_WindowPosition = 'bottom'
+  endif
 
-  " Find files in all directories that are not hidden or of forbidden extention types
-  function! s:do_ctrlp()
-    if v:count == 2
-      CtrlPBuffer
-    elseif v:count == 3
-      CtrlPTag
-    else
-      let g:ctrlp_user_command = "find %s -type f -not -path '*/\.*/*'"
-      for l:ignore in split(&wildignore, '\s*,\s*')
-        let g:ctrlp_user_command .= " -not -path '" . l:ignore . "'"
-      endfor
-      CtrlP .
-    endif
-  endfunc
-  " }}}
+  let g:Lf_WildIgnore = {
+        \ 'dir': ['.svn','.git','.hg','__pycache__'],
+        \ 'file': split(&wildignore, '\s*,\s*')
+        \}
+
+  let g:Lf_PreviewCode = 1
+  let g:Lf_PreviewInPopup = 1
+  let g:Lf_UseVersionControlTool = 0
+  let g:Lf_PopupWidth = 0.8
+  let g:Lf_IgnoreCurrentBufferName = 1
+
+  nnoremap <silent> <bar> :<c-u>LeaderfBufTag<CR>
+  nnoremap <silent> <leader>t :<c-u>LeaderfTag<CR>
+  nnoremap <silent> <leader>: :<c-u>LeaderfCommand<CR>
+  nnoremap <silent> <leader><s-h> :<c-u>LeaderfHelp<CR>
+else
+  Plug 'Yggdroot/LeaderF', { 'tag': 'v1.01', 'do': './install.sh' }
 endif
+" }}}
+
+"if has('nvim') && s:has_py36
+"  " Plug 'Shougo/denite.nvim' "{{{
+"  Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
+"  "}}}
+"else
+"  "Plug 'ctrlpvim/ctrlp.vim' " Fuzzy file finder {{{
+"  Plug 'ctrlpvim/ctrlp.vim', {'on': ['CtrlPBuffer','CtrlPTag','CtrlP']}
+"  let g:ctrlp_map = ''
+"  nnoremap <F1> :call <SID>do_ctrlp()<CR>
+"  let g:ctrlp_by_filename = 1
+"  let g:ctrlp_match_window = 'results:100'
+"
+"  " Find files in all directories that are not hidden or of forbidden extention types
+"  function! s:do_ctrlp()
+"    if v:count == 2
+"      CtrlPBuffer
+"    elseif v:count == 3
+"      CtrlPTag
+"    else
+"      let g:ctrlp_user_command = "find %s -type f -not -path '*/\.*/*'"
+"      for l:ignore in split(&wildignore, '\s*,\s*')
+"        let g:ctrlp_user_command .= " -not -path '" . l:ignore . "'"
+"      endfor
+"      CtrlP .
+"    endif
+"  endfunc
+"  " }}}
+"endif
 
 Plug 'milkypostman/vim-togglelist' " Toggle Location list and Quickfix list {{{
 let g:toggle_list_no_mappings = 1 "Define mapping(s) myself
@@ -202,15 +232,7 @@ Plug 'sudobash1/vim-gutentags' " Automatically re-generate tag files {{{
 Plug 'captbaritone/better-indent-support-for-php-with-html' " Indent PHP + HTML files
 
 Plug 'derekwyatt/vim-fswitch' " Toggle between header and source files {{{
-	nnoremap <silent> <Leader>tt :FSHere<cr>
-	nnoremap <silent> <Leader>tl :FSRight<cr>
-	nnoremap <silent> <Leader>tL :FSSplitRight<cr>
-	nnoremap <silent> <Leader>th :FSLeft<cr>
-	nnoremap <silent> <Leader>tH :FSSplitLeft<cr>
-	nnoremap <silent> <Leader>tk :FSAbove<cr>
-	nnoremap <silent> <Leader>tK :FSSplitAbove<cr>
-	nnoremap <silent> <Leader>tj :FSBelow<cr>
-	nnoremap <silent> <Leader>tJ :FSSplitBelow<cr>
+    nnoremap <silent> <Leader>h :FSHere<cr>
 "}}}
 
 Plug 'mattn/emmet-vim' " html editing tools {{{
