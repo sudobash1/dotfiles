@@ -41,4 +41,14 @@ command -v vimdiff >/dev/null && git config --global diff.tool vimdiff
 git config --global push.default nothing
 
 git config --global color.ui auto
-git config --global log.decorate auto
+git config --global log.decorate short
+
+# If I want a merge, then do "git merge -ff"
+git config --global merge.ff only
+
+# Git Aliases
+git config --global alias.vlog "log --pretty=fuller"
+git config --global alias.graph "log --graph --oneline --decorate --all"
+git config --global alias.graph "log --graph --oneline --decorate --all"
+git config --global alias.graphl "log --graph --pretty=short --decorate --all"
+git config --global alias.headdiff "log --oneline --cherry-pick --left-right"
