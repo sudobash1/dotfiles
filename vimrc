@@ -336,6 +336,8 @@ if has('nvim')
   let g:ale_set_loclist = 1
   let g:ale_set_quickfix = 0
 
+  let g:ale_c_parse_compile_commands = 1
+
   " Python {{{
   if has("python3")
     py3 import sys
