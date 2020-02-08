@@ -1,9 +1,9 @@
 DEPENDS=(
   gcc
   cmake
+  make
   python2.7
 )
-
-VERSION=2.4.2
-SRC="https://github.com/rizsotto/Bear/archive/${VERSION}.tar.gz"
 STATIC=false
+VERSION="2.4.3"
+SRC="https://github.com/rizsotto/Bear/archive/v${VERSION}.tar.gz"
