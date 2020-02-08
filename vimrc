@@ -146,8 +146,10 @@ if (v:version > 704 || v:version == 704 && has("patch330"))
   nnoremap <silent> <leader>t :<c-u>LeaderfTag<CR>
   nnoremap <silent> <leader>: :<c-u>LeaderfCommand<CR>
   nnoremap <silent> <leader><s-h> :<c-u>LeaderfHelp<CR>
-else
+elseif (v:version == 704 && has("patch330"))
   Plug 'Yggdroot/LeaderF', { 'tag': 'v1.01', 'do': './install.sh' }
+else
+  " No LeaderF for you!
 endif
 " }}}
 
