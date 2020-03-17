@@ -277,6 +277,7 @@ if has('nvim') && s:has_py36
   " Async completion [nvim only] (Shougo/deoplete.nvim) {{{
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   let g:deoplete#enable_at_startup = 1
+  set completeopt-=preview
 
   " Make like SuperTab
   " https://github.com/Shougo/deoplete.nvim/issues/816#issuecomment-409119635
