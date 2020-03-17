@@ -1,6 +1,6 @@
 runtime! ftplugin/text.vim ftplugin/text_*.vim ftplugin/text/*.vim
 
-au vimrc FileType markdown setlocal concealcursor=
+setlocal concealcursor=
 
 
 "============================= CUSTOM HIGHLIGHTS ============================= {{{
