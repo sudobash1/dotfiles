@@ -1,0 +1,10 @@
+DEPENDS=(
+  pkg-config
+  automake
+  gcc
+  make
+)
+IS_LIB=yes
+SRC_VERSION=20191231-3.1
+VERSION=${SRC_VERSION##*-}
+SRC="https://thrysoee.dk/editline/libedit-${SRC_VERSION}.tar.gz"
