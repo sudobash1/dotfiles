@@ -10,12 +10,12 @@ export DEPENDS=(
   "unzip"
   "ninja-build"
 )
-VERSION=0.4.2
+VERSION=0.4.3
 export SRC=https://github.com/neovim/neovim/archive/v${VERSION}.tar.gz
 
 do_check() {
   command_exists nvim
 }
 do_build() {
-  make CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX='$PREFIX'" "${MAKE_J}"
+  make CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX='$PREFIX'" CMAKE_BUILD_TYPE=Release "${MAKE_J}"
 }
