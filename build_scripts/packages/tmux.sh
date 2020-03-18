@@ -4,10 +4,11 @@ DEPENDS=(
   autoconf
   automake
   pkg-config
+  bison
 )
 LDEPENDS=(
   libevent
   ncurses
 )
-VERSION=2.9a
+VERSION=3.0a
 SRC="https://github.com/tmux/tmux/archive/${VERSION}.tar.gz"
