@@ -14,7 +14,7 @@ exec 1>>"${tmux_socket_path}_version_source_log"
 exec 2>>"${tmux_socket_path}_version_source_log"
 
 tmux_pid=$(echo $TMUX | cut -d, -f2)
-tmux_ver=$(/proc/$tmux_pid/exe -V | cut -d' ' -f2)
+tmux_ver=$(/proc/$tmux_pid/exe -V | cut -d' ' -f2 | tr -d a)
 tmux_socket_cmd="/proc/$tmux_pid/exe -S '$tmux_socket_path'"
 conf_dir="$DOTFILES_REPO/scripts/tmux/tmux_version_conf"
 
