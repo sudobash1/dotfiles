@@ -1,2 +1,2 @@
 #!/bin/bash
-tmux -L ttmux -f $DOTFILES_REPO/scripts/utils/misc/ttmux.conf /ttmux.conf "$@"
+tmux -L ttmux -f "$DOTFILES_REPO/scripts/utils/misc/ttmux.conf" "$@"

@@ -26,7 +26,8 @@ function do_install() {
   mkdir -p "$dest_dir"
   for dir in "$DOTFILES_REPO"/scripts/utils/*; do
     if [[ -d $dir ]]; then
-      choose_yn "Do you want to install $(basename $dir) utilities" "install_utilities '$dir'"
+      choose_yn "Do you want to install $(basename "$dir") utilities" \
+        "install_utilities $(printf "%q" "$dir")"
     fi
   done
 }
