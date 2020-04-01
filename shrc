@@ -34,6 +34,12 @@ export LESS_TERMCAP_se=$'\e[0m'
 
 # ------------------- Aliases & Functions ------------------- {{{
 
+if command -v nvim >/dev/null; then
+  alias nman='MANPAGER="nvim -R +set\ ft=man" man'
+else
+  alias nman='man'
+fi
+
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
