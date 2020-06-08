@@ -1152,7 +1152,8 @@ set statusline+=%r      "read only flag
 
 "set statusline+=%y      "filetype
 
-set statusline+=%{tagbar#currenttag('\ \ <%s>','')}
+set statusline+=%{tagbar#currenttag('\ \ <%s>\ ','\ ')}
+set statusline+=%{FugitiveStatusline()}
 
 let g:statusline_cscope_update_status = ""
 set statusline+=%{g:statusline_cscope_update_status}
