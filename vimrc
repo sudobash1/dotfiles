@@ -924,14 +924,6 @@ nnoremap <leader><leader> :CustCMD
 
 nnoremap <leader>h :echo printf("0x%x", expand('<cword>'))<CR>
 
-"System clipboard
-nnoremap <C-P> "+p
-nnoremap <C-Y> "+y
-inoremap <C-P> <ESC>"+pi
-inoremap <C-Y> <ESC>"+yi
-vnoremap <C-Y> <ESC>"+yi
-vnoremap <C-P> "+p
-
 "Word by word navigation
 inoremap <C-right> <esc>lwi
 inoremap <C-left> <esc>bi
