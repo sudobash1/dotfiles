@@ -280,81 +280,21 @@ au vimrc FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<
 au vimrc FileType python nnoremap <buffer> <silent> K :call jedi#show_documentation()<CR>
 " }}}
 
-if has('nvim') && s:has_py36
-  " Async completion [nvim only] (Shougo/deoplete.nvim) {{{
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  let g:deoplete#enable_at_startup = 1
-  set completeopt-=preview
-
-  " Make like SuperTab
-  " https://github.com/Shougo/deoplete.nvim/issues/816#issuecomment-409119635
-  function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-  endfunction
-  inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ deoplete#manual_complete()
-
-  " Find list of deoplete plugins at https://github.com/Shougo/deoplete.nvim/wiki/Completion-Sources
-  Plug 'Shougo/neco-vim' " deoplete for vimL {{{
-  "}}}
-  "Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' } " Machine learning autocomplete {{{
-  "}}}
-  Plug 'deoplete-plugins/deoplete-jedi' " deoplete for python {{{
-  "}}}
-  Plug 'Shougo/deoplete-clangx' " deoplete for C/C++ {{{
-  "}}}
-
-  " Experimentally using jedi-vim for parameter display only {{{
-    let g:jedi#auto_initialization = 0 " Don't initialize!
-    let g:jedi#completions_enabled = 0 " We are using deoplete-jedi for completions
-    let g:jedi#auto_vim_configuration = 0 " Don't set completeopt
-    let g:jedi#popup_select_first = 0 " Don't auto select first entry
-    let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
-  " }}}
-  " }}}
-else
-  Plug 'ervandew/supertab' " Tab completion anywhere {{{
-  let g:SuperTabDefaultCompletionType = "context" " Detect if in a pathname, etc...
-  let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>" " If above detect fails fallback to cxcp
-  "let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
-  "let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
-
-  let g:SuperTabClosePreviewOnPopupClose = 1
-  "Should be the same as
-  au vimrc CompleteDone * pclose
-
-  " Jedi vim should be allowed to autocomplete in cases like "from os import "
-  " au vimrc FileType python let b:SuperTabNoCompleteAfter = ['^']
-  " Allow Jedi vim to take precidence
-  "au vimrc FileType python let b:SuperTabDefaultCompletionType = "<C-X><C-O>"
-  " Allow Jedi vim to be the fallback if context fails
-  " au vimrc FileType python call SuperTabSetDefaultCompletionType("<C-X><C-O>")
-
-  " }}}
-endif
-
-" Async linting [nvim only] (dense-analysis/ale) {{{
 if has('nvim')
-  Plug 'dense-analysis/ale'
+  Plug 'prabirshrestha/async.vim'
+  Plug 'prabirshrestha/vim-lsp'
+  Plug 'prabirshrestha/asyncomplete.vim'
+  Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
-  " Use location list instead of quickfix list
-  let g:ale_set_loclist = 1
-  let g:ale_set_quickfix = 0
-
-  let g:ale_c_parse_compile_commands = 1
-
-  " Python {{{
-  if has("python3")
-    py3 import sys
-    let g:ale_python_mypy_options = ' --python-version ' .
-                                     \ py3eval("'3.'+str(sys.version_info[1])")
-  endif
-  " }}}
+  source ~/.vim/vim-lsp-setup.vim
 endif
-" }}}
+
+if has('nvim')
+  " This is only needed until neovim 5.0
+  Plug 'ncm2/float-preview.nvim'
+  let g:float_preview#docked = 0
+  " let g:float_preview#winhl = XXX
+endif
 
 Plug 'mrtazz/DoxygenToolkit.vim' "{{{
 let g:DoxygenToolkit_authorName="Stephen Robinson"
@@ -455,6 +395,82 @@ Plug 'guns/xterm-color-table.vim', {'on': 'XtermColorTable'}
 "  endfunc
 "  "}}}
 "endif
+
+"" Async linting [nvim only] (dense-analysis/ale) {{{
+"if has('nvim')
+"  Plug 'dense-analysis/ale'
+"
+"  " Use location list instead of quickfix list
+"  let g:ale_set_loclist = 1
+"  let g:ale_set_quickfix = 0
+"
+"  let g:ale_c_parse_compile_commands = 1
+"
+"  " Python {{{
+"  if has("python3")
+"    py3 import sys
+"    let g:ale_python_mypy_options = ' --python-version ' .
+"                                     \ py3eval("'3.'+str(sys.version_info[1])")
+"  endif
+"  " }}}
+"endif
+"" }}}
+
+"if has('nvim') && s:has_py36
+"  " Async completion [nvim only] (Shougo/deoplete.nvim) {{{
+"    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"  let g:deoplete#enable_at_startup = 1
+"
+"  " Make like SuperTab
+"  " https://github.com/Shougo/deoplete.nvim/issues/816#issuecomment-409119635
+"  function! s:check_back_space() abort
+"    let col = col('.') - 1
+"    return !col || getline('.')[col - 1]  =~ '\s'
+"  endfunction
+"  inoremap <silent><expr> <TAB>
+"        \ pumvisible() ? "\<C-n>" :
+"        \ <SID>check_back_space() ? "\<TAB>" :
+"        \ deoplete#manual_complete()
+"
+"  " Find list of deoplete plugins at https://github.com/Shougo/deoplete.nvim/wiki/Completion-Sources
+"  Plug 'Shougo/neco-vim' " deoplete for vimL {{{
+"  "}}}
+"  "Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' } " Machine learning autocomplete {{{
+"  "}}}
+"  Plug 'deoplete-plugins/deoplete-jedi' " deoplete for python {{{
+"  "}}}
+"  Plug 'Shougo/deoplete-clangx' " deoplete for C/C++ {{{
+"  "}}}
+"
+"  " Experimentally using jedi-vim for parameter display only {{{
+"    let g:jedi#auto_initialization = 0 " Don't initialize!
+"    let g:jedi#completions_enabled = 0 " We are using deoplete-jedi for completions
+"    let g:jedi#auto_vim_configuration = 0 " Don't set completeopt
+"    let g:jedi#popup_select_first = 0 " Don't auto select first entry
+"    let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
+"  " }}}
+"  " }}}
+"else
+"  Plug 'ervandew/supertab' " Tab completion anywhere {{{
+"  let g:SuperTabDefaultCompletionType = "context" " Detect if in a pathname, etc...
+"  let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>" " If above detect fails fallback to cxcp
+"  "let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
+"  "let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
+"
+"  let g:SuperTabClosePreviewOnPopupClose = 1
+"  "Should be the same as
+"  au vimrc CompleteDone * pclose
+"
+"  " Jedi vim should be allowed to autocomplete in cases like "from os import "
+"  " au vimrc FileType python let b:SuperTabNoCompleteAfter = ['^']
+"  " Allow Jedi vim to take precidence
+"  "au vimrc FileType python let b:SuperTabDefaultCompletionType = "<C-X><C-O>"
+"  " Allow Jedi vim to be the fallback if context fails
+"  " au vimrc FileType python call SuperTabSetDefaultCompletionType("<C-X><C-O>")
+"
+"  " }}}
+"endif
+
 
 "Plug 'junkblocker/patchreview-vim' "{{{ Open up patches or git diffs in separate tabs
 "Reviewing current changes in your workspace:
@@ -725,7 +741,7 @@ set cinoptions+=(4m1 "This makes only one indentation happen after (
 set cinoptions+=g0 "disable for access modifiers
 
 " Don't show the preview window when completing
-set completeopt-=preview
+set completeopt=menu
 
 " Enable spellcheck for commit messages
 au vimrc Filetype svn,*commit* setlocal spell
