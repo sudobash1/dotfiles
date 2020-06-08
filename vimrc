@@ -241,7 +241,7 @@ endif
 Plug 'captbaritone/better-indent-support-for-php-with-html' " Indent PHP + HTML files
 
 Plug 'derekwyatt/vim-fswitch' " Toggle between header and source files {{{
-    nnoremap <silent> <Leader>h :FSHere<cr>
+    nnoremap <silent> <leader>h :FSHere<cr>
 "}}}
 
 Plug 'mattn/emmet-vim' " html editing tools {{{
