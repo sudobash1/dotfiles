@@ -676,6 +676,7 @@ set tabpagemax=25 "set the maximum number of pages
 set foldmethod=indent "set the method of determining where to fold
 set foldlevel=99 "Don't fold by default
 set formatoptions+=j "Remove extra comment header on join
+set showcmd " Show the multi-key mapping being entered
 "set textauto "recognize ^M files
 syn on "turn on syntax highlighting
 
