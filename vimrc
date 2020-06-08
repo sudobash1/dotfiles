@@ -46,6 +46,8 @@
 "  To insert a check (✓) type <C-K>OK. To insert an X (✗) type <C-K>XX
 "  See :h digraph-table
 "
+"  To read an error list loaded in a buffer, use :cb
+"
 " }}}
 
 "============================= PREINIT ============================= {{{
