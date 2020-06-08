@@ -155,35 +155,6 @@ else
 endif
 " }}}
 
-"if has('nvim') && s:has_py36
-"  " Plug 'Shougo/denite.nvim' "{{{
-"  Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-"  "}}}
-"else
-"  "Plug 'ctrlpvim/ctrlp.vim' " Fuzzy file finder {{{
-"  Plug 'ctrlpvim/ctrlp.vim', {'on': ['CtrlPBuffer','CtrlPTag','CtrlP']}
-"  let g:ctrlp_map = ''
-"  nnoremap <F1> :call <SID>do_ctrlp()<CR>
-"  let g:ctrlp_by_filename = 1
-"  let g:ctrlp_match_window = 'results:100'
-"
-"  " Find files in all directories that are not hidden or of forbidden extention types
-"  function! s:do_ctrlp()
-"    if v:count == 2
-"      CtrlPBuffer
-"    elseif v:count == 3
-"      CtrlPTag
-"    else
-"      let g:ctrlp_user_command = "find %s -type f -not -path '*/\.*/*'"
-"      for l:ignore in split(&wildignore, '\s*,\s*')
-"        let g:ctrlp_user_command .= " -not -path '" . l:ignore . "'"
-"      endfor
-"      CtrlP .
-"    endif
-"  endfunc
-"  " }}}
-"endif
-
 Plug 'milkypostman/vim-togglelist' " Toggle Location list and Quickfix list {{{
 let g:toggle_list_no_mappings = 1 "Define mapping(s) myself
 "let g:toggle_list_copen_command = "copen 30"
