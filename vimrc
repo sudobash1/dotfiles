@@ -699,10 +699,8 @@ if (v:version > 704 || v:version == 704 && has("patch710"))
   set listchars+=space:.
 endif
 
-"if running in terminal use custom colors.
-if !has("gui_running")
-  colorscheme custom
-endif
+"use custom colors.
+colorscheme custom
 
 set sessionoptions=blank,buffers,curdir,folds,help,localoptions,options,slash
 set sessionoptions+=tabpages,unix,winsize
