@@ -124,8 +124,13 @@ Plug 'ntpeters/vim-better-whitespace' "Show trailing whitespace
 Plug 'ConradIrwin/vim-bracketed-paste' " Automatically enter and leave paste mode
 
 " Plug 'Yggdroot/LeaderF' " Fuzzy Finder {{{
-if (v:version > 704 || v:version == 704 && has("patch330"))
-  Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+if (v:version >= 703)
+  if (v:version > 704 || v:version == 704 && has("patch330"))
+    Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+  else
+    " Must fall back to v1.01
+    Plug 'Yggdroot/LeaderF', { 'tag': 'v1.01', 'do': './install.sh' }
+  endif
   if has("nvim-0.4.2") ||
         \ (v:version > 801 || v:version == 801 && has("patch1615"))
     let g:Lf_WindowPosition = 'popup'
@@ -143,13 +148,13 @@ if (v:version > 704 || v:version == 704 && has("patch330"))
   let g:Lf_UseVersionControlTool = 0
   let g:Lf_PopupWidth = 0.8
   let g:Lf_IgnoreCurrentBufferName = 1
+  let g:Lf_DiscardEmptyBuffer = 1
+  let g:Lf_JumpToExistingWindow = 0
 
   nnoremap <silent> <bar> :<c-u>LeaderfBufTag<CR>
   nnoremap <silent> <leader>t :<c-u>LeaderfTag<CR>
   nnoremap <silent> <leader>: :<c-u>LeaderfCommand<CR>
   nnoremap <silent> <leader><s-h> :<c-u>LeaderfHelp<CR>
-elseif (v:version == 704 && has("patch330"))
-  Plug 'Yggdroot/LeaderF', { 'tag': 'v1.01', 'do': './install.sh' }
 else
   " No LeaderF for you!
 endif
