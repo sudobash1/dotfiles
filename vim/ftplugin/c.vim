@@ -2,6 +2,8 @@ setlocal foldmethod=syntax
 
 nnoremap <buffer> <F9> :wa<CR>:call Make()<CR>
 
+nmap <expr> <buffer> <leader>h '<leader>f' . expand('%:t:r') . (match(expand('%:e'), '[Cc]') ==# 0 ? '.h' : '.c')
+
 " Generate gdb break for current line {{{
 function! GenerateBreakpoint()
   " TODO: what about paths with spaces?
