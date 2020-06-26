@@ -259,8 +259,7 @@ au vimrc FileType python nnoremap <buffer> <silent> K :call jedi#show_documentat
 if has('nvim')
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
-  Plug 'prabirshrestha/asyncomplete.vim'
-  Plug 'prabirshrestha/asyncomplete-lsp.vim'
+  inoremap <expr> <C-l> pumvisible() ? "\<lt>c-y>" : "\<lt>c-x>\<lt>c-o>"
 
   source ~/.vim/vim-lsp-setup.vim
 endif
@@ -718,7 +717,7 @@ set cinoptions+=(4m1 "This makes only one indentation happen after (
 set cinoptions+=g0 "disable for access modifiers
 
 " Don't show the preview window when completing
-set completeopt=menu
+set completeopt=menu,menuone,noinsert
 
 " Enable spellcheck for commit messages
 au vimrc Filetype svn,*commit* setlocal spell
