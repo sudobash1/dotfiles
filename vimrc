@@ -920,7 +920,7 @@ nnoremap <space> za
 "Doublepress the leader to get a prompt to do one of my custom commands
 nnoremap <leader><leader> :CustCMD
 
-nnoremap <leader>h :echo printf("0x%x", expand('<cword>'))<CR>
+nnoremap <leader>x :echo printf("0x%x", expand('<cword>'))<CR>
 
 "Word by word navigation
 inoremap <C-right> <esc>lwi
