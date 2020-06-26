@@ -895,6 +895,12 @@ cnoreabbrev  w!! w !sudo tee % >/dev/null
 
 command! BD bp<BAR>bd #
 
+function! s:new_tab_same_buffer() abort
+    let l:view = winsaveview()
+    tabe %
+    call winrestview(l:view)
+endfunction
+command! TN call <SID>new_tab_same_buffer()
 command! UseTabsHere setlocal noet sts=0 sw=0
 command! UseTabsEverywhere set noet sts=0 sw=0
 
