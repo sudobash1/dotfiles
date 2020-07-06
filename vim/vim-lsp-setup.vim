@@ -127,6 +127,7 @@ endfunction
 augroup lsp_install
   au!
   autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+  autocmd User lsp_setup highlight lspReference term=underline cterm=underline gui=underline
   autocmd User lsp_diagnostics_updated call s:on_lsp_diagnostics_updated()
 augroup END
 
@@ -135,3 +136,4 @@ let g:lsp_virtual_text_enabled = 0
 "let g:lsp_diagnostics_float_cursor = 1
 let g:lsp_diagnostics_echo_cursor = 1
 let g:lsp_diagnostics_echo_delay = 1
+let g:lsp_highlight_references_enabled = 1
