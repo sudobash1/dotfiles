@@ -9,7 +9,7 @@
 " Set 'background' back to the default.  The value can't always be estimated
 " and is then guessed.
 hi clear Normal
-set bg&
+set bg=dark
 
 " Remove all existing highlighting and set the defaults.
 hi clear
@@ -19,6 +19,7 @@ if exists("syntax_on")
   syntax reset
 endif
 
+hi Normal           guibg=Black guifg=White
 hi NonText          ctermfg=242
 hi SpecialKey       ctermfg=242
 
