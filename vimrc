@@ -297,10 +297,12 @@ nnoremap <leader>db :DoxBlock<CR>
 syntax region DoxComment start="\/\*\*" end="\*\/" transparent fold
 "}}}
 
-Plug 'sudobash1/vimwits' " Settings for a project {{{
-let g:vimwits_enable = g:vimrc_autoinit
-au vimrc Filetype vim,make,sh let b:vimwits_valid_hi_groups = ["", "Identifier"]
+if !has('nvim')
+  Plug 'sudobash1/vimwits' " Settings for a project {{{
+  let g:vimwits_enable = g:vimrc_autoinit
+  au vimrc Filetype vim,make,sh let b:vimwits_valid_hi_groups = ["", "Identifier"]
 "}}}
+endif
 
 Plug 'simeji/winresizer' " Resize window mode {{{
 let g:winresizer_start_key = '<leader>w'
