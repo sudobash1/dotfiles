@@ -230,32 +230,6 @@ au vimrc FileType html,css,php,xml EmmetInstall
 
 Plug 'kergoth/vim-bitbake' " Bitbake syntax and file support for vim
 
-Plug 'davidhalter/jedi-vim' " Context completion for Python {{{
-let g:jedi#popup_select_first = 0
-let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
-let g:jedi#auto_vim_configuration = 0 " Don't set completeopt
-
-" s:jedigoto {{{
-func! s:jedigoto()
-  echo
-  redir => l:goto_output
-  silent call jedi#goto_assignments()
-  redir END
-  if l:goto_output != ""
-    try
-      tag expand("<cword>")
-    catch /E257/
-      echohl WarningMsg
-      echo "Tag not found"
-      echohl None
-    endtry
-  endif
-endfunc
-" }}}
-au vimrc FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
-au vimrc FileType python nnoremap <buffer> <silent> K :call jedi#show_documentation()<CR>
-" }}}
-
 if has('nvim')
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
@@ -342,6 +316,32 @@ Plug 'Vimjas/vim-python-pep8-indent' " Force vim to follow pep8
 Plug 'guns/xterm-color-table.vim', {'on': 'XtermColorTable'}
 
 "Unused: {{{
+
+"Plug 'davidhalter/jedi-vim' " Context completion for Python {{{
+"let g:jedi#popup_select_first = 0
+"let g:jedi#popup_on_dot = 0 "disables the autocomplete to popup whenever you press .
+"let g:jedi#auto_vim_configuration = 0 " Don't set completeopt
+"
+"" s:jedigoto {{{
+"func! s:jedigoto()
+"  echo
+"  redir => l:goto_output
+"  silent call jedi#goto_assignments()
+"  redir END
+"  if l:goto_output != ""
+"    try
+"      tag expand("<cword>")
+"    catch /E257/
+"      echohl WarningMsg
+"      echo "Tag not found"
+"      echohl None
+"    endtry
+"  endif
+"endfunc
+"" }}}
+"au vimrc FileType python nnoremap <buffer> <silent> <C-]> :call <SID>jedigoto()<CR>
+"au vimrc FileType python nnoremap <buffer> <silent> K :call jedi#show_documentation()<CR>
+"" }}}
 
 "Plug 'craigemery/vim-autotag' " Automatically re-generate tag files
 
