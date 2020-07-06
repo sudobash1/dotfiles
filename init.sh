@@ -27,7 +27,7 @@ files=(
 .config/nvim/init.vim .local/share/nvim/site
 .bashrc .bashrc.local.bash
 .zshrc .zshenv .zshrc.local.zsh
-.ctags .Xmodmap
+.ctags .Xmodmap .npmrc
 )
 
 error=
@@ -111,6 +111,11 @@ ln -s "$dir/Xmodmap" .Xmodmap
 # CTAGS
 echo "Setting up .ctags"
 ln -s "$dir/ctags" .ctags
+
+# NPM / NODEJS
+echo "Setting up .npmrc"
+ln -s "$dir/npmrc" .npmrc
+
 echo
 
 # TERMINFO
