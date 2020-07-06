@@ -46,6 +46,9 @@ git config --global log.decorate short
 # If I want a merge, then do "git merge -ff"
 git config --global merge.ff only
 
+# git stash show should show the patch
+git config --global stash.showPatch true
+
 # Git Aliases
 git config --global alias.vlog "log --pretty=fuller"
 git config --global alias.graph "log --graph --oneline --decorate --all"
