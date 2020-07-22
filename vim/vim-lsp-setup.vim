@@ -112,6 +112,24 @@ if executable('pyls')
     augroup END
 endif
 
+if executable('bash-language-server')
+  function! s:bash_init() abort
+    let l:root_path = s:get_root_path(['.bash.init.json'])
+    call lsp#register_server({
+          \ 'name': 'bash-language-server',
+          \ 'cmd': {server_info->[&shell, &shellcmdflag, 'bash-language-server start']},
+          \ 'root_uri': {server_info->lsp#utils#path_to_uri(l:root_path)},
+          \ 'workspace_config': s:get_init_json(l:root_path, '.bash.init.json', {}),
+          \ 'allowlist': ['sh'],
+          \ })
+  endfunction
+  augroup lsp_bash
+    au!
+    au User lsp_setup call s:bash_init()
+    au FileType sh call s:init_mapping()
+  augroup END
+endif
+
 function! s:on_lsp_buffer_enabled() abort
   setlocal omnifunc=lsp#complete
 endfunction
