@@ -16,7 +16,7 @@ function! s:deep_merge(dict, def) abort
 endfunction
 
 function! s:get_root_path(markers) abort
-  let l:buffer_path = lsp#utils#get_buffer_path('%:h')
+  let l:buffer_path = expand('%:h:p')
   for l:marker in a:markers
     let l:root_path = lsp#utils#find_nearest_parent_file_directory(
           \ l:buffer_path,
