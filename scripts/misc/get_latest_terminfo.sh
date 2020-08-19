@@ -2,7 +2,7 @@
 
 # This creates a ~/.terminfo with all of the latest terminfo (including tmux*)
 
-SRC_URL=http://invisible-island.net/datafiles/current/terminfo.src.gz
+SRC_URL=https://invisible-island.net/datafiles/current/terminfo.src.gz
 {
   if command -v curl >/dev/null; then
     curl -L $SRC_URL

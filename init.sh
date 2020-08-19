@@ -118,7 +118,6 @@ ln -s "$dir/npmrc" .npmrc
 
 echo
 
-
 # VIM-PLUG
 echo "Initializing vim-plug"
 if [[ -e "$dir/vim/autoload/plug.vim" ]]; then
