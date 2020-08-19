@@ -2,6 +2,7 @@
 
 set -e
 shopt -s extglob
+shopt -s failglob
 
 #
 # choose_yn "prompt" ["yes_action"] ["no_action"] ["default"]
