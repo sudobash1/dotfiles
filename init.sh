@@ -28,6 +28,7 @@ files=(
 .bashrc .bashrc.local.bash
 .zshrc .zshenv .zshrc.local.zsh
 .ctags .Xmodmap .npmrc
+.config/kitty/kitty.conf
 )
 
 error=
@@ -115,6 +116,12 @@ ln -s "$dir/ctags" .ctags
 # NPM / NODEJS
 echo "Setting up .npmrc"
 ln -s "$dir/npmrc" .npmrc
+
+# KITTY
+echo "Setting up .config/kitty/kitty.conf"
+mkdir -p .config/kitty
+ln -s "$dir/kitty.conf" .config/kitty/kitty.conf
+echo
 
 echo
 
