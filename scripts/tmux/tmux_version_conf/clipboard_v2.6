@@ -1,0 +1,5 @@
+# Only forward tmux clipboard to terminal using OSC 52. Don't set internal
+# clipboard when receiving an OSC 52.
+set -s set-clipboard external
+
+# vim: ft=tmux
