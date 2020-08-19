@@ -118,21 +118,6 @@ ln -s "$dir/npmrc" .npmrc
 
 echo
 
-# TERMINFO
-if command -v infocmp >/dev/null; then
-  if ! infocmp tmux-256color >/dev/null 2>&1; then
-    echo "No 'tmux-256color' terminfo found..."
-    choose_yn "Do you want to get the latest terminfo" \
-      "$dir/scripts/misc/get_latest_terminfo.sh" "" "y"
-  else
-    echo "Already have 'tmux-256color' terminfo."
-    echo "Skipping fetching terminfo."
-  fi
-else
-  echo "No 'infocmp' command"
-  echo "Skipping fetching terminfo."
-fi
-echo
 
 # VIM-PLUG
 echo "Initializing vim-plug"
