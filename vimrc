@@ -724,6 +724,24 @@ set completeopt=menu,menuone,noinsert
 " Enable spellcheck for commit messages
 au vimrc Filetype svn,*commit* setlocal spell
 
+if has('nvim')
+  " Shared clipboard support through ssh, docker, or anything
+  " XXX need to make yank aware of multiple clipboards
+  let g:clipboard = {
+        \   'name': 'osc52-yank',
+        \   'copy': {
+        \      '+': {lines, regtype -> chansend(v:stderr, system('echo ' . shellescape(join(lines, "\n")) . '|yank'))},
+        \      '*': {lines, regtype -> chansend(v:stderr, system('echo ' . shellescape(join(lines, "\n")) . '|yank'))},
+        \    },
+        \   'paste': {
+        \      '+': 'xclip -o -selection clipboard',
+        \      '*': 'xclip -o',
+        \    },
+        \   'cache_enabled': 1,
+        \ }
+
+endif
+
 " }}}
 
 "============================= GREP CONFIG ============================= {{{
