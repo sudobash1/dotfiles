@@ -238,13 +238,6 @@ if has('nvim')
   source ~/.vim/vim-lsp-setup.vim
 endif
 
-if has('nvim')
-  " This is only needed until neovim 5.0
-  Plug 'ncm2/float-preview.nvim'
-  let g:float_preview#docked = 0
-  " let g:float_preview#winhl = XXX
-endif
-
 Plug 'mrtazz/DoxygenToolkit.vim' "{{{
 let g:DoxygenToolkit_authorName="Stephen Robinson"
 let g:DoxygenToolkit_briefTag_pre=""
