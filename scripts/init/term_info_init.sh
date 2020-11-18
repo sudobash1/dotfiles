@@ -3,9 +3,10 @@
 source "$DOTFILES_REPO/scripts/init/util.sh"
 
 function install_terminfo() {
-  mkdir -p "~/.terminfo"
-  for ti in "$DOTFILES_REPO/terminfo/"*; do
-    dir="~/.terminfo/$(echo $ti | head -c1)"
+  mkdir -p "$HOME/.terminfo"
+  for ti_path in "$DOTFILES_REPO/terminfo/"*; do
+    ti=$(basename "$ti_path")
+    dir="$HOME/.terminfo/$(echo $ti | head -c1)"
     dest="${dir}/${ti}"
     mkdir -p "$dir"
     [[ -h "$dest" ]] && rm "$dest"
@@ -14,7 +15,7 @@ function install_terminfo() {
         continue
     fi
     echo "Installing $ti"
-    ln -s "$ti" "$dest"
+    ln -s "$ti_path" "$dest"
   done
 }
 
