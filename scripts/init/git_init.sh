@@ -55,3 +55,6 @@ git config --global alias.graph "log --graph --oneline --decorate --all"
 git config --global alias.graph "log --graph --oneline --decorate --all"
 git config --global alias.graphl "log --graph --pretty=short --decorate --all"
 git config --global alias.headdiff "log --oneline --cherry-pick --left-right"
+
+# setup global git ignore
+git config --global core.excludesFile '~/.gitignore'
