@@ -57,6 +57,19 @@ hi DeniteFilter     ctermbg=237
 hi DeniteMatch      ctermfg=14 cterm=bold
 hi DeniteMatchRange ctermfg=6 cterm=italic
 
+hi doxygenBrief                    ctermfg=39  cterm=bold
+hi doxygenBriefL                   ctermfg=39  cterm=bold
+hi doxygenBriefLine                ctermfg=39  cterm=bold
+hi doxygenSpecialOnelineDesc       ctermfg=39  cterm=bold
+hi doxygenSpecialMultilineDesc     ctermfg=39  cterm=bold
+hi doxygenSpecialTypeOnelineDesc   ctermfg=39  cterm=bold
+hi doxygenLinkRest                 ctermfg=39  cterm=bold
+hi doxygenPageDesc                 ctermfg=39  cterm=bold
+hi doxygenSpecialSectionDesc       ctermfg=39  cterm=bold
+hi doxygenSpecialHeading           ctermfg=39  cterm=bold
+hi doxygenHeaderLine               ctermfg=39  cterm=bold
+
+
 let colors_name = "custom"
 
 " vim: sw=5
