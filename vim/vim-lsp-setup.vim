@@ -130,6 +130,23 @@ if executable('bash-language-server')
   augroup END
 endif
 
+let s:JDTLS_PATH = expand('~/.vim/tools/eclipse.jdt.ls/startjdls.sh')
+if executable(s:JDTLS_PATH)
+  function! s:jdtls_init() abort
+    let l:root_path = s:get_root_path(['.jdtls.init.json'])
+    call lsp#register_server({
+          \ 'name': 'eclipse.jdt.ls',
+          \ 'cmd': {server_info->[s:JDTLS_PATH, getcwd()]},
+          \ 'whitelist': ['java'],
+          \ })
+  endfunction
+  augroup lsp_jdtls
+    au!
+    au User lsp_setup call s:jdtls_init()
+    au FileType java call s:init_mapping()
+  augroup END
+endif
+
 function! s:on_lsp_buffer_enabled() abort
   setlocal omnifunc=lsp#complete
 endfunction
