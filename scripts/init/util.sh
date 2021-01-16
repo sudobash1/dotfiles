@@ -31,3 +31,20 @@ function choose_yn() {
     break
   done
 }
+
+function download() {
+  dest="${2-$(basename "$1")}"
+  {
+    if command -v curl >/dev/null 2>&1; then
+      curl -fLo "$dest" "$1"
+    elif command -v wget >/dev/null 2>&1; then
+      wget -O "$dest" "$1"
+    else
+      echo "Download failed. No curl or wget in path" >&2
+      return 1
+    fi
+  } || {
+    echo "Unable to download '$1'" >&2
+    return 1
+  }
+}
