@@ -48,7 +48,7 @@ hi htmlItalic       cterm=italic
 hi mkdItalic        cterm=italic
 hi htmlBold         cterm=bold
 hi mkdBold          cterm=bold
-hi mkdCode          ctermfg=12 ctermbg=8
+hi mkdCode          ctermfg=19 ctermbg=247
 hi mkdCodeDelimiter ctermfg=4
 
 hi NormalFloat      ctermbg=235
