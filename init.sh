@@ -29,7 +29,7 @@ files=(
 .zshrc .zshenv .zshrc.local.zsh
 .ctags .Xmodmap .npmrc
 .config/kitty/kitty.conf
-.gitignore
+.gitconfig .gitignore
 )
 
 error=
@@ -125,7 +125,8 @@ ln -s "$dir/kitty.conf" .config/kitty/kitty.conf
 echo
 
 # GIT
-echo "Setting up .gitignore"
+echo "Setting up .gitconfig & .gitignore"
+ln -s "$dir/gitconfig" .gitconfig
 ln -s "$dir/gitignore" .gitignore
 echo
 

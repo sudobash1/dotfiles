@@ -1,0 +1,22 @@
+[core]
+	editor = vim
+	excludesFile = ~/.gitignore
+[diff]
+	tool = vimdiff
+[push]
+	default = nothing
+[color]
+	ui = auto
+[log]
+	decorate = short
+[alias]
+	vlog = log --pretty=fuller
+	graph = log --graph --oneline --decorate --all
+	graphl = log --graph --pretty=short --decorate --all
+	headdiff = log --oneline --cherry-pick --left-right
+[stash]
+	showPatch = true
+[init]
+	defaultBranch = master
+[pull]
+	rebase = true

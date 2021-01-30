@@ -1,0 +1,53 @@
+#!/bin/bash -e
+
+EMAIL_REGEX="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$"
+
+email_awk() {
+  awk -F' *<|>' "$@"
+}
+
+while true; do
+
+  # Determine email to use
+  echo
+  echo "1) Stephen Robinson <sblazerobinson@gmail.com>"
+  echo "2) Stephen Robinson <stephen.robinson@eqware.net>"
+  echo "3) Stephen <stephen@drsudo.net>"
+  echo "or enter custom email"
+  read -p "What email do you want to use for git? " ans
+  case "$ans" in
+    1) ans="Stephen Robinson <sblazerobinson@gmail.com>" ;;
+    2) ans="Stephen Robinson <stephen.robinson@eqware.net>" ;;
+    3) ans="Stephen <stephen@drsudo.net>" ;;
+  esac
+
+  if [[ $(email_awk '{print NF}' <<<"$ans") != 3 ]]; then
+    echo "Custom email must be in the form \`name <user@domain.tld>'" >&2
+    continue
+  fi
+
+  name=$(email_awk '{print $1}' <<<"$ans")
+  email=$(email_awk '{print $2}' <<<"$ans")
+
+  if [[ -z "$name" ]]; then
+    echo "Name is required" >&2
+    continue
+  fi
+  if [[ -z "$email" ]]; then
+    echo "Email is required" >&2
+    continue
+  fi
+
+  if ! printf '%s' "$email" | grep -Eq "$EMAIL_REGEX"; then
+    echo "Invalid email" >&2
+    continue
+  fi
+
+  git config user.email "$email"
+  git config user.name "$name"
+
+  git submodule foreach git config user.email "$email"
+  git submodule foreach git config user.name "$name"
+
+  break
+done
