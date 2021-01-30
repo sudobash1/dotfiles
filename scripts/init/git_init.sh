@@ -29,6 +29,9 @@ else
   echo "Invalid email"
 fi
 
+# Remove the prompt for the default branch name
+git config --global init.defaultBranch master
+
 # Set up editor and diff tool
 if command -v vim >/dev/null; then
   git config --global core.editor vim
@@ -44,7 +47,8 @@ git config --global color.ui auto
 git config --global log.decorate short
 
 # If I want a merge, then do "git merge -ff"
-git config --global merge.ff only
+#git config --global merge.ff only
+git config --global pull.rebase true
 
 # git stash show should show the patch
 git config --global stash.showPatch true
