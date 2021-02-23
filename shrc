@@ -3,6 +3,10 @@
 # Get the dotfiles repo directory
 export DOTFILES_REPO=$(dirname $(find ~/.bashrc -prune -printf "%l\n"))
 
+if uname -a | grep "Microsoft" 1>/dev/null 2>&1 && command -v cmd.exe 1>/dev/null 2>&1; then
+  export WHOME="/mnt/c/Users/$(cmd.exe /c "echo %USERNAME%" 2>/dev/null | tr -d '\r')"
+fi
+
 # ------------------- Basic settings ------------------- {{{
 
 export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.sbr_local/bin:$HOME/.npm-packages/bin:$HOME/go/bin:$PATH"

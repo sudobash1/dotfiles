@@ -48,3 +48,19 @@ function download() {
     return 1
   }
 }
+
+function is_wsl() {
+  if
+    uname -a | grep "Microsoft" >/dev/null 2>&1 &&
+    command -v cmd.exe >/dev/null 2>&1 &&
+    [[ -d "$(wsl_windows_home)" ]]
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function wsl_windows_home() {
+  echo "/mnt/c/Users/$(cmd.exe /c "echo %USERNAME%" 2>/dev/null | tr -d '\r')"
+}

@@ -42,6 +42,10 @@ for file in "${files[@]}"; do
 done
 [ "$error" ] && exit 1
 
+if is_wsl; then
+  export WHOME=$(wsl_windows_home)
+fi
+
 function get_local_file() {
   # Check if hostname.ext exists in the local dir
   if [[ -e "$dir/local/${hostname}.$1" ]]; then
@@ -129,6 +133,12 @@ echo "Setting up .gitconfig & .gitignore"
 ln -s "$dir/gitconfig" .gitconfig
 ln -s "$dir/gitignore" .gitignore
 echo
+
+# ALACRITTY
+if is_wsl; then
+  echo "Setting up alacritty.yml"
+  cp "$dir/alacritty.yml" "$WHOME/AppData/Roaming/alacritty/alacritty.yml"
+fi
 
 echo
 
